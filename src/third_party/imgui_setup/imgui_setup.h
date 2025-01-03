@@ -24,6 +24,8 @@ typedef ImFont       Font;
 typedef Mix_Chunk    Sound;
 typedef Mix_Music    Music;
 
+typedef std::function<void(const Event&)> EventCallback;
+
 // Painter
 class Painter
 {
@@ -35,7 +37,7 @@ public:
     int Init(const char* title = nullptr, const IRect* layout = nullptr); // 0:初始化成功
     int Quit();
 
-    void On_frame_begin(std::function<void(const Event&)> f = nullptr) const;
+    void On_frame_begin(EventCallback f = nullptr) const;
     void On_frame_end(const Color* clear_color = nullptr) const;
 
 public:

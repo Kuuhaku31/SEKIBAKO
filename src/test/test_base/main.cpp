@@ -13,7 +13,7 @@ bool is_running = true;
 
 Color clear_color = { 0xcc, 0xcc, 0xcc, 0xFF };
 
-std::function<void(const Event&)> f = [](const Event& e) {
+EventCallback f = [](const Event& e) {
     if(e.type == SDL_QUIT) is_running = false;
 };
 

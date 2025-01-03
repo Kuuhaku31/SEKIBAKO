@@ -108,7 +108,7 @@ Painter::Quit()
 }
 
 void
-Painter::On_frame_begin(std::function<void(const Event&)> f) const
+Painter::On_frame_begin(EventCallback f) const
 {
     static Event e;
     while(SDL_PollEvent(&e))

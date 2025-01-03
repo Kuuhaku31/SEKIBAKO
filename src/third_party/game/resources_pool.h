@@ -39,6 +39,7 @@ public:
 
 public:
     bool LoadResources(Renderer* renderer);
+    bool FreeResources();
 
     const FontPool&    get_font_pool() const;
     const SoundPool&   get_sound_pool() const;

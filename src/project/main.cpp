@@ -1,11 +1,10 @@
 
 // main.cpp
 
-#include <stdio.h>
+#include "game.h"
 
 int
 main()
 {
-    printf("Hello World");
-    return 0;
+    return Game::Instance().PlayGame();
 }

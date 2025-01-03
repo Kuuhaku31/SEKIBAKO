@@ -67,6 +67,39 @@ ResourcesPool::LoadResources(Renderer* renderer)
     return flag;
 }
 
+bool
+ResourcesPool::FreeResources()
+{
+    for(auto& pair : sound_pool)
+    {
+        if(pair.second)
+        {
+            Mix_FreeChunk(pair.second);
+            pair.second = nullptr;
+        }
+    }
+
+    for(auto& pair : music_pool)
+    {
+        if(pair.second)
+        {
+            Mix_FreeMusic(pair.second);
+            pair.second = nullptr;
+        }
+    }
+
+    for(auto& pair : texture_pool)
+    {
+        if(pair.second)
+        {
+            SDL_DestroyTexture(pair.second);
+            pair.second = nullptr;
+        }
+    }
+
+    return true;
+}
+
 const ResourcesPool::FontPool&
 ResourcesPool::get_font_pool() const
 {

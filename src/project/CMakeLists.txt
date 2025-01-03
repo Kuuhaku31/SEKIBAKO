@@ -1,12 +1,19 @@
 
 project(main_project)
 
+set(PATHS
+    ${CMAKE_CURRENT_LIST_DIR}/game
+    ${CMAKE_CURRENT_LIST_DIR}/imgui_windows
+)
+
 set(SRC_PATH
     ${CMAKE_CURRENT_LIST_DIR}
+    ${PATHS}
 )
 
 set(INC_PATH
     ${THIRD_PARTY_INC_PATHS}
+    ${PATHS}
 )
 
 foreach(p ${SRC_PATH})
