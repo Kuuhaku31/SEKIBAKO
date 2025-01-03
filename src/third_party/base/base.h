@@ -6,6 +6,7 @@
 #include <functional>
 #include <stdint.h>
 
+
 class IRect
 {
 public:
@@ -23,21 +24,12 @@ class FRect
     float h = 0;
 };
 
-struct Color
-{
-    uint8_t r = 0.0f;
-    uint8_t g = 0.0f;
-    uint8_t b = 0.0f;
-    uint8_t a = 0.0f;
-
-    uint32_t to_int32();
-};
-
 struct Point
 {
     int32_t px = 0;
     int32_t py = 0;
 };
+
 
 class Vector2
 {

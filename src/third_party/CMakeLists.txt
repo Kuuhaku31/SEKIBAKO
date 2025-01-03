@@ -2,14 +2,14 @@
 project(third_party)
 
 set(PATH
-    ${CMAKE_SOURCE_DIR}/base
-    ${CMAKE_SOURCE_DIR}/game
-    ${CMAKE_SOURCE_DIR}/imgui_setup
+    ${CMAKE_CURRENT_LIST_DIR}/base
+    ${CMAKE_CURRENT_LIST_DIR}/game
+    ${CMAKE_CURRENT_LIST_DIR}/imgui_setup
 )
 
 foreach(p ${PATH})
     aux_source_directory(${p} DIR_LIB_SRCS)
-endforeach(p)
+endforeach()
 
 include_directories(${PATH})
 
@@ -44,9 +44,6 @@ pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
 
 if(SDL2_FOUND)
     message(STATUS "==SDL2 FOUND==")
-    message(STATUS "SDL2_INCLUDE_DIRS: ${SDL2_INCLUDE_DIRS}")
-    message(STATUS "SDL2_LIBRARIES: ${SDL2_LIBRARIES}")
-
     target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 else()
@@ -55,9 +52,6 @@ endif()
 
 if(SDL_image_FOUND)
     message(STATUS "==SDL_image FOUND==")
-    message(STATUS "SDL_image_INCLUDE_DIRS: ${SDL_image_INCLUDE_DIRS}")
-    message(STATUS "SDL_image_LIBRARIES: ${SDL_image_LIBRARIES}")
-
     target_include_directories(${PROJECT_NAME} PUBLIC ${SDL_image_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SDL_image_LIBRARIES})
 else()
@@ -66,9 +60,6 @@ endif()
 
 if(SDL2_GFX_FOUND)
     message(STATUS "==SDL2_GFX FOUND==")
-    message(STATUS "SDL2_GFX_INCLUDE_DIRS: ${SDL2_GFX_INCLUDE_DIRS}")
-    message(STATUS "SDL2_GFX_LIBRARIES: ${SDL2_GFX_LIBRARIES}")
-
     target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_GFX_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SDL2_GFX_LIBRARIES})
 else()
@@ -77,9 +68,6 @@ endif()
 
 if(SDL2_TTF_FOUND)
     message(STATUS "==SDL2_TTF FOUND==")
-    message(STATUS "SDL2_TTF_INCLUDE_DIRS: ${SDL2_TTF_INCLUDE_DIRS}")
-    message(STATUS "SDL2_TTF_LIBRARIES: ${SDL2_TTF_LIBRARIES}")
-
     target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_TTF_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SDL2_TTF_LIBRARIES})
 else()
@@ -88,11 +76,16 @@ endif()
 
 if(SDL2_MIXER_FOUND)
     message(STATUS "==SDL2_MIXER FOUND==")
-    message(STATUS "SDL2_MIXER_INCLUDE_DIRS: ${SDL2_MIXER_INCLUDE_DIRS}")
-    message(STATUS "SDL2_MIXER_LIBRARIES: ${SDL2_MIXER_LIBRARIES}")
-
     target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_MIXER_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} ${SDL2_MIXER_LIBRARIES})
 else()
     message(FATAL_ERROR "SDL2_mixer not found!")
 endif()
+
+# 设置include目录
+set(THIRD_PARTY_INC_PATHS
+    ${PATH}
+    ${IMGUI_DIR}
+    ${IMGUI_BACKENDS_DIR}
+    PARENT_SCOPE
+)

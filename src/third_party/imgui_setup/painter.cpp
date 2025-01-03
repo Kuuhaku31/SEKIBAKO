@@ -115,8 +115,16 @@ Painter::Quit()
 }
 
 void
-Painter::On_frame_begin() const
+Painter::On_frame_begin(std::function<void(const Event&)> f) const
 {
+    static Event e;
+    while(SDL_PollEvent(&e))
+    {
+        f(e); // 用户自定义的回调函数，用于处理用户自定义的事件
+        ImGui_ImplSDL2_ProcessEvent(&e);
+    }
+
+
     // Start the Dear ImGui frame
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();

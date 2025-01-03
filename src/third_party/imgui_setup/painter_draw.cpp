@@ -417,7 +417,7 @@ Painter::DrawCircle(float center_x, float center_y, float radius, int color, boo
         {
             Vector2 dir = painter_view->Get_view_center_position() - Vector2{ center_x, center_y };
 
-            dir = dir.unit();
+            dir.to_unit();
             dir *= radius;
 
             DrawLine(
@@ -537,15 +537,15 @@ Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, flo
 }
 
 void
-Painter::DrawTexture(Texture* texture, const Rect& rect_src, const Rect& rect_dst, float angle) const
+Painter::DrawTexture(Texture* texture, const IRect& rect_src, const IRect& rect_dst, float angle) const
 {
     float view_left_top_position_x = painter_view->Get_view_left_top_position().vx;
     float view_left_top_position_y = painter_view->Get_view_left_top_position().vy;
 
     float unit_size = painter_view->Get_unit_size();
 
-    static Rect src;
-    static Rect dst;
+    static SDL_Rect src;
+    static SDL_Rect dst;
 
     src.x = (rect_src.x - view_left_top_position_x) * unit_size;
     src.y = (rect_src.y - view_left_top_position_y) * unit_size;

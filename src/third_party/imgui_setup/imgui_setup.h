@@ -9,6 +9,7 @@
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer2.h"
 
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
 #include <SDL_image.h>
@@ -34,7 +35,7 @@ public:
     int Init(const char* title = nullptr, const IRect* layout = nullptr); // 0:初始化成功
     int Quit();
 
-    void On_frame_begin() const;
+    void On_frame_begin(std::function<void(const Event&)> f = nullptr) const;
     void On_frame_end(const Color* clear_color = nullptr) const;
 
 public:
