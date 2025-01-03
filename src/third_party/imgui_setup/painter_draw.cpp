@@ -20,6 +20,8 @@ Painter::DrawLine(float A, float B, float C, int color) const
 
     static float unit_size = 0;
 
+    if(!painter_view) return;
+
     view_y1 = painter_view->Get_view_left_top_position().vy;
     view_y2 = painter_view->Get_view_right_bottom_position().vy;
     view_x1 = painter_view->Get_view_left_top_position().vx;
@@ -107,6 +109,8 @@ Painter::DrawLine(float start_x, float start_y, float end_x, float end_y, int co
     static float view_x2 = 0;
 
     static float unit_size = 0;
+
+    if(!painter_view) return;
 
     view_y1 = painter_view->Get_view_left_top_position().vy;
     view_y2 = painter_view->Get_view_right_bottom_position().vy;
@@ -201,6 +205,8 @@ Painter::DrawLine(float start_x, float start_y, float end_x, float end_y, int co
 void
 Painter::DrawLine_(float start_x, float start_y, float end_x, float end_y, int color) const
 {
+    if(!painter_view) return;
+
     float view_left_top_position_y     = painter_view->Get_view_left_top_position().vy;
     float view_right_bottom_position_y = painter_view->Get_view_right_bottom_position().vy;
 
@@ -293,6 +299,8 @@ Painter::DrawLine_(float start_x, float start_y, float end_x, float end_y, int c
 void
 Painter::DrawArc(float center_x, float center_y, float radius, float start_angle, float end_angle, int color) const
 {
+    if(!painter_view) return;
+
     float view_left_top_position_x = painter_view->Get_view_left_top_position().vx;
     float view_left_top_position_y = painter_view->Get_view_left_top_position().vy;
 
@@ -356,6 +364,8 @@ DrawPartialCircle(SDL_Renderer* renderer, int centerX, int centerY, int radius, 
 void
 Painter::DrawCircle(float center_x, float center_y, float radius, int color, bool is_solid) const
 {
+    if(!painter_view) return;
+
     float view_left_top_position_x = painter_view->Get_view_left_top_position().vx;
     float view_left_top_position_y = painter_view->Get_view_left_top_position().vy;
 
@@ -448,6 +458,8 @@ Painter::DrawCircle(float center_x, float center_y, float radius, int color, boo
 void
 Painter::DrawRect(float x, float y, float w, float h, int color, bool is_solid) const
 {
+    if(!painter_view) return;
+
     float view_left_top_position_x = painter_view->Get_view_left_top_position().vx;
     float view_left_top_position_y = painter_view->Get_view_left_top_position().vy;
 
@@ -495,6 +507,8 @@ Painter::DrawRect(float x, float y, float w, float h, int color, bool is_solid) 
 void
 Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, float c_y, int color, bool is_solid) const
 {
+    if(!painter_view) return;
+
     float view_left_top_position_x = painter_view->Get_view_left_top_position().vx;
     float view_left_top_position_y = painter_view->Get_view_left_top_position().vy;
 
@@ -539,6 +553,8 @@ Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, flo
 void
 Painter::DrawTexture(Texture* texture, const IRect& rect_src, const IRect& rect_dst, float angle) const
 {
+    if(!painter_view) return;
+
     float view_left_top_position_x = painter_view->Get_view_left_top_position().vx;
     float view_left_top_position_y = painter_view->Get_view_left_top_position().vy;
 

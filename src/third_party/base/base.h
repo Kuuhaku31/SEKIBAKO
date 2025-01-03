@@ -156,6 +156,7 @@ public:
     virtual void On_render() const;
 
     void Force(const Vector2& force);
+    void Move(const Vector2& move);
 
     const Vector2& Get_position() const;
     const Vector2& Get_velocity() const;

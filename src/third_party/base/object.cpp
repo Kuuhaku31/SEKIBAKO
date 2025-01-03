@@ -104,6 +104,12 @@ Object::Force(const Vector2& force)
     movement_acceleration += force / movement_mass;
 }
 
+void
+Object::Move(const Vector2& move)
+{
+    movement_position += move;
+}
+
 const Vector2&
 Object::Get_position() const
 {

@@ -24,7 +24,8 @@ typedef ImFont       Font;
 typedef Mix_Chunk    Sound;
 typedef Mix_Music    Music;
 
-typedef std::function<void(const Event&)> EventCallback;
+typedef std::function<void(const Event&)> EventCallback;    // 事件回调函数
+typedef std::function<void()>             RendererCallback; // 渲染回调函数
 
 // Painter
 class Painter
@@ -38,7 +39,7 @@ public:
     int Quit();
 
     void On_frame_begin(EventCallback f = nullptr) const;
-    void On_frame_end(const Color* clear_color = nullptr) const;
+    void On_frame_end(RendererCallback f = nullptr) const;
 
 public:
     float Get_delta_time() const;
@@ -64,6 +65,7 @@ public:
     void Render_target(Texture* texture = nullptr, const View* view = nullptr);
     void Render_color(int color) const;
     void Render_clear(int color) const;
+    void Render_clear(Color color) const;
     void Render_clear() const;
 
 private:

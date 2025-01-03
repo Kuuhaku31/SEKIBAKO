@@ -125,26 +125,25 @@ Painter::On_frame_begin(EventCallback f) const
 }
 
 void
-Painter::On_frame_end(const Color* clear_color) const
+Painter::On_frame_end(RendererCallback f) const
 {
-    // Rendering
-    ImGui::Render();
+    ImGui::Render(); // Rendering
 
-    SDL_RenderSetScale(renderer, imgui_io->DisplayFramebufferScale.x, imgui_io->DisplayFramebufferScale.y);
+    SDL_RenderSetScale(renderer, imgui_io->DisplayFramebufferScale.x, imgui_io->DisplayFramebufferScale.y); // 设置渲染目标
 
-    // 清空屏幕
-    if(clear_color)
+    if(f)
     {
-        SDL_SetRenderDrawColor(renderer, clear_color->r, clear_color->g, clear_color->b, clear_color->a);
+        f(); // 用户自定义的回调函数，用于渲染用户自定义的内容
     }
     else
     {
         SDL_SetRenderDrawColor(renderer, DEFAULT_CLEAR_COLOR);
+        SDL_RenderClear(renderer);
     }
-    SDL_RenderClear(renderer);
 
-    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
-    SDL_RenderPresent(renderer);
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer); // 渲染imgui
+
+    SDL_RenderPresent(renderer); // 显示渲染结果
 }
 
 float
@@ -246,6 +245,13 @@ Painter::Render_clear(int color) const
         color & 0xff
 
     );
+    SDL_RenderClear(renderer);
+}
+
+void
+Painter::Render_clear(Color color) const
+{
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderClear(renderer);
 }
 

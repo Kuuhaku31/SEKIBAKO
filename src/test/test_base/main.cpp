@@ -108,7 +108,7 @@ main()
 
         ImguiTestWindow();
 
-        painter.On_frame_end(&clear_color);
+        painter.On_frame_end();
     }
 
     painter.Quit();

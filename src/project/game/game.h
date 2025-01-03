@@ -21,12 +21,20 @@ public:
 private:
     bool is_running = true;
 
+    bool is_open_debug_window = false;
+
 private:
     void game_init();
     void game_loop();
     void game_quit();
 
-    EventCallback event_callback;
+    void input_event();
+
+    EventCallback    event_callback;
+    RendererCallback render_callback;
+
+    Object camera;
+    View   game_view;
 
 private:
     Game();
