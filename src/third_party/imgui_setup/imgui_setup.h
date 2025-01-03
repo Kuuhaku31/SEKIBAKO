@@ -20,7 +20,7 @@ typedef SDL_Event    Event;
 typedef SDL_Color    Color;
 typedef SDL_Texture  Texture;
 typedef SDL_Renderer Renderer;
-typedef TTF_Font     Font;
+typedef ImFont       Font;
 typedef Mix_Chunk    Sound;
 typedef Mix_Music    Music;
 
@@ -51,7 +51,6 @@ public:
     Texture* LoadTexture(const char* file_path) const;
     Sound*   LoadWAV(const char* file_path) const;
     Music*   LoadMUS(const char* file_path) const;
-    Font*    LoadFont(const char* file_path, int font_size) const;
 
 private:
     char resources_path[_MAX_PATH] = "";
@@ -82,10 +81,12 @@ public:
     void DrawTexture(Texture* texture, const IRect& rect_src, const IRect& rect_dst, float angle) const;
 
 private:
-    int           init_flag = 1; // 1:未初始化 0:初始化成功 -1:初始化失败
-    SDL_Window*   window    = nullptr;
-    SDL_Renderer* renderer  = nullptr;
-    ImGuiIO*      imgui_io  = nullptr;
+    int init_flag = 1; // 1:未初始化 0:初始化成功 -1:初始化失败
+
+public:
+    SDL_Window* window   = nullptr;
+    Renderer*   renderer = nullptr;
+    ImGuiIO*    imgui_io = nullptr;
 
 private:
     const View* painter_view = nullptr;

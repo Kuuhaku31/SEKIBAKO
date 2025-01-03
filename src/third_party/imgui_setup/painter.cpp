@@ -80,13 +80,6 @@ Painter::Init(const char* title, const IRect* layout)
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer2_Init(renderer);
 
-    // 加载字体
-    imgui_io->Fonts->AddFontDefault();
-    imgui_io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-    imgui_io->Fonts->AddFontFromFileTTF("fonts/DroidSans.ttf", 16.0f);
-    imgui_io->Fonts->AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 16.0f);
-    imgui_io->Fonts->AddFontFromFileTTF("fonts/Cousine-Regular.ttf", 15.0f);
-
     return init_flag;
 }
 
@@ -123,7 +116,6 @@ Painter::On_frame_begin(std::function<void(const Event&)> f) const
         f(e); // 用户自定义的回调函数，用于处理用户自定义的事件
         ImGui_ImplSDL2_ProcessEvent(&e);
     }
-
 
     // Start the Dear ImGui frame
     ImGui_ImplSDLRenderer2_NewFrame();
@@ -201,14 +193,6 @@ Painter::LoadMUS(const char* file_path) const
     char full_path[_MAX_PATH];
     sprintf(full_path, "%s/%s", resources_path, file_path);
     return Mix_LoadMUS(full_path);
-}
-
-Font*
-Painter::LoadFont(const char* file_path, int font_size) const
-{
-    char full_path[_MAX_PATH];
-    sprintf(full_path, "%s/%s", resources_path, file_path);
-    return TTF_OpenFont(full_path, font_size);
 }
 
 void
