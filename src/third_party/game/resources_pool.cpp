@@ -21,6 +21,10 @@ ResourcesPool::LoadResources(Renderer* renderer)
         texture_pool[ResourcesID::Tex_Test] = IMG_LoadTexture(renderer, "pictures/kana.jpg");
     }
 
+    { // 加载音乐
+        music_pool[ResourcesID::Music_Test] = Mix_LoadMUS("sounds/Phigros - いざ、参ります.flac");
+    }
+
     { // 加载字体
         font_pool[ResourcesID::Font_default]           = io.Fonts->AddFontDefault();
         font_pool[ResourcesID::Font_ipix]              = io.Fonts->AddFontFromFileTTF("fonts/ipix.ttf", 12.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
@@ -36,6 +40,16 @@ ResourcesPool::LoadResources(Renderer* renderer)
         if(!pair.second)
         {
             printf("Error: IMG_LoadTexture(): %s\n", IMG_GetError());
+            flag = false;
+        }
+    }
+
+    // 检查加载音乐
+    for(const auto& pair : music_pool)
+    {
+        if(!pair.second)
+        {
+            printf("Error: Mix_LoadMUS(): %s\n", Mix_GetError());
             flag = false;
         }
     }

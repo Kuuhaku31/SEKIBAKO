@@ -17,6 +17,7 @@ enum class ResourcesID
     // 音效
 
     // 音乐
+    Music_Test, // 测试音乐
 
     // 字体
     Font_default,          // 默认字体
