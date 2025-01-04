@@ -36,7 +36,13 @@ Game::Game()
         painter.DrawLine(-100, 100, 100, -100, 0xff00ffFF);
         painter.DrawRect(100, 100, 100, 100, 0xffff00FF, true);
         painter.DrawCircle(0, 0, 50, 0x00ff00FF, true);
+
+        player.On_render();
     };
+
+    player.Set_mass(1.0f);
+    player.Set_radius(10);
+    player.Set_color(0xff0000FF);
 }
 
 int
@@ -59,20 +65,17 @@ Game::game_init()
 void
 Game::game_loop()
 {
-    ImGuiIO& io = ImGui::GetIO();
-
     while(is_running)
     {
         painter.On_frame_begin(event_callback);
 
         input_event();
 
-        game_view.Set_view_size({ io.DisplaySize.x, io.DisplaySize.y });
-        game_view.Set_view_center_position(camera.Get_position());
+        on_update_view();
 
-        {
-            ImGuiWin_Debug(&is_open_debug_window);
-        }
+        ImGuiWin_Debug(&is_open_debug_window);
+
+        player.On_update(painter.imgui_io->DeltaTime);
 
         painter.On_frame_end(render_callback);
     }
@@ -90,16 +93,46 @@ Game::input_event()
 {
     if(ImGui::IsKeyPressed(ImGuiKey_P)) is_open_debug_window = !is_open_debug_window;
 
-    static const uint8_t delta = 5;
+    static Vector2 move_dir;
 
-    Vector2 move_dir;
-    if(ImGui::IsKeyDown(ImGuiKey_UpArrow)) move_dir += { 0, -1 };
-    if(ImGui::IsKeyDown(ImGuiKey_DownArrow)) move_dir += { 0, 1 };
-    if(ImGui::IsKeyDown(ImGuiKey_LeftArrow)) move_dir += { -1, 0 };
-    if(ImGui::IsKeyDown(ImGuiKey_RightArrow)) move_dir += { 1, 0 };
+    { // 控制摄像机
+        move_dir.to_zero();
+        if(ImGui::IsKeyDown(ImGuiKey_UpArrow)) move_dir += { 0, -1 };
+        if(ImGui::IsKeyDown(ImGuiKey_DownArrow)) move_dir += { 0, 1 };
+        if(ImGui::IsKeyDown(ImGuiKey_LeftArrow)) move_dir += { -1, 0 };
+        if(ImGui::IsKeyDown(ImGuiKey_RightArrow)) move_dir += { 1, 0 };
 
-    move_dir.to_unit();
-    move_dir *= delta;
+        move_dir.to_unit();
+        move_dir /= game_view.Get_unit_size() * 0.5f;
+        camera.Move(move_dir);
 
-    camera.Move(move_dir);
+        // 控制摄像机的视野大小
+        // , .
+        float size = game_view.Get_unit_size();
+        if(ImGui::IsKeyDown(ImGuiKey_Comma)) size *= 0.99f;
+        if(ImGui::IsKeyDown(ImGuiKey_Period)) size *= 1.01f;
+        game_view.Set_unit_size(size);
+    }
+
+    { // 控制玩家
+        move_dir.to_zero();
+        if(ImGui::IsKeyDown(ImGuiKey_W)) move_dir += { 0, -1 };
+        if(ImGui::IsKeyDown(ImGuiKey_S)) move_dir += { 0, 1 };
+        if(ImGui::IsKeyDown(ImGuiKey_A)) move_dir += { -1, 0 };
+        if(ImGui::IsKeyDown(ImGuiKey_D)) move_dir += { 1, 0 };
+
+        move_dir.to_unit();
+        move_dir *= player_force;
+        player.Force(move_dir);
+        player.Force_resistance(player_friction, player_air_resistance);
+    }
+}
+
+void
+Game::on_update_view()
+{
+    Vector2 view_size = { painter.imgui_io->DisplaySize.x, painter.imgui_io->DisplaySize.y };
+    view_size /= game_view.Get_unit_size();
+    game_view.Set_view_size(view_size);
+    game_view.Set_view_center_position(camera.Get_position());
 }

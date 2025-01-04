@@ -156,6 +156,7 @@ public:
     virtual void On_render() const;
 
     void Force(const Vector2& force);
+    void Force_resistance(float friction, float air_resistance);
     void Move(const Vector2& move);
 
     const Vector2& Get_position() const;
@@ -169,20 +170,16 @@ public:
     void Set_velocity(const Vector2& velocity);
     void Set_acceleration(const Vector2& acceleration);
     void Set_mass(float mass);
-    void Set_resistance_friction(float resistance_friction);
-    void Set_resistance_air(float resistance_air);
     void Set_radius(float radius);
     void Set_color(int color);
 
 protected:
-    Vector2 movement_position;                // 位置
-    Vector2 movement_velocity;                // 速度
-    Vector2 movement_acceleration;            // 加速度
-    float   movement_mass                = 0; // 质量（为0时视为质量无穷大）
-    float   movement_resistance_friction = 0; // 摩擦力
-    float   movement_resistance_air      = 0; // 空气阻力
-    float   object_radius                = 0; // 半径
-    int     object_color                 = 0; // 颜色
+    Vector2 movement_position;     // 位置
+    Vector2 movement_velocity;     // 速度
+    Vector2 movement_acceleration; // 加速度
+    float   movement_mass = 0;     // 质量（为0时视为质量无穷大）
+    float   object_radius = 0;     // 半径
+    int     object_color  = 0;     // 颜色
 };
 
 

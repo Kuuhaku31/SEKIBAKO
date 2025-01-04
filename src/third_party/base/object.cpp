@@ -17,91 +17,52 @@ void
 Object::On_update(float delta_time)
 {
     // 更新速度
-    movement_velocity += movement_acceleration * delta_time;
-
-    // 如果有阻力参数，则计算阻力
-    if(
-        movement_mass &&
-        movement_resistance_friction &&
-        movement_resistance_air &&
-        movement_velocity.vx &&
-        movement_velocity.vy)
-    {
-        // 根据阻力参数改变运动状态
-        float v_mod  = movement_velocity.module();
-        float v_mod_ = v_mod - (movement_resistance_friction + v_mod * v_mod * movement_resistance_air) / movement_mass;
-
-        if(v_mod_ < 0)
-        {
-            movement_velocity = Vector2{ 0, 0 };
-        }
-        else
-        {
-            movement_velocity *= v_mod_ / v_mod;
-        }
-    }
+    movement_velocity += (movement_acceleration * delta_time);
+    if(movement_velocity.module() < 1.0f) movement_velocity.to_zero();
 
     // 更新位置
     movement_position += (movement_velocity * delta_time);
 
     // 清空加速度
-    movement_acceleration = { 0.0f, 0.0f };
+    movement_acceleration.to_zero();
 }
 
 void
 Object::On_render() const
 {
     static const Painter& painter = Painter::Instance();
-    static const float    SIZE    = 0.1;
-    static const float    EDGR    = SIZE * sqrt(3);
 
-    static Vector2 vel_unit;
-    static Vector2 pos_top;
-    static Vector2 pos_left;
-    static Vector2 pos_right;
+    painter.DrawCircle(
+        movement_position.vx,
+        movement_position.vy,
+        object_radius,
+        object_color,
+        true
 
-    if(movement_velocity != Vector2{ 0, 0 })
-    {
-        vel_unit = movement_velocity;
-        vel_unit.to_unit();
-
-        pos_top = movement_position + vel_unit * SIZE;
-
-        pos_left  = pos_top - (vel_unit * EDGR);
-        pos_right = pos_top - (vel_unit * EDGR);
-        pos_left.rotate(-M_PI / 9);
-        pos_right.rotate(M_PI / 9);
-
-        painter.DrawTriangle(
-            pos_top.vx,
-            pos_top.vy,
-            pos_left.vx,
-            pos_left.vy,
-            pos_right.vx,
-            pos_right.vy,
-            object_color,
-            true
-
-        );
-    }
-    else
-    {
-        painter.DrawCircle(
-            movement_position.vx,
-            movement_position.vy,
-            SIZE,
-            object_color,
-            true
-
-        );
-    }
+    );
 }
 
 void
 Object::Force(const Vector2& force)
 {
     if(movement_mass <= 0) return;
-    movement_acceleration += force / movement_mass;
+    movement_acceleration += (force / movement_mass);
+}
+
+void
+Object::Force_resistance(float friction, float air_resistance)
+{
+    static float   v_mod = 0.0f;
+    static Vector2 dir;
+
+    v_mod = movement_velocity.module();
+    if(v_mod > 0)
+    {
+        // 根据阻力参数改变运动状态
+        dir = movement_velocity;
+        dir.to_unit();
+        Force(dir * -(friction + v_mod * v_mod * air_resistance));
+    }
 }
 
 void
@@ -168,18 +129,6 @@ void
 Object::Set_mass(float mass)
 {
     movement_mass = mass;
-}
-
-void
-Object::Set_resistance_friction(float resistance_friction)
-{
-    movement_resistance_friction = resistance_friction;
-}
-
-void
-Object::Set_resistance_air(float resistance_air)
-{
-    movement_resistance_air = resistance_air;
 }
 
 void

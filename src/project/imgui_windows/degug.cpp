@@ -19,9 +19,19 @@ ImGuiWin_Debug(bool* is_open)
     ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SmileySans));
 
     {
-
         ImGui::Text("Hello, ImGuiWin_Debug!");
+        ImGui::SameLine();
         ImGui::Text("中文测试");
+
+        const Object& player = game.Get_player();
+
+        ImGui::Text("Player Position: (%.2f, %.2f)", player.Get_position().vx, player.Get_position().vy);
+        ImGui::Text("Player Velocity: (%.2f, %.2f)", player.Get_velocity().vx, player.Get_velocity().vy);
+        ImGui::Text("Player Acceleration: (%.2f, %.2f)", player.Get_acceleration().vx, player.Get_acceleration().vy);
+        ImGui::Text("Player Mass: %.2f", player.Get_mass());
+        ImGui::InputFloat("Player Force", &game.player_force);
+        ImGui::InputFloat("Player Friction", &game.player_friction);
+        ImGui::InputFloat("Player Air Resistance", &game.player_air_resistance);
     }
 
     ImGui::Separator();
