@@ -6,7 +6,7 @@
 #include "base.h"
 
 void
-Painter::DrawLine(float A, float B, float C, int color) const
+Painter::DrawLine(float A, float B, float C, const Color& color) const
 {
     static float start_x = 0;
     static float start_y = 0;
@@ -87,16 +87,16 @@ Painter::DrawLine(float A, float B, float C, int color) const
         (start_y - view_y1) * unit_size,
         (end_x - view_x1) * unit_size,
         (end_y - view_y1) * unit_size,
-        color >> 24 & 0xff,
-        color >> 16 & 0xff,
-        color >> 8 & 0xff,
-        color & 0xff
+        color.r,
+        color.g,
+        color.b,
+        color.a
 
     );
 }
 
 void
-Painter::DrawLine(float start_x, float start_y, float end_x, float end_y, int color) const
+Painter::DrawLine(float start_x, float start_y, float end_x, float end_y, const Color& color) const
 {
     static float x1 = 0;
     static float y1 = 0;
@@ -194,16 +194,16 @@ Painter::DrawLine(float start_x, float start_y, float end_x, float end_y, int co
         (y1 - view_y1) * unit_size,
         (x2 - view_x1) * unit_size,
         (y2 - view_y1) * unit_size,
-        color >> 24 & 0xff,
-        color >> 16 & 0xff,
-        color >> 8 & 0xff,
-        color & 0xff
+        color.r,
+        color.g,
+        color.b,
+        color.a
 
     );
 }
 
 void
-Painter::DrawLine_(float start_x, float start_y, float end_x, float end_y, int color) const
+Painter::DrawLine_(float start_x, float start_y, float end_x, float end_y, const Color& color) const
 {
     if(!painter_view) return;
 
@@ -288,16 +288,16 @@ Painter::DrawLine_(float start_x, float start_y, float end_x, float end_y, int c
         (start_y - view_left_top_position_y) * unit_size,
         (end_x - view_left_top_position_x) * unit_size,
         (end_y - view_left_top_position_y) * unit_size,
-        color >> 24 & 0xff,
-        color >> 16 & 0xff,
-        color >> 8 & 0xff,
-        color & 0xff
+        color.r,
+        color.g,
+        color.b,
+        color.a
 
     );
 }
 
 void
-Painter::DrawArc(float center_x, float center_y, float radius, float start_angle, float end_angle, int color) const
+Painter::DrawArc(float center_x, float center_y, float radius, float start_angle, float end_angle, const Color& color) const
 {
     if(!painter_view) return;
 
@@ -313,10 +313,10 @@ Painter::DrawArc(float center_x, float center_y, float radius, float start_angle
         radius * unit_size,
         start_angle,
         end_angle,
-        color >> 24 & 0xff,
-        color >> 16 & 0xff,
-        color >> 8 & 0xff,
-        color & 0xff
+        color.r,
+        color.g,
+        color.b,
+        color.a
 
     );
 }
@@ -362,7 +362,7 @@ DrawPartialCircle(SDL_Renderer* renderer, int centerX, int centerY, int radius, 
 }
 
 void
-Painter::DrawCircle(float center_x, float center_y, float radius, int color, bool is_solid) const
+Painter::DrawCircle(float center_x, float center_y, float radius, const Color& color, bool is_solid) const
 {
     if(!painter_view) return;
 
@@ -396,10 +396,10 @@ Painter::DrawCircle(float center_x, float center_y, float radius, int color, boo
                 (center_x - view_left_top_position_x) * unit_size,
                 (center_y - view_left_top_position_y) * unit_size,
                 radius * unit_size,
-                color >> 24 & 0xff,
-                color >> 16 & 0xff,
-                color >> 8 & 0xff,
-                color & 0xff,
+                color.r,
+                color.g,
+                color.b,
+                color.a,
                 painter_view->Get_view_size().vx * unit_size,
                 painter_view->Get_view_size().vy * unit_size
 
@@ -414,10 +414,10 @@ Painter::DrawCircle(float center_x, float center_y, float radius, int color, boo
                 (center_x - view_left_top_position_x) * unit_size,
                 (center_y - view_left_top_position_y) * unit_size,
                 radius * unit_size,
-                color >> 24 & 0xff,
-                color >> 16 & 0xff,
-                color >> 8 & 0xff,
-                color & 0xff,
+                color.r,
+                color.g,
+                color.b,
+                color.a,
                 painter_view->Get_view_size().vx * unit_size,
                 painter_view->Get_view_size().vy * unit_size
 
@@ -446,17 +446,17 @@ Painter::DrawCircle(float center_x, float center_y, float radius, int color, boo
             (center_x - view_left_top_position_x) * unit_size,
             (center_y - view_left_top_position_y) * unit_size,
             radius * unit_size,
-            color >> 24 & 0xff,
-            color >> 16 & 0xff,
-            color >> 8 & 0xff,
-            color & 0xff
+            color.r,
+            color.g,
+            color.b,
+            color.a
 
         );
     }
 }
 
 void
-Painter::DrawRect(float x, float y, float w, float h, int color, bool is_solid) const
+Painter::DrawRect(float x, float y, float w, float h, const Color& color, bool is_solid) const
 {
     if(!painter_view) return;
 
@@ -495,17 +495,17 @@ Painter::DrawRect(float x, float y, float w, float h, int color, bool is_solid) 
             (y - view_left_top_position_y) * unit_size,
             (x + w - view_left_top_position_x) * unit_size,
             (y + h - view_left_top_position_y) * unit_size,
-            color >> 24 & 0xff,
-            color >> 16 & 0xff,
-            color >> 8 & 0xff,
-            color & 0xff
+            color.r,
+            color.g,
+            color.b,
+            color.a
 
         );
     }
 }
 
 void
-Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, float c_y, int color, bool is_solid) const
+Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, float c_y, const Color& color, bool is_solid) const
 {
     if(!painter_view) return;
 
@@ -524,10 +524,10 @@ Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, flo
             (b_y - view_left_top_position_y) * unit_size,
             (c_x - view_left_top_position_x) * unit_size,
             (c_y - view_left_top_position_y) * unit_size,
-            color >> 24 & 0xff,
-            color >> 16 & 0xff,
-            color >> 8 & 0xff,
-            color & 0xff
+            color.r,
+            color.g,
+            color.b,
+            color.a
 
         );
     }
@@ -541,10 +541,10 @@ Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, flo
             (b_y - view_left_top_position_y) * unit_size,
             (c_x - view_left_top_position_x) * unit_size,
             (c_y - view_left_top_position_y) * unit_size,
-            color >> 24 & 0xff,
-            color >> 16 & 0xff,
-            color >> 8 & 0xff,
-            color & 0xff
+            color.r,
+            color.g,
+            color.b,
+            color.a
 
         );
     }

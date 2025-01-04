@@ -3,7 +3,9 @@ project(main_project)
 
 set(PATHS
     ${CMAKE_CURRENT_LIST_DIR}/game
+    ${CMAKE_CURRENT_LIST_DIR}/debug
     ${CMAKE_CURRENT_LIST_DIR}/imgui_windows
+    ${CMAKE_CURRENT_LIST_DIR}/player
 )
 
 set(SRC_PATH

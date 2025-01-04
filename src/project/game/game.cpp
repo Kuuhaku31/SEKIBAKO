@@ -3,11 +3,13 @@
 
 #include "game.h"
 
+#include "debuger.h"
 #include "imgui_windows.h"
 #include "resources_pool.h"
 
 static Painter&       painter        = Painter::Instance();
 static ResourcesPool& resources_pool = ResourcesPool::Instance();
+static Debuger&       debuger        = Debuger::Instance();
 
 Game* Game::instance = nullptr;
 Game&
@@ -30,19 +32,20 @@ Game::Game()
         painter.Render_clear(clear_color);
         painter.Render_target(nullptr, &game_view);
 
-        painter.DrawLine(0, 1, 0, 0xffffffFF);
+        painter.DrawLine(0, 1, 0, Color{ 0xff, 0xff, 0xff, 0xFF });
 
-        painter.DrawLine(-100, -100, 100, 100, 0xff00ffFF);
-        painter.DrawLine(-100, 100, 100, -100, 0xff00ffFF);
-        painter.DrawRect(100, 100, 100, 100, 0xffff00FF, true);
-        painter.DrawCircle(0, 0, 50, 0x00ff00FF, true);
+        painter.DrawLine(-100, -100, 100, 100, Color{ 0xff, 0x00, 0xff, 0xFF });
+        painter.DrawLine(-100, 100, 100, -100, Color{ 0xff, 0x00, 0xff, 0xFF });
+        painter.DrawRect(100, 100, 100, 100, Color{ 0xff, 0xff, 0x00, 0xFF }, true);
+        painter.DrawCircle(0, 0, 50, Color{ 0x00, 0xff, 0x00, 0xFF }, true);
 
-        player.On_render();
+        player->On_render();
     };
 
-    player.Set_mass(1.0f);
-    player.Set_radius(10);
-    player.Set_color(0xff0000FF);
+    player = new Player(Vector2{ 10, 30 }, COLOR_ORANGE);
+    player->Set_mass(1.0f);
+    player->Set_radius(10);
+    player->Set_color(Color{ 0xff, 0x00, 0x00, 0xFF });
 }
 
 int
@@ -73,9 +76,9 @@ Game::game_loop()
 
         on_update_view();
 
-        ImGuiWin_Debug(&is_open_debug_window);
+        debuger.ImGuiWin_Debug(&is_open_debug_window);
 
-        player.On_update(painter.imgui_io->DeltaTime);
+        on_uodate_player(painter.imgui_io->DeltaTime);
 
         painter.On_frame_end(render_callback);
     }
@@ -84,6 +87,8 @@ Game::game_loop()
 void
 Game::game_quit()
 {
+    delete player;
+
     resources_pool.FreeResources();
     painter.Quit();
 }
@@ -123,8 +128,8 @@ Game::input_event()
 
         move_dir.to_unit();
         move_dir *= player_force;
-        player.Force(move_dir);
-        player.Force_resistance(player_friction, player_air_resistance);
+        player->Force(move_dir);
+        player->Force_resistance(player_friction, player_air_resistance);
     }
 }
 
@@ -135,4 +140,12 @@ Game::on_update_view()
     view_size /= game_view.Get_unit_size();
     game_view.Set_view_size(view_size);
     game_view.Set_view_center_position(camera.Get_position());
+}
+
+void
+Game::on_uodate_player(const float& delta_time)
+{
+    player->On_update(delta_time);
+
+    player_hight = -player->Get_position().vy;
 }

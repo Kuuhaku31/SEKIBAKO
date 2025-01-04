@@ -17,7 +17,6 @@
 #include <SDL_ttf.h>
 
 typedef SDL_Event    Event;
-typedef SDL_Color    Color;
 typedef SDL_Texture  Texture;
 typedef SDL_Renderer Renderer;
 typedef ImFont       Font;
@@ -63,9 +62,8 @@ public:
     void Destroy_texture(Texture*& texture) const;
 
     void Render_target(Texture* texture = nullptr, const View* view = nullptr);
-    void Render_color(int color) const;
-    void Render_clear(int color) const;
-    void Render_clear(Color color) const;
+    void Render_color(const Color& color = COLOR_BLACK) const;
+    void Render_clear(const Color& color = COLOR_BLACK) const;
     void Render_clear() const;
 
 private:
@@ -74,13 +72,13 @@ private:
 public:
     void Draw_plaid() const;
 
-    void DrawLine(float A, float B, float C, int color) const; // 直线方程 Ax + By + C = 0
-    void DrawLine_(float start_x, float start_y, float end_x, float end_y, int color) const;
-    void DrawLine(float start_x, float start_y, float end_x, float end_y, int color) const;
-    void DrawArc(float center_x, float center_y, float radius, float start_angle, float end_angle, int color) const;
-    void DrawCircle(float center_x, float center_y, float radius, int color, bool is_solid = true) const;
-    void DrawRect(float x, float y, float w, float h, int color, bool is_solid = true) const;
-    void DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, float c_y, int color, bool is_solid = true) const;
+    void DrawLine(float A, float B, float C, const Color& color = COLOR_BLACK) const; // 直线方程 Ax + By + C = 0
+    void DrawLine_(float start_x, float start_y, float end_x, float end_y, const Color& color = COLOR_BLACK) const;
+    void DrawLine(float start_x, float start_y, float end_x, float end_y, const Color& color = COLOR_BLACK) const;
+    void DrawArc(float center_x, float center_y, float radius, float start_angle, float end_angle, const Color& color = COLOR_BLACK) const;
+    void DrawCircle(float center_x, float center_y, float radius, const Color& color = COLOR_BLACK, bool is_solid = true) const;
+    void DrawRect(float x, float y, float w, float h, const Color& color = COLOR_BLACK, bool is_solid = true) const;
+    void DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, float c_y, const Color& color = COLOR_BLACK, bool is_solid = true) const;
 
     void DrawTexture(Texture* texture, const IRect& rect_src, const IRect& rect_dst, float angle) const;
 

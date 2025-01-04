@@ -3,8 +3,9 @@
 
 #pragma once
 
+#include "color.h"
+
 #include <functional>
-#include <stdint.h>
 
 
 class IRect
@@ -28,7 +29,16 @@ struct Point
 {
     int32_t px = 0;
     int32_t py = 0;
+
+    Point& operator=(const Point& p)
+    {
+        px = p.px;
+        py = p.py;
+
+        return *this;
+    }
 };
+#define ORIGIN_POINT Point{ 0, 0 }
 
 
 class Vector2
@@ -69,6 +79,11 @@ public:
 
     bool approx_zero() const;
 };
+#define VECTOR2_ZERO Vector2{ 0.0f, 0.0f }
+#define VECTOR2_UNIT_UP Vector2{ 0.0f, -1.0f }
+#define VECTOR2_UNIT_DOWN Vector2{ 0.0f, 1.0f }
+#define VECTOR2_UNIT_LEFT Vector2{ -1.0f, 0.0f }
+#define VECTOR2_UNIT_RIGHT Vector2{ 1.0f, 0.0f }
 
 
 class Timer
@@ -148,7 +163,9 @@ protected:
 class Object
 {
 public:
-    Object(const Vector2& pos = { 0, 0 }, const Vector2& vel = { 0, 0 }, float mass = 0, int color = 0);
+    Object() = default;
+    Object(const Vector2& pos, const Vector2& vel = VECTOR2_ZERO, float mass = 0, const Color& color = COLOR_BLACK);
+    Object(float radius, float mass, const Color& color);
     ~Object() = default;
 
 public:
@@ -164,14 +181,14 @@ public:
     const Vector2& Get_acceleration() const;
     float          Get_mass() const;
     float          Get_radius() const;
-    int            Get_color() const;
+    const Color&   Get_color() const;
 
     void Set_position(const Vector2& position);
     void Set_velocity(const Vector2& velocity);
     void Set_acceleration(const Vector2& acceleration);
     void Set_mass(float mass);
     void Set_radius(float radius);
-    void Set_color(int color);
+    void Set_color(const Color& color);
 
 protected:
     Vector2 movement_position;     // 位置
@@ -179,7 +196,7 @@ protected:
     Vector2 movement_acceleration; // 加速度
     float   movement_mass = 0;     // 质量（为0时视为质量无穷大）
     float   object_radius = 0;     // 半径
-    int     object_color  = 0;     // 颜色
+    Color   object_color;          // 颜色
 };
 
 

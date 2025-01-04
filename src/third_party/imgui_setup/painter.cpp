@@ -224,32 +224,13 @@ Painter::Render_target(Texture* texture, const View* view)
 }
 
 void
-Painter::Render_color(int color) const
+Painter::Render_color(const Color& color) const
 {
-    SDL_SetRenderDrawColor(renderer,
-        color >> 24 & 0xff,
-        color >> 16 & 0xff,
-        color >> 8 & 0xff,
-        color & 0xff
-
-    );
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
 void
-Painter::Render_clear(int color) const
-{
-    SDL_SetRenderDrawColor(renderer,
-        color >> 24 & 0xff,
-        color >> 16 & 0xff,
-        color >> 8 & 0xff,
-        color & 0xff
-
-    );
-    SDL_RenderClear(renderer);
-}
-
-void
-Painter::Render_clear(Color color) const
+Painter::Render_clear(const Color& color) const
 {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderClear(renderer);

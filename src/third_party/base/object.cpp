@@ -5,9 +5,16 @@
 
 #include "imgui_setup.h"
 
-Object::Object(const Vector2& pos, const Vector2& vel, float mass, int color)
+Object::Object(const Vector2& pos, const Vector2& vel, float mass, const Color& color)
     : movement_position(pos)
     , movement_velocity(vel)
+    , movement_mass(mass)
+    , object_color(color)
+{
+}
+
+Object::Object(float radius, float mass, const Color& color)
+    : object_radius(radius)
     , movement_mass(mass)
     , object_color(color)
 {
@@ -101,7 +108,7 @@ Object::Get_radius() const
     return object_radius;
 }
 
-int
+const Color&
 Object::Get_color() const
 {
     return object_color;
@@ -138,7 +145,7 @@ Object::Set_radius(float radius)
 }
 
 void
-Object::Set_color(int color)
+Object::Set_color(const Color& color)
 {
     object_color = color;
 }
