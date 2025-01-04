@@ -16,7 +16,7 @@ Painter::Instance()
 }
 
 int
-Painter::Init(const char* title, const IRect* layout)
+Painter::Init(const char* title, const IRect& layout)
 {
     if(!init_flag) return 0;
 
@@ -39,10 +39,10 @@ Painter::Init(const char* title, const IRect* layout)
 
     window = SDL_CreateWindow(
         title ? title : "SDL2 ImGui",
-        layout ? layout->x : SDL_WINDOWPOS_CENTERED,
-        layout ? layout->y : SDL_WINDOWPOS_CENTERED,
-        layout ? layout->w : 1280,
-        layout ? layout->h : 720,
+        layout.x,
+        layout.y,
+        layout.w,
+        layout.h,
         (SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI)
 
     );

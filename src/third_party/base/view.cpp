@@ -26,6 +26,7 @@ void
 View::Set_unit_size(float size)
 {
     unit_size = size;
+    if(unit_size <= 0) unit_size = 1.0f;
 }
 
 const Vector2&

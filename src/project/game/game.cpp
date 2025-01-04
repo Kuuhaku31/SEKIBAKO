@@ -37,14 +37,21 @@ Game::Game()
         painter.DrawLine(-100, -100, 100, 100, Color{ 0xff, 0x00, 0xff, 0xFF });
         painter.DrawLine(-100, 100, 100, -100, Color{ 0xff, 0x00, 0xff, 0xFF });
         painter.DrawRect(100, 100, 100, 100, Color{ 0xff, 0xff, 0x00, 0xFF }, true);
-        painter.DrawCircle(0, 0, 50, Color{ 0x00, 0xff, 0x00, 0xFF }, true);
+        painter.DrawCircle(0, 0, 5, COLOR_GREEN, true);
+
+        painter.DrawLine(-1.5, 0.5, 2, -0.5, COLOR_PURPLE);
+        painter.DrawLine(-1.5, 0.5, 0, 0, COLOR_PURPLE);
+
+        painter.DrawRect(0, 0, 1, 1, COLOR_LIGHT_GRAY, true);
 
         player->On_render();
     };
 
-    player = new Player(Vector2{ 10, 30 }, COLOR_ORANGE);
+    game_view.Set_unit_size(50.f);
+
+    player = new Player(Vector2{ 1, 3 }, COLOR_ORANGE);
     player->Set_mass(1.0f);
-    player->Set_radius(10);
+    player->Set_radius(0.5);
     player->Set_color(Color{ 0xff, 0x00, 0x00, 0xFF });
 }
 
@@ -61,7 +68,7 @@ Game::PlayGame()
 void
 Game::game_init()
 {
-    painter.Init("Game");
+    painter.Init("Game", IRect{ SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 1200 });
     resources_pool.LoadResources(painter.renderer);
 }
 
@@ -102,13 +109,13 @@ Game::input_event()
 
     { // 控制摄像机
         move_dir.to_zero();
-        if(ImGui::IsKeyDown(ImGuiKey_UpArrow)) move_dir += { 0, -1 };
-        if(ImGui::IsKeyDown(ImGuiKey_DownArrow)) move_dir += { 0, 1 };
-        if(ImGui::IsKeyDown(ImGuiKey_LeftArrow)) move_dir += { -1, 0 };
-        if(ImGui::IsKeyDown(ImGuiKey_RightArrow)) move_dir += { 1, 0 };
+        if(ImGui::IsKeyDown(ImGuiKey_UpArrow)) move_dir += VECTOR2_UNIT_UP;
+        if(ImGui::IsKeyDown(ImGuiKey_DownArrow)) move_dir += VECTOR2_UNIT_DOWN;
+        if(ImGui::IsKeyDown(ImGuiKey_LeftArrow)) move_dir += VECTOR2_UNIT_LEFT;
+        if(ImGui::IsKeyDown(ImGuiKey_RightArrow)) move_dir += VECTOR2_UNIT_RIGHT;
 
         move_dir.to_unit();
-        move_dir /= game_view.Get_unit_size() * 0.5f;
+        move_dir /= (game_view.Get_unit_size() * 0.1f);
         camera.Move(move_dir);
 
         // 控制摄像机的视野大小
@@ -121,10 +128,10 @@ Game::input_event()
 
     { // 控制玩家
         move_dir.to_zero();
-        if(ImGui::IsKeyDown(ImGuiKey_W)) move_dir += { 0, -1 };
-        if(ImGui::IsKeyDown(ImGuiKey_S)) move_dir += { 0, 1 };
-        if(ImGui::IsKeyDown(ImGuiKey_A)) move_dir += { -1, 0 };
-        if(ImGui::IsKeyDown(ImGuiKey_D)) move_dir += { 1, 0 };
+        if(ImGui::IsKeyDown(ImGuiKey_W)) move_dir += VECTOR2_UNIT_UP;
+        if(ImGui::IsKeyDown(ImGuiKey_S)) move_dir += VECTOR2_UNIT_DOWN;
+        if(ImGui::IsKeyDown(ImGuiKey_A)) move_dir += VECTOR2_UNIT_LEFT;
+        if(ImGui::IsKeyDown(ImGuiKey_D)) move_dir += VECTOR2_UNIT_RIGHT;
 
         move_dir.to_unit();
         move_dir *= player_force;
@@ -136,7 +143,9 @@ Game::input_event()
 void
 Game::on_update_view()
 {
-    Vector2 view_size = { painter.imgui_io->DisplaySize.x, painter.imgui_io->DisplaySize.y };
+    static Vector2 view_size;
+
+    view_size = Vector2{ painter.imgui_io->DisplaySize.x, painter.imgui_io->DisplaySize.y };
     view_size /= game_view.Get_unit_size();
     game_view.Set_view_size(view_size);
     game_view.Set_view_center_position(camera.Get_position());

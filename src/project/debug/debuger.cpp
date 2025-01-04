@@ -47,9 +47,18 @@ Debuger::ImGuiWin_Debug(bool* is_open)
     }
 
     ImGui::Separator();
+    ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SweiAliasLegCJKjp));
+
+    { // 视野参数
+        const View& view = game.game_view;
+        ImGui::Text("一单位距离显示为: %.2f个像素", view.Get_unit_size());
+        ImGui::Text("View Center Position: (%.2f, %.2f)", view.Get_view_center_position().vx, view.Get_view_center_position().vy);
+    }
+
+    ImGui::Separator();
 
     {
-        ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SweiAliasLegCJKjp));
+
         ImGui::Text("日本語テスト");
 
         // 显示帧率
@@ -58,10 +67,9 @@ Debuger::ImGuiWin_Debug(bool* is_open)
         ImGui::Text("FPS: %.2f", io.Framerate);
         ImGui::SameLine();
         ImGui::Text("Frame Time: %.2f ms", 1000.0f / io.Framerate);
-
-        ImGui::PopFont();
     }
 
+    ImGui::PopFont();
     ImGui::Separator();
 
     {

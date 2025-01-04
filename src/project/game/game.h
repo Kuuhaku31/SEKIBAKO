@@ -23,9 +23,9 @@ public:
     Color clear_color;
 
 public:
-    float player_force          = 2000.0f;
-    float player_friction       = 500.0f;
-    float player_air_resistance = 0.01f;
+    float player_force          = 100.0f;
+    float player_friction       = 20.0f;
+    float player_air_resistance = 0.5f;
     float player_hight          = 0.0f; // 角色物理高度
 
 private:

@@ -34,7 +34,7 @@ class Painter
 public:
     static Painter& Instance();
 
-    int Init(const char* title = nullptr, const IRect* layout = nullptr); // 0:初始化成功
+    int Init(const char* title = nullptr, const IRect& layout = IRect{ 0, 0, 0, 0 }); // 0:初始化成功
     int Quit();
 
     void On_frame_begin(EventCallback f = nullptr) const;
