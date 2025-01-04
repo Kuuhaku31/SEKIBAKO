@@ -49,7 +49,9 @@ Game::Game()
 
     game_view.Set_unit_size(50.f);
 
-    player = new Player(Vector2{ 1, 3 }, COLOR_ORANGE);
+    player = new Player();
+    player->Set_position(Vector2{ 1, 3 });
+    player->Set_color(COLOR_ORANGE);
     player->Set_mass(1.0f);
     player->Set_radius(0.5);
     player->Set_color(Color{ 0xff, 0x00, 0x00, 0xFF });
