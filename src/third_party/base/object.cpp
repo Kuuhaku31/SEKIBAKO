@@ -72,6 +72,45 @@ Object::Move(const Vector2& move)
     movement_position += move;
 }
 
+void
+Object::Move_to(const Vector2& dst)
+{
+    movement_position = dst;
+}
+
+void
+Object::Move_to_x(float dst_x)
+{
+    movement_position.vx = dst_x;
+}
+
+void
+Object::Move_to_y(float dst_y)
+{
+    movement_position.vy = dst_y;
+}
+
+void
+Object::Stop_move()
+{
+    movement_acceleration.to_zero();
+    movement_velocity.to_zero();
+}
+
+void
+Object::Stop_move_x()
+{
+    movement_acceleration.vx = 0;
+    movement_velocity.vx     = 0;
+}
+
+void
+Object::Stop_move_y()
+{
+    movement_acceleration.vy = 0;
+    movement_velocity.vy     = 0;
+}
+
 const Vector2&
 Object::Get_position() const
 {

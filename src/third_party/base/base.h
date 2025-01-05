@@ -181,6 +181,13 @@ public:
 
     void Force(const Vector2& force);
     void Move(const Vector2& move);
+    void Move_to(const Vector2& dst);
+    void Move_to_x(float dst_x);
+    void Move_to_y(float dst_y);
+
+    void Stop_move();
+    void Stop_move_x();
+    void Stop_move_y();
 
     const Vector2& Get_position() const;
     const Vector2& Get_velocity() const;

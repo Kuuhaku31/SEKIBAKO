@@ -148,10 +148,8 @@ Game::input_event()
         move_dir *= player_force;
         player->Force(move_dir);
 
-        // 如果按下空格键，让玩家跳跃
-        player->try_jump = ImGui::IsKeyPressed(ImGuiKey_Space) || ImGui::IsKeyPressed(ImGuiKey_W);
-        // 如果按下 shift 键，让玩家翻滚
-        player->try_roll = ImGui::IsKeyPressed(ImGuiKey_LeftShift) || ImGui::IsKeyPressed(ImGuiKey_S);
+        player->try_jump = ImGui::IsKeyChordPressed(ImGuiKey_Space) || ImGui::IsKeyChordPressed(ImGuiKey_W);
+        player->try_roll = ImGui::IsKeyChordPressed(ImGuiKey_LeftShift) || ImGui::IsKeyChordPressed(ImGuiKey_S);
     }
 }
 
@@ -170,6 +168,17 @@ void
 Game::on_uodate_player(const float& delta_time)
 {
     player->On_update(delta_time);
+
+    if(player->Get_position().vx < game_view.Get_view_left_top_position().vx)
+    {
+        player->Move_to_x(game_view.Get_view_left_top_position().vx);
+        player->Stop_move_x();
+    }
+    else if(player->Get_position().vx > game_view.Get_view_right_bottom_position().vx)
+    {
+        player->Move_to_x(game_view.Get_view_right_bottom_position().vx);
+        player->Stop_move_x();
+    }
 
     player_hight = -player->Get_position().vy;
 }
