@@ -9,11 +9,17 @@
 Player::Player()
     : Object(10.0f, 1.0f, COLOR_RED)
 {
-    state_machine.Register_state(PLAYER_STATE_IDLE, new PlayerStatesIdle(*this));
-    state_machine.Register_state(PLAYER_STATE_RUN, new PlayerStatesRun(*this));
-    state_machine.Register_state(PLAYER_STATE_LEVIATE, new PlayerStatesLeviate(*this));
+    // 创建状态
+    static PlayerStatesIdle    state_idel(*this);
+    static PlayerStatesRun     state_run(*this);
+    static PlayerStatesLeviate state_leviate(*this);
 
-    state_machine.Switch_to(PLAYER_STATE_IDLE);
+    // 注册状态
+    Register_state(&state_idel);
+    Register_state(&state_run);
+    Register_state(&state_leviate);
+
+    Switch_to_state(PLAYER_STATE_IDLE);
 }
 
 void
@@ -57,7 +63,7 @@ Player::On_update(float delta_time)
 {
     floor_correct_y = floor_y - object_radius;
 
-    state_machine.On_update(delta_time);
+    StateMachine::On_update(delta_time);
 
     if(enable_gravity) movement_velocity.vy += GRAVITY * delta_time;
 

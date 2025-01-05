@@ -5,7 +5,8 @@
 #include "player_states.h"
 
 PlayerStatesIdle::PlayerStatesIdle(Player& player)
-    : player(player)
+    : StateNode(PLAYER_STATE_IDLE)
+    , player(player)
 {
 }
 
@@ -24,12 +25,12 @@ PlayerStatesIdle::On_update(float delta_time)
     if(player.movement_velocity.vx)
     {
         // 如果速度不为0，切换到 run 状态
-        player.state_machine.Switch_to(PLAYER_STATE_RUN);
+        player.Switch_to_state(PLAYER_STATE_RUN);
     }
     else if(player.movement_velocity.vy)
     {
         // 如果有垂直速度，切换到 leviate 状态
-        player.state_machine.Switch_to(PLAYER_STATE_LEVIATE);
+        player.Switch_to_state(PLAYER_STATE_LEVIATE);
     }
 }
 

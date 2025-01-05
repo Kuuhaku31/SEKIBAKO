@@ -6,7 +6,8 @@
 #include "player.h"
 
 PlayerStatesJump::PlayerStatesJump(Player& player)
-    : player(player)
+    : StateNode(PLAYER_STATE_JUMP)
+    , player(player)
 {
 }
 

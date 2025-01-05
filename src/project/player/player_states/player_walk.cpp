@@ -5,7 +5,8 @@
 #include "player_states.h"
 
 PlayerStatesWalk::PlayerStatesWalk(Player& player)
-    : player(player)
+    : StateNode(PLAYER_STATE_WALK)
+    , player(player)
 {
 }
 

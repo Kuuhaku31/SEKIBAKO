@@ -5,7 +5,8 @@
 #include "player_states.h"
 
 PlayerStatesLeviate::PlayerStatesLeviate(Player& player)
-    : player(player)
+    : StateNode(PLAYER_STATE_LEVIATE)
+    , player(player)
 {
 }
 
@@ -27,12 +28,12 @@ PlayerStatesLeviate::On_update(float delta_time)
         if(player.movement_velocity.vx)
         {
             // 如果速度不为0，切换到 run 状态
-            player.state_machine.Switch_to(PLAYER_STATE_RUN);
+            player.Switch_to_state(PLAYER_STATE_RUN);
         }
         else
         {
             // 如果速度为0，切换到 idle 状态
-            player.state_machine.Switch_to(PLAYER_STATE_IDLE);
+            player.Switch_to_state(PLAYER_STATE_IDLE);
         }
     }
 }

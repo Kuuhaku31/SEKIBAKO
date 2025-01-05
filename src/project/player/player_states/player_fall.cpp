@@ -6,7 +6,8 @@
 #include "player.h"
 
 PlayerStatesFall::PlayerStatesFall(Player& player)
-    : player(player)
+    : StateNode(PLAYER_STATE_FALL)
+    , player(player)
 {
 }
 

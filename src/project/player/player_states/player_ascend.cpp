@@ -6,7 +6,8 @@
 #include "player.h"
 
 PlayerStatesAscend::PlayerStatesAscend(Player& player)
-    : player(player)
+    : StateNode(PLAYER_STATE_ASCEND)
+    , player(player)
 {
 }
 
