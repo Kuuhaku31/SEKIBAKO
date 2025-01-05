@@ -1,6 +1,7 @@
 
 // player_walk.cpp
 
+#include "player.h"
 #include "player_states.h"
 
 PlayerStatesWalk::PlayerStatesWalk(Player* player)

@@ -17,6 +17,14 @@
 #define PLAYER_STATE_HURT "player_hurt"     // 角色受伤
 #define PLAYER_STATE_DEAD "player_dead"     // 角色死亡
 
+/*
+    idle -> run, jump
+    run -> idle, jump
+    jump -> ascend, fall
+    ascend -> jump, fall
+    fall -> idle, run, jump
+*/
+
 enum class PalyerFacing
 {
     Player_Facing_Left,
@@ -25,6 +33,9 @@ enum class PalyerFacing
 
 class Player : public Object
 {
+    friend class PlayerStatesIdle;
+    friend class PlayerStatesRun;
+
 public:
     Player();
     ~Player() = default;
@@ -33,10 +44,18 @@ public:
     void On_render() const override;
     void On_update(float delta_time) override;
 
+public:
+    void On_jump() { try_jump = true; }
+
 private:
     StateMachine state_machine;
     PalyerFacing facing = PalyerFacing::Player_Facing_Right;
 
+    bool  try_jump   = false;
     float jump_force = 4000.0f;
     float jump_time  = 0.5f;
+
+    bool enable_gravity = true; // 是否启用重力
+
+    const float GRAVITY = 40.0f; // 重力加速度
 };

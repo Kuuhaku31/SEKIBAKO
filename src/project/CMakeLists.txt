@@ -7,6 +7,7 @@ set(PATHS
     ${CMAKE_CURRENT_LIST_DIR}/debug
     ${CMAKE_CURRENT_LIST_DIR}/imgui_windows
     ${CMAKE_CURRENT_LIST_DIR}/player
+    ${CMAKE_CURRENT_LIST_DIR}/player/player_states
 )
 
 set(SRC_PATH
