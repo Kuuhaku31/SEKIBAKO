@@ -13,6 +13,7 @@ class Player;
 #define PLAYER_STATE_WALK "player_walk"       // 角色行走
 #define PLAYER_STATE_RUN "player_run"         // 角色奔跑
 #define PLAYER_STATE_JUMP "player_jump"       // 角色跳跃
+#define PLAYER_STATE_ROLL "player_roll"       // 角色翻滚
 #define PLAYER_STATE_ASCEND "player_ascend"   // 角色上升
 #define PLAYER_STATE_LEVIATE "player_leviate" // 角色悬浮
 #define PLAYER_STATE_FALL "player_fall"       // 角色下落
@@ -79,6 +80,22 @@ public:
 private:
     Player& player;
     Timer   jump_timer; // 跳跃计时器
+};
+
+// 角色翻滚
+class PlayerStatesRoll : public StateNode
+{
+public:
+    PlayerStatesRoll(Player& player);
+    ~PlayerStatesRoll() = default;
+
+    void On_enter() override;
+    void On_update(float delta_time) override;
+    void On_exit() override;
+
+private:
+    Player& player;
+    Timer   roll_timer; // 翻滚计时器
 };
 
 // 角色上升

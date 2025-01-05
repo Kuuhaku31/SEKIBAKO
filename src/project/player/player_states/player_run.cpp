@@ -42,6 +42,11 @@ PlayerStatesRun::On_update(float delta_time)
         // 如果尝试跳跃，切换到 jump 状态
         player.Switch_to_state(PLAYER_STATE_JUMP);
     }
+    else if(player.try_roll)
+    {
+        // 如果尝试翻滚，切换到 roll 状态
+        player.Switch_to_state(PLAYER_STATE_ROLL);
+    }
 }
 
 void

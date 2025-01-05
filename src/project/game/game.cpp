@@ -133,17 +133,25 @@ Game::input_event()
 
     { // 控制玩家
         move_dir.to_zero();
-        if(ImGui::IsKeyDown(ImGuiKey_W)) move_dir += VECTOR2_UNIT_UP;
-        if(ImGui::IsKeyDown(ImGuiKey_S)) move_dir += VECTOR2_UNIT_DOWN;
-        if(ImGui::IsKeyDown(ImGuiKey_A)) move_dir += VECTOR2_UNIT_LEFT;
-        if(ImGui::IsKeyDown(ImGuiKey_D)) move_dir += VECTOR2_UNIT_RIGHT;
+        if(ImGui::IsKeyDown(ImGuiKey_A))
+        {
+            move_dir += VECTOR2_UNIT_LEFT;
+            player->Set_facing(PalyerFacing::Player_Facing_Left);
+        }
+        if(ImGui::IsKeyDown(ImGuiKey_D))
+        {
+            move_dir += VECTOR2_UNIT_RIGHT;
+            player->Set_facing(PalyerFacing::Player_Facing_Right);
+        }
 
         move_dir.to_unit();
         move_dir *= player_force;
         player->Force(move_dir);
 
         // 如果按下空格键，让玩家跳跃
-        if(ImGui::IsKeyPressed(ImGuiKey_Space)) player->On_jump();
+        if(ImGui::IsKeyPressed(ImGuiKey_Space) || ImGui::IsKeyPressed(ImGuiKey_W)) player->On_jump();
+        // 如果按下 shift 键，让玩家翻滚
+        if(ImGui::IsKeyPressed(ImGuiKey_LeftShift) || ImGui::IsKeyPressed(ImGuiKey_S)) player->On_roll();
     }
 }
 

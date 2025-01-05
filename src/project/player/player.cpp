@@ -14,12 +14,14 @@ Player::Player()
     static PlayerStatesRun     state_run(*this);
     static PlayerStatesLeviate state_leviate(*this);
     static PlayerStatesJump    state_jump(*this);
+    static PlayerStatesRoll    state_roll(*this);
 
     // 注册状态
     Register_state(&state_idel);
     Register_state(&state_run);
     Register_state(&state_leviate);
     Register_state(&state_jump);
+    Register_state(&state_roll);
 
     Switch_to_state(PLAYER_STATE_IDLE);
 }
@@ -63,6 +65,7 @@ Player::On_render() const
 void
 Player::On_update(float delta_time)
 {
+    // 地面修正 y 坐标
     floor_correct_y = floor_y - object_radius;
 
     StateMachine::On_update(delta_time);

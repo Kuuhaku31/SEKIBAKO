@@ -7,10 +7,11 @@
 #include "state_machine.h"
 
 /*
-    idle -> run, leviate, jump
-    run -> idle, leviate, jump
+    idle -> run, leviate, jump, roll
+    run -> idle, leviate, jump, roll
     leviate -> idle, run, jump
     jump -> leviate
+    roll -> idle, run
 */
 
 enum class PalyerFacing
@@ -27,6 +28,7 @@ class Player : public Object, public StateMachine
     friend class PlayerStatesRun;
     friend class PlayerStatesLeviate;
     friend class PlayerStatesJump;
+    friend class PlayerStatesRoll;
 
 public:
     Player();
@@ -39,6 +41,12 @@ public:
 public:
     void On_stop_move() { movement_acceleration.to_zero(), movement_velocity.to_zero(); }
     void On_jump() { try_jump = true; }
+    void On_roll()
+    {
+        if(is_on_ground) try_roll = true;
+    }
+
+    void Set_facing(PalyerFacing facing) { this->facing = facing; }
 
 private:
     PalyerFacing facing = PalyerFacing::Player_Facing_Right;
@@ -46,6 +54,10 @@ private:
     bool  try_jump   = false;
     float jump_force = 250.0f;
     float jump_time  = 0.1f;
+
+    bool  try_roll   = false;
+    float roll_force = 100.0f;
+    float roll_time  = 0.2f;
 
     bool is_on_ground = false; // 是否在地面上
 
