@@ -4,7 +4,7 @@
 #include "player.h"
 #include "player_states.h"
 
-PlayerStatesWalk::PlayerStatesWalk(Player* player)
+PlayerStatesWalk::PlayerStatesWalk(Player& player)
     : player(player)
 {
 }

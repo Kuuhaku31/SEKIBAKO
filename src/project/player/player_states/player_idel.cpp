@@ -4,7 +4,7 @@
 #include "player.h"
 #include "player_states.h"
 
-PlayerStatesIdle::PlayerStatesIdle(Player* player)
+PlayerStatesIdle::PlayerStatesIdle(Player& player)
     : player(player)
 {
 }
@@ -12,22 +12,24 @@ PlayerStatesIdle::PlayerStatesIdle(Player* player)
 void
 PlayerStatesIdle::On_enter()
 {
-    player->object_color = COLOR_GREEN;
+    player.object_color = COLOR_GREEN;
+
+    player.is_on_ground   = true;
+    player.enable_gravity = false;
 }
 
 void
 PlayerStatesIdle::On_update(float delta_time)
 {
-    if(!player->movement_velocity.approx_zero())
+    if(player.movement_velocity.vx)
     {
-        // 如果速度不为0，切换到run状态
-        player->state_machine.Switch_to(PLAYER_STATE_RUN);
+        // 如果速度不为0，切换到 run 状态
+        player.state_machine.Switch_to(PLAYER_STATE_RUN);
     }
-    else if(player->try_jump)
+    else if(player.movement_velocity.vy)
     {
-        // 如果尝试跳跃，切换到jump状态
-        player->state_machine.Switch_to(PLAYER_STATE_JUMP);
-        player->try_jump = false;
+        // 如果有垂直速度，切换到 leviate 状态
+        player.state_machine.Switch_to(PLAYER_STATE_LEVIATE);
     }
 }
 

@@ -5,7 +5,7 @@
 
 #include "player.h"
 
-PlayerStatesFall::PlayerStatesFall(Player* player)
+PlayerStatesFall::PlayerStatesFall(Player& player)
     : player(player)
 {
 }

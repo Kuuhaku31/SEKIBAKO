@@ -5,7 +5,7 @@
 
 #include "player.h"
 
-PlayerStatesAscend::PlayerStatesAscend(Player* player)
+PlayerStatesAscend::PlayerStatesAscend(Player& player)
     : player(player)
 {
 }

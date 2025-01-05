@@ -5,7 +5,7 @@
 
 #include "player.h"
 
-PlayerStatesJump::PlayerStatesJump(Player* player)
+PlayerStatesJump::PlayerStatesJump(Player& player)
     : player(player)
 {
 }
