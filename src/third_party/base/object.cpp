@@ -23,14 +23,24 @@ Object::Object(float radius, float mass, const Color& color)
 void
 Object::On_update(float delta_time)
 {
+    float v_mod = 0.0f;
+    if(v_mod = movement_velocity.module()) // 如果有速度，需要计算阻力
+    {
+        float f_mod = 0.0f;
+        if(is_use_air_resistance) f_mod += v_mod * v_mod * movement_air_resistance; // 计算空气阻力
+        if(is_use_friction) f_mod += movement_friction;                             // 计算摩擦力
+        if(f_mod) movement_acceleration -= (movement_velocity / v_mod) * f_mod;     // 计算阻力加速度
+    }
+
     // 更新速度
     movement_velocity += (movement_acceleration * delta_time);
-    if(movement_velocity.module() < 1.0f) movement_velocity.to_zero();
+    if(movement_velocity.module() < 0.1f) movement_velocity.to_zero();
 
     // 更新位置
     movement_position += (movement_velocity * delta_time);
 
-    // 清空加速度
+    // 更新加速度
+    acceleration_last_frame = movement_acceleration;
     movement_acceleration.to_zero();
 }
 
@@ -57,22 +67,6 @@ Object::Force(const Vector2& force)
 }
 
 void
-Object::Force_resistance(float friction, float air_resistance)
-{
-    static float   v_mod = 0.0f;
-    static Vector2 dir;
-
-    v_mod = movement_velocity.module();
-    if(v_mod > 0)
-    {
-        // 根据阻力参数改变运动状态
-        dir = movement_velocity;
-        dir.to_unit();
-        Force(dir * -(friction + v_mod * v_mod * air_resistance));
-    }
-}
-
-void
 Object::Move(const Vector2& move)
 {
     movement_position += move;
@@ -93,7 +87,7 @@ Object::Get_velocity() const
 const Vector2&
 Object::Get_acceleration() const
 {
-    return movement_acceleration;
+    return acceleration_last_frame;
 }
 
 float

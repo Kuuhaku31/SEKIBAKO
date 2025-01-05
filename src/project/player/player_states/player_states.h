@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "base.h"
 #include "state_machine.h"
 
 class Player;
@@ -77,6 +78,7 @@ public:
 
 private:
     Player& player;
+    Timer   jump_timer; // 跳跃计时器
 };
 
 // 角色上升

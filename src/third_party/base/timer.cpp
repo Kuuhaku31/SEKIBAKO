@@ -3,7 +3,7 @@
 
 #include "base.h"
 
-// 设置等待时间
+// 重启计时器
 void
 Timer::restart()
 {

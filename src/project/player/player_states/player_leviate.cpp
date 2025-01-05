@@ -17,13 +17,15 @@ PlayerStatesLeviate::On_enter()
 
     player.is_on_ground   = false;
     player.enable_gravity = true;
+
+    player.is_use_friction       = false;
+    player.is_use_air_resistance = true;
 }
 
 void
 PlayerStatesLeviate::On_update(float delta_time)
 {
-    // 如果碰到地面
-    if(player.movement_position.vy >= player.floor_correct_y)
+    if(player.movement_position.vy >= player.floor_correct_y) // 如果碰到地面
     {
         if(player.movement_velocity.vx)
         {
@@ -35,6 +37,11 @@ PlayerStatesLeviate::On_update(float delta_time)
             // 如果速度为0，切换到 idle 状态
             player.Switch_to_state(PLAYER_STATE_IDLE);
         }
+    }
+    else if(player.try_jump)
+    {
+        // 如果尝试跳跃，切换到 jump 状态
+        player.Switch_to_state(PLAYER_STATE_JUMP);
     }
 }
 

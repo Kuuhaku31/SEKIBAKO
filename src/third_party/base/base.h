@@ -172,8 +172,14 @@ public:
     virtual void On_update(float delta_time);
     virtual void On_render() const;
 
+public:
+    bool is_use_friction       = false;
+    bool is_use_air_resistance = false;
+
+    float movement_friction       = 0.0f;
+    float movement_air_resistance = 0.0f;
+
     void Force(const Vector2& force);
-    void Force_resistance(float friction, float air_resistance);
     void Move(const Vector2& move);
 
     const Vector2& Get_position() const;
@@ -197,6 +203,8 @@ protected:
     float   movement_mass = 0;     // 质量（为0时视为质量无穷大）
     float   object_radius = 0;     // 半径
     Color   object_color;          // 颜色
+
+    Vector2 acceleration_last_frame; // 上一帧的加速度
 };
 
 

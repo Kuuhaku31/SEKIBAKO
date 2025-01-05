@@ -7,9 +7,10 @@
 #include "state_machine.h"
 
 /*
-    idle -> run, leviate
-    run -> idle, leviate
-    leviate -> idle, run
+    idle -> run, leviate, jump
+    run -> idle, leviate, jump
+    leviate -> idle, run, jump
+    jump -> leviate
 */
 
 enum class PalyerFacing
@@ -20,9 +21,12 @@ enum class PalyerFacing
 
 class Player : public Object, public StateMachine
 {
+    friend class Debuger;
+
     friend class PlayerStatesIdle;
     friend class PlayerStatesRun;
     friend class PlayerStatesLeviate;
+    friend class PlayerStatesJump;
 
 public:
     Player();
@@ -33,14 +37,15 @@ public:
     void On_update(float delta_time) override;
 
 public:
+    void On_stop_move() { movement_acceleration.to_zero(), movement_velocity.to_zero(); }
     void On_jump() { try_jump = true; }
 
 private:
     PalyerFacing facing = PalyerFacing::Player_Facing_Right;
 
     bool  try_jump   = false;
-    float jump_force = 4000.0f;
-    float jump_time  = 0.5f;
+    float jump_force = 250.0f;
+    float jump_time  = 0.1f;
 
     bool is_on_ground = false; // 是否在地面上
 

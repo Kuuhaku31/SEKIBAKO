@@ -17,6 +17,11 @@ PlayerStatesRun::On_enter()
 
     player.is_on_ground   = true;
     player.enable_gravity = false;
+
+    player.is_use_friction       = true;
+    player.is_use_air_resistance = true;
+
+    player.movement_acceleration.vy = player.movement_velocity.vy = 0;
 }
 
 void
@@ -31,6 +36,11 @@ PlayerStatesRun::On_update(float delta_time)
     {
         // 如果有垂直速度，切换到 leviate 状态
         player.Switch_to_state(PLAYER_STATE_LEVIATE);
+    }
+    else if(player.try_jump)
+    {
+        // 如果尝试跳跃，切换到 jump 状态
+        player.Switch_to_state(PLAYER_STATE_JUMP);
     }
 }
 

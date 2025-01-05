@@ -13,11 +13,13 @@ Player::Player()
     static PlayerStatesIdle    state_idel(*this);
     static PlayerStatesRun     state_run(*this);
     static PlayerStatesLeviate state_leviate(*this);
+    static PlayerStatesJump    state_jump(*this);
 
     // 注册状态
     Register_state(&state_idel);
     Register_state(&state_run);
     Register_state(&state_leviate);
+    Register_state(&state_jump);
 
     Switch_to_state(PLAYER_STATE_IDLE);
 }
@@ -65,7 +67,7 @@ Player::On_update(float delta_time)
 
     StateMachine::On_update(delta_time);
 
-    if(enable_gravity) movement_velocity.vy += GRAVITY * delta_time;
+    if(enable_gravity) movement_acceleration.vy += GRAVITY;
 
     Object::On_update(delta_time);
 

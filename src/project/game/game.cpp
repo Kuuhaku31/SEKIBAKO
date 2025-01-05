@@ -53,6 +53,11 @@ Game::Game()
     player->Set_position(Vector2{ 1, 3 });
     player->Set_mass(1.0f);
     player->Set_radius(0.5);
+
+    player->is_use_friction         = true;
+    player->is_use_air_resistance   = true;
+    player->movement_friction       = 20.0f;
+    player->movement_air_resistance = 0.1f;
 }
 
 int
@@ -136,7 +141,9 @@ Game::input_event()
         move_dir.to_unit();
         move_dir *= player_force;
         player->Force(move_dir);
-        player->Force_resistance(player_friction, player_air_resistance);
+
+        // 如果按下空格键，让玩家跳跃
+        if(ImGui::IsKeyPressed(ImGuiKey_Space)) player->On_jump();
     }
 }
 

@@ -34,6 +34,8 @@ public:
     void Switch_to_state(const char* id);       // 切换状态
     void Register_state(StateNode* state_node); // 注册状态
 
+    const char* Current_state() const { return current_state->state_id; }
+
 private:
     StateNode* current_state = nullptr; // 当前状态
     StatePool  state_pool;              // 状态池
