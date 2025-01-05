@@ -39,25 +39,27 @@ public:
     void On_update(float delta_time) override;
 
 public:
+    bool try_jump = false;
+    bool try_roll = false;
+
+public:
     void On_stop_move() { movement_acceleration.to_zero(), movement_velocity.to_zero(); }
-    void On_jump() { try_jump = true; }
-    void On_roll()
-    {
-        if(is_on_ground) try_roll = true;
-    }
 
     void Set_facing(PalyerFacing facing) { this->facing = facing; }
 
 private:
     PalyerFacing facing = PalyerFacing::Player_Facing_Right;
 
-    bool  try_jump   = false;
-    float jump_force = 250.0f;
-    float jump_time  = 0.1f;
+    float   jump_force = 250.0f;
+    float   jump_time  = 0.1f;
+    float   jump_cd    = 0.5f;
+    uint8_t can_jump   = 2;
 
-    bool  try_roll   = false;
     float roll_force = 100.0f;
     float roll_time  = 0.2f;
+    float roll_cd    = 0.5f;
+    bool  can_roll   = true;
+    Timer roll_cd_timer; // 翻滚冷却计时器
 
     bool is_on_ground = false; // 是否在地面上
 

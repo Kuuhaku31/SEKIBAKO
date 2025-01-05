@@ -24,6 +24,10 @@ Player::Player()
     Register_state(&state_roll);
 
     Switch_to_state(PLAYER_STATE_IDLE);
+
+    // 计时器
+    roll_cd_timer.set_one_shot(true);
+    roll_cd_timer.set_on_timeout([&]() { can_roll = true; }); // 翻滚冷却计时结束
 }
 
 void
@@ -68,12 +72,21 @@ Player::On_update(float delta_time)
     // 地面修正 y 坐标
     floor_correct_y = floor_y - object_radius;
 
+    // 重置跳跃次数
+    if(is_on_ground) can_jump = 2;
+
+    // 更新状态机
     StateMachine::On_update(delta_time);
 
+    // 计算重力
     if(enable_gravity) movement_acceleration.vy += GRAVITY;
 
+    // 更新物理
     Object::On_update(delta_time);
 
     // 修正位置
     if(movement_position.vy > floor_correct_y) movement_velocity.vy = movement_position.vy = floor_correct_y;
+
+    // 更新计时器
+    roll_cd_timer.on_update(delta_time);
 }

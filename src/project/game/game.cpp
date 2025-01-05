@@ -149,9 +149,9 @@ Game::input_event()
         player->Force(move_dir);
 
         // 如果按下空格键，让玩家跳跃
-        if(ImGui::IsKeyPressed(ImGuiKey_Space) || ImGui::IsKeyPressed(ImGuiKey_W)) player->On_jump();
+        player->try_jump = ImGui::IsKeyPressed(ImGuiKey_Space) || ImGui::IsKeyPressed(ImGuiKey_W);
         // 如果按下 shift 键，让玩家翻滚
-        if(ImGui::IsKeyPressed(ImGuiKey_LeftShift) || ImGui::IsKeyPressed(ImGuiKey_S)) player->On_roll();
+        player->try_roll = ImGui::IsKeyPressed(ImGuiKey_LeftShift) || ImGui::IsKeyPressed(ImGuiKey_S);
     }
 }
 

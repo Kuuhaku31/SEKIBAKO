@@ -20,6 +20,7 @@ PlayerStatesJump::On_enter()
     player.object_color = COLOR_PURPLE;
 
     player.try_jump = false;
+    player.can_jump--;
 
     player.is_on_ground   = false;
     player.enable_gravity = true;

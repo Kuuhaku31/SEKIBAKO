@@ -46,8 +46,10 @@ Debuger::ImGuiWin_Debug(bool* is_open)
             ImGui::InputFloat("Player Force", &game.player_force);
             ImGui::InputFloat("Player Jump Force", &player->jump_force);
             ImGui::InputFloat("Player Jump Time", &player->jump_time);
+            ImGui::InputFloat("Player Jump Time CD", &player->jump_cd);
             ImGui::InputFloat("Player Roll Force", &player->roll_force);
             ImGui::InputFloat("Player Roll Time", &player->roll_time);
+            ImGui::InputFloat("Player Roll Time CD", &player->roll_cd);
             ImGui::InputFloat("Player Friction", &player->movement_friction);
             ImGui::InputFloat("Player Air Resistance", &player->movement_air_resistance);
         }

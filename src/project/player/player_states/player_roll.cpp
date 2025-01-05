@@ -26,10 +26,13 @@ PlayerStatesRoll::On_enter()
 {
     player.object_color = COLOR_ORANGE;
 
-    player.try_roll = false;
+    player.can_roll = false;
 
     roll_timer.set_wait_time(player.roll_time);
     roll_timer.restart();
+
+    player.roll_cd_timer.set_wait_time(player.roll_cd);
+    player.roll_cd_timer.restart();
 }
 
 void
