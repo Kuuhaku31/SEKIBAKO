@@ -77,6 +77,9 @@ Player::On_update(float delta_time)
     // 重置跳跃次数
     if(is_on_ground) can_jump = 2;
 
+    // 更新角色加速度
+    movement_acceleration += Get_try_move_dir() * run_acceleration;
+
     // 更新角色朝向
     // 要求朝向没有被锁定并且尝试朝一个方向移动
     if(!is_Lock_facing && Is_try_move_x_on_one_dir())
@@ -105,6 +108,47 @@ Player::On_update(float delta_time)
 
     // 更新计时器
     roll_cd_timer.on_update(delta_time);
+}
+
+// 角色是否至少按下一个水平移动键
+bool
+Player::Is_try_move_x() const
+{
+    return player_controler & PLAYER_CONTROL_IS_MOVE_X;
+}
+
+// 角色是否只按下一个水平移动键
+bool
+Player::Is_try_move_x_on_one_dir() const
+{
+    return (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_LEFT ||
+           (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_RIGHT;
+}
+
+// 角色面朝方向是否背对速度
+bool
+Player::Is_back_to_velocity() const
+{
+    switch(facing)
+    {
+    case PalyerFacing::Player_Facing_Left: return movement_velocity.vx > 0;
+    case PalyerFacing::Player_Facing_Right: return movement_velocity.vx < 0;
+    default: return false;
+    }
+}
+
+// 获取角色尝试移动的方向
+const Vector2&
+Player::Get_try_move_dir() const
+{
+    static Vector2 move_dir;
+
+    move_dir.to_zero();
+    if(player_controler & PLAYER_CONTROL_PRESS_LEFT) move_dir += VECTOR2_UNIT_LEFT;
+    if(player_controler & PLAYER_CONTROL_PRESS_RIGHT) move_dir += VECTOR2_UNIT_RIGHT;
+    move_dir.to_unit();
+
+    return move_dir;
 }
 
 const Vector2&

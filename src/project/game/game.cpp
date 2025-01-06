@@ -132,15 +132,6 @@ Game::input_event()
     }
 
     { // 控制玩家
-        move_dir.to_zero();
-        if(ImGui::IsKeyDown(ImGuiKey_A)) move_dir += VECTOR2_UNIT_LEFT;
-        if(ImGui::IsKeyDown(ImGuiKey_D)) move_dir += VECTOR2_UNIT_RIGHT;
-
-        move_dir.to_unit();
-        move_dir *= player_force;
-        player->Force(move_dir);
-
-
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_LEFT, ImGui::IsKeyDown(ImGuiKey_A));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_RIGHT, ImGui::IsKeyDown(ImGuiKey_D));
 

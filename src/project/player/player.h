@@ -61,28 +61,16 @@ public:
     PlayerControler player_controler = 0;
 
     // 角色是否至少按下一个水平移动键
-    bool Is_try_move_x() const
-    {
-        return player_controler & PLAYER_CONTROL_IS_MOVE_X;
-    }
+    bool Is_try_move_x() const;
 
     // 角色是否只按下一个水平移动键
-    bool Is_try_move_x_on_one_dir() const
-    {
-        return (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_LEFT ||
-               (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_RIGHT;
-    }
+    bool Is_try_move_x_on_one_dir() const;
 
     // 角色面朝方向是否背对速度
-    bool Is_back_to_velocity() const
-    {
-        switch(facing)
-        {
-        case PalyerFacing::Player_Facing_Left: return movement_velocity.vx > 0;
-        case PalyerFacing::Player_Facing_Right: return movement_velocity.vx < 0;
-        default: return false;
-        }
-    }
+    bool Is_back_to_velocity() const;
+
+    // 获取角色尝试移动的方向
+    const Vector2& Get_try_move_dir() const;
 
 public:
     const Vector2& Get_facing_vector() const;
@@ -96,6 +84,9 @@ private:
     PalyerFacing facing = PalyerFacing::Player_Facing_Right;
     // 是否锁定朝向
     bool is_Lock_facing = false;
+
+    // 移动
+    float run_acceleration = 30.0f; // 跑步加速度
 
     // 跳跃
     float   jump_force = 250.0f; // 跳跃力
