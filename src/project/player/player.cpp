@@ -78,7 +78,8 @@ Player::On_update(float delta_time)
     if(is_on_ground) can_jump = 2;
 
     // 更新角色朝向
-    if(!is_Lock_facing)
+    // 要求朝向没有被锁定并且尝试朝一个方向移动
+    if(!is_Lock_facing && Is_try_move_x_on_one_dir())
     {
         if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_LEFT))
         {

@@ -12,9 +12,13 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
     roll_timer.set_on_timeout([&player]() {
         // 退出翻滚状态
         if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
-            CONTROLER_GET(player.player_controler, PLAYER_CONTROL_IS_MOVE_X))
+            player.Is_try_move_x_on_one_dir() &&
+            (player.movement_velocity.vx > player.dash_min_speed || player.movement_velocity.vx < -player.dash_min_speed))
         {
-            // 如果按住冲刺键并且有水平速度，切换到 dash 状态
+            // 如果按住冲刺键
+            // 并且有水平速度
+            // 并且当前速度大于最小冲刺速度
+            // 切换到 dash 状态
             player.Switch_to_state(PLAYER_STATE_DASH);
         }
         else

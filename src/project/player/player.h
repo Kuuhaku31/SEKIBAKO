@@ -60,6 +60,19 @@ public:
     // 控制
     PlayerControler player_controler = 0;
 
+    // 角色是否至少按下一个水平移动键
+    bool Is_try_move_x() const
+    {
+        return player_controler & PLAYER_CONTROL_IS_MOVE_X;
+    }
+
+    // 角色是否只按下一个水平移动键
+    bool Is_try_move_x_on_one_dir() const
+    {
+        return (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_LEFT ||
+               (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_RIGHT;
+    }
+
 public:
     const Vector2& Get_facing_vector() const;
 
@@ -85,6 +98,7 @@ private:
 
     // 冲刺
     float dash_acceleration = 100.0f;
+    float dash_min_speed    = 20.0f; // 冲刺最小速度
 
 
     bool is_on_ground = false; // 是否在地面上
