@@ -73,10 +73,24 @@ public:
                (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_RIGHT;
     }
 
+    // 角色面朝方向是否背对速度
+    bool Is_back_to_velocity() const
+    {
+        switch(facing)
+        {
+        case PalyerFacing::Player_Facing_Left: return movement_velocity.vx > 0;
+        case PalyerFacing::Player_Facing_Right: return movement_velocity.vx < 0;
+        default: return false;
+        }
+    }
+
 public:
     const Vector2& Get_facing_vector() const;
 
-    void On_stop_move() { movement_acceleration.to_zero(), movement_velocity.to_zero(); }
+    void On_stop_move()
+    {
+        movement_acceleration.to_zero(), movement_velocity.to_zero();
+    }
 
 private:
     PalyerFacing facing = PalyerFacing::Player_Facing_Right;
@@ -84,17 +98,16 @@ private:
     bool is_Lock_facing = false;
 
     // 跳跃
-    float   jump_force = 250.0f;
-    float   jump_time  = 0.1f;
-    float   jump_cd    = 0.5f;
-    uint8_t can_jump   = 2;
+    float   jump_force = 250.0f; // 跳跃力
+    float   jump_time  = 0.1f;   // 跳跃时间
+    uint8_t can_jump   = 2;      // 可跳跃次数
 
     // 翻滚
-    float roll_force = 100.0f;
-    float roll_time  = 0.2f;
-    float roll_cd    = 0.5f;
-    bool  can_roll   = true;
-    Timer roll_cd_timer; // 翻滚冷却计时器
+    float roll_force   = 100.0f; // 翻滚力
+    float roll_time    = 0.2f;   // 翻滚时间
+    float roll_cd      = 0.5f;   // 翻滚冷却
+    bool  roll_cd_done = true;   // 翻滚冷却是否完成
+    Timer roll_cd_timer;         // 翻滚冷却计时器
 
     // 冲刺
     float dash_acceleration = 100.0f;

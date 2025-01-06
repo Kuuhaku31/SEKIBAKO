@@ -40,7 +40,7 @@ PlayerStatesRoll::On_enter()
 {
     player.object_color = PLAYER_ROLL_COLOR;
 
-    player.can_roll       = false;
+    player.roll_cd_done   = false;
     player.is_Lock_facing = true;
 
     roll_timer.set_wait_time(player.roll_time);
