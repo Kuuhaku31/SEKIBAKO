@@ -15,6 +15,7 @@ Player::Player()
     static PlayerStatesLeviate state_leviate(*this);
     static PlayerStatesJump    state_jump(*this);
     static PlayerStatesRoll    state_roll(*this);
+    static PlayerStatesDash    state_dash(*this);
 
     // 注册状态
     Register_state(&state_idel);
@@ -22,6 +23,7 @@ Player::Player()
     Register_state(&state_leviate);
     Register_state(&state_jump);
     Register_state(&state_roll);
+    Register_state(&state_dash);
 
     Switch_to_state(PLAYER_STATE_IDLE);
 
@@ -75,6 +77,19 @@ Player::On_update(float delta_time)
     // 重置跳跃次数
     if(is_on_ground) can_jump = 2;
 
+    // 更新角色朝向
+    if(!is_Lock_facing)
+    {
+        if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_LEFT))
+        {
+            facing = PalyerFacing::Player_Facing_Left;
+        }
+        else if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_RIGHT))
+        {
+            facing = PalyerFacing::Player_Facing_Right;
+        }
+    }
+
     // 更新状态机
     StateMachine::On_update(delta_time);
 
@@ -89,4 +104,17 @@ Player::On_update(float delta_time)
 
     // 更新计时器
     roll_cd_timer.on_update(delta_time);
+}
+
+const Vector2&
+Player::Get_facing_vector() const
+{
+    static Vector2 facing_vector;
+    switch(facing)
+    {
+    case PalyerFacing::Player_Facing_Left: facing_vector = VECTOR2_UNIT_LEFT; break;
+    case PalyerFacing::Player_Facing_Right: facing_vector = VECTOR2_UNIT_RIGHT; break;
+    default: facing_vector = VECTOR2_UNIT_RIGHT; break;
+    }
+    return facing_vector;
 }

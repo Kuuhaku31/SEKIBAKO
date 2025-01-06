@@ -11,7 +11,8 @@
     run -> idle, leviate, jump, roll
     leviate -> idle, run, jump
     jump -> leviate
-    roll -> idle, run
+    roll -> idle, run, dash
+    dash -> run
 */
 
 enum class PalyerFacing
@@ -19,6 +20,22 @@ enum class PalyerFacing
     Player_Facing_Left,
     Player_Facing_Right
 };
+
+typedef uint32_t PlayerControler;
+// 冲刺键（按下） | 冲刺键（点击） | 跳跃键（点击） | 右移键（按下） | 左移键（按下） | 下移键（按下） | 上移键（按下） |
+#define PLAYER_CONTROL_PRESS_UP PlayerControler(1 << 0)
+#define PLAYER_CONTROL_PRESS_DOWN PlayerControler(1 << 1)
+#define PLAYER_CONTROL_PRESS_LEFT PlayerControler(1 << 2)
+#define PLAYER_CONTROL_PRESS_RIGHT PlayerControler(1 << 3)
+#define PLAYER_CONTROL_IS_MOVE_X PlayerControler(PLAYER_CONTROL_PRESS_LEFT | PLAYER_CONTROL_PRESS_RIGHT)
+#define PLAYER_CONTROL_CLICK_JUMP PlayerControler(1 << 4)
+#define PLAYER_CONTROL_CLICK_DASH PlayerControler(1 << 5)
+#define PLAYER_CONTROL_PRESS_DASH PlayerControler(1 << 6)
+
+#define CONTROLER_GET(controler, flag) (controler & flag)
+#define CONTROLER_TRUE(controler, flag) (controler |= flag)
+#define CONTROLER_FALSE(controler, flag) (controler &= ~flag)
+#define CONTROLER_SET(controler, flag, value) (value ? controler |= flag : controler &= ~flag)
 
 class Player : public Object, public StateMachine
 {
@@ -29,6 +46,7 @@ class Player : public Object, public StateMachine
     friend class PlayerStatesLeviate;
     friend class PlayerStatesJump;
     friend class PlayerStatesRoll;
+    friend class PlayerStatesDash;
 
 public:
     Player();
@@ -39,27 +57,35 @@ public:
     void On_update(float delta_time) override;
 
 public:
-    bool try_jump = false;
-    bool try_roll = false;
+    // 控制
+    PlayerControler player_controler = 0;
 
 public:
-    void On_stop_move() { movement_acceleration.to_zero(), movement_velocity.to_zero(); }
+    const Vector2& Get_facing_vector() const;
 
-    void Set_facing(PalyerFacing facing) { this->facing = facing; }
+    void On_stop_move() { movement_acceleration.to_zero(), movement_velocity.to_zero(); }
 
 private:
     PalyerFacing facing = PalyerFacing::Player_Facing_Right;
+    // 是否锁定朝向
+    bool is_Lock_facing = false;
 
+    // 跳跃
     float   jump_force = 250.0f;
     float   jump_time  = 0.1f;
     float   jump_cd    = 0.5f;
     uint8_t can_jump   = 2;
 
+    // 翻滚
     float roll_force = 100.0f;
     float roll_time  = 0.2f;
     float roll_cd    = 0.5f;
     bool  can_roll   = true;
     Timer roll_cd_timer; // 翻滚冷却计时器
+
+    // 冲刺
+    float dash_acceleration = 100.0f;
+
 
     bool is_on_ground = false; // 是否在地面上
 

@@ -10,13 +10,23 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
 {
     roll_timer.set_one_shot(true);
     roll_timer.set_on_timeout([&player]() {
-        if(player.movement_velocity.vx)
+        // 退出翻滚状态
+        if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
+            CONTROLER_GET(player.player_controler, PLAYER_CONTROL_IS_MOVE_X))
         {
-            player.Switch_to_state(PLAYER_STATE_RUN);
+            // 如果按住冲刺键并且有水平速度，切换到 dash 状态
+            player.Switch_to_state(PLAYER_STATE_DASH);
         }
         else
         {
-            player.Switch_to_state(PLAYER_STATE_IDLE);
+            if(player.movement_velocity.vx)
+            {
+                player.Switch_to_state(PLAYER_STATE_RUN);
+            }
+            else
+            {
+                player.Switch_to_state(PLAYER_STATE_IDLE);
+            }
         }
     }); // 翻滚计时结束
 }
@@ -24,9 +34,10 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
 void
 PlayerStatesRoll::On_enter()
 {
-    player.object_color = COLOR_ORANGE;
+    player.object_color = PLAYER_ROLL_COLOR;
 
-    player.can_roll = false;
+    player.can_roll       = false;
+    player.is_Lock_facing = true;
 
     roll_timer.set_wait_time(player.roll_time);
     roll_timer.restart();
@@ -40,15 +51,11 @@ PlayerStatesRoll::On_update(float delta_time)
 {
     roll_timer.on_update(delta_time);
 
-    switch(player.facing)
-    {
-    case PalyerFacing::Player_Facing_Left: player.movement_acceleration.vx -= player.roll_force; break;
-    case PalyerFacing::Player_Facing_Right: player.movement_acceleration.vx += player.roll_force; break;
-    default: break;
-    }
+    player.movement_acceleration += (player.Get_facing_vector() * player.roll_force);
 }
 
 void
 PlayerStatesRoll::On_exit()
 {
+    player.is_Lock_facing = false;
 }

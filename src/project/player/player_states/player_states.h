@@ -12,6 +12,7 @@ class Player;
 #define PLAYER_STATE_IDLE "player_idle"       // 角色空闲
 #define PLAYER_STATE_WALK "player_walk"       // 角色行走
 #define PLAYER_STATE_RUN "player_run"         // 角色奔跑
+#define PLAYER_STATE_DASH "player_dash"       // 角色冲刺
 #define PLAYER_STATE_JUMP "player_jump"       // 角色跳跃
 #define PLAYER_STATE_ROLL "player_roll"       // 角色翻滚
 #define PLAYER_STATE_ASCEND "player_ascend"   // 角色上升
@@ -20,6 +21,13 @@ class Player;
 #define PLAYER_STATE_ATTACK "player_attack"   // 角色攻击
 #define PLAYER_STATE_HURT "player_hurt"       // 角色受伤
 #define PLAYER_STATE_DEAD "player_dead"       // 角色死亡
+
+#define PLAYER_IDEEL_COLOR COLOR_PURPLE
+#define PLAYER_RUN_COLOR COLOR_GREEN
+#define PLAYER_DASH_COLOR COLOR_YELLOW
+#define PLAYER_JUMP_COLOR COLOR_BLUE
+#define PLAYER_ROLL_COLOR COLOR_RED
+#define PLAYER_LEVIATE_COLOR COLOR_ORANGE
 
 // 角色空闲
 class PlayerStatesIdle : public StateNode
@@ -57,6 +65,21 @@ class PlayerStatesRun : public StateNode
 public:
     PlayerStatesRun(Player& player);
     ~PlayerStatesRun() = default;
+
+    void On_enter() override;
+    void On_update(float delta_time) override;
+    void On_exit() override;
+
+private:
+    Player& player;
+};
+
+// 角色冲刺
+class PlayerStatesDash : public StateNode
+{
+public:
+    PlayerStatesDash(Player& player);
+    ~PlayerStatesDash() = default;
 
     void On_enter() override;
     void On_update(float delta_time) override;

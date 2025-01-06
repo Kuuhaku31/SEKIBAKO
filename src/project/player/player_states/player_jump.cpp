@@ -17,10 +17,12 @@ PlayerStatesJump::PlayerStatesJump(Player& player)
 void
 PlayerStatesJump::On_enter()
 {
-    player.object_color = COLOR_PURPLE;
+    player.object_color = PLAYER_JUMP_COLOR;
 
-    player.try_jump = false;
+    CONTROLER_FALSE(player.player_controler, PLAYER_CONTROL_CLICK_JUMP);
     player.can_jump--;
+
+    if(player.movement_velocity.vy > 0) player.movement_velocity.vy = 0;
 
     player.is_on_ground   = false;
     player.enable_gravity = true;

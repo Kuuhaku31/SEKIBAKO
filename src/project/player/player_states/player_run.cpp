@@ -13,7 +13,7 @@ PlayerStatesRun::PlayerStatesRun(Player& player)
 void
 PlayerStatesRun::On_enter()
 {
-    player.object_color = COLOR_BLUE;
+    player.object_color = PLAYER_RUN_COLOR;
 
     player.is_on_ground   = true;
     player.enable_gravity = false;
@@ -37,12 +37,12 @@ PlayerStatesRun::On_update(float delta_time)
         // 如果有垂直速度，切换到 leviate 状态
         player.Switch_to_state(PLAYER_STATE_LEVIATE);
     }
-    else if(player.try_jump && player.can_jump > 0)
+    else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_JUMP) && player.can_jump > 0)
     {
         // 如果尝试跳跃，切换到 jump 状态
         player.Switch_to_state(PLAYER_STATE_JUMP);
     }
-    else if(player.try_roll && player.can_roll)
+    else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_DASH) && player.can_roll)
     {
         // 如果尝试翻滚，切换到 roll 状态
         player.Switch_to_state(PLAYER_STATE_ROLL);

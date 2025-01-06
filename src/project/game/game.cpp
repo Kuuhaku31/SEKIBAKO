@@ -133,23 +133,20 @@ Game::input_event()
 
     { // 控制玩家
         move_dir.to_zero();
-        if(ImGui::IsKeyDown(ImGuiKey_A))
-        {
-            move_dir += VECTOR2_UNIT_LEFT;
-            player->Set_facing(PalyerFacing::Player_Facing_Left);
-        }
-        if(ImGui::IsKeyDown(ImGuiKey_D))
-        {
-            move_dir += VECTOR2_UNIT_RIGHT;
-            player->Set_facing(PalyerFacing::Player_Facing_Right);
-        }
+        if(ImGui::IsKeyDown(ImGuiKey_A)) move_dir += VECTOR2_UNIT_LEFT;
+        if(ImGui::IsKeyDown(ImGuiKey_D)) move_dir += VECTOR2_UNIT_RIGHT;
 
         move_dir.to_unit();
         move_dir *= player_force;
         player->Force(move_dir);
 
-        player->try_jump = ImGui::IsKeyChordPressed(ImGuiKey_Space) || ImGui::IsKeyChordPressed(ImGuiKey_W);
-        player->try_roll = ImGui::IsKeyChordPressed(ImGuiKey_LeftShift) || ImGui::IsKeyChordPressed(ImGuiKey_S);
+
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_LEFT, ImGui::IsKeyDown(ImGuiKey_A));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_RIGHT, ImGui::IsKeyDown(ImGuiKey_D));
+
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_JUMP, ImGui::IsKeyChordPressed(ImGuiKey_Space) || ImGui::IsKeyChordPressed(ImGuiKey_W));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_DASH, ImGui::IsKeyChordPressed(ImGuiKey_LeftShift) || ImGui::IsKeyChordPressed(ImGuiKey_S));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_DASH, ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_S));
     }
 }
 
