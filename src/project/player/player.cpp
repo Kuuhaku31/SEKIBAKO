@@ -75,7 +75,7 @@ Player::On_update(float delta_time)
     floor_correct_y = floor_y - object_radius;
 
     // 重置跳跃次数
-    if(is_on_ground) can_jump = 2;
+    if(is_on_ground) can_jump_count = can_jump_count_max;
 
     // 更新角色加速度
     movement_acceleration += Get_try_move_dir() * run_acceleration;
@@ -151,6 +151,7 @@ Player::Get_try_move_dir() const
     return move_dir;
 }
 
+// 获取角色面朝方向
 const Vector2&
 Player::Get_facing_vector() const
 {
@@ -162,4 +163,11 @@ Player::Get_facing_vector() const
     default: facing_vector = VECTOR2_UNIT_RIGHT; break;
     }
     return facing_vector;
+}
+
+// 角色停止移动
+void
+Player::On_stop_move()
+{
+    movement_acceleration.to_zero(), movement_velocity.to_zero();
 }

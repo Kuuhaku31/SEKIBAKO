@@ -38,7 +38,7 @@ PlayerStatesLeviate::On_update(float delta_time)
             player.Switch_to_state(PLAYER_STATE_IDLE);
         }
     }
-    else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_JUMP) && player.can_jump > 0)
+    else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_JUMP) && player.can_jump_count > 0)
     {
         // 如果尝试跳跃，切换到 jump 状态
         player.Switch_to_state(PLAYER_STATE_JUMP);

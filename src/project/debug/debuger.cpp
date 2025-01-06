@@ -42,11 +42,12 @@ Debuger::ImGuiWin_Debug(bool* is_open)
             ImGui::Text("Player Acceleration: (%.2f, %.2f)", player->Get_acceleration().vx, player->Get_acceleration().vy);
             ImGui::Text("Player Is Use Friction: %s", player->is_use_friction ? "true" : "false");
             ImGui::Text("Player Is Use Air Resistance: %s", player->is_use_air_resistance ? "true" : "false");
+            ImGui::Text("Player Can Jump Count: %d", player->can_jump_count);
             ImGui::Text("Player Mass: %.2f", player->Get_mass());
             ImGui::InputFloat("Player Run Acceleration", &player->run_acceleration);
-            ImGui::InputFloat("Player Jump Force", &player->jump_force);
+            ImGui::InputFloat("Player Jump Force", &player->jump_acceleration);
             ImGui::InputFloat("Player Jump Time", &player->jump_time);
-            ImGui::InputFloat("Player Roll Force", &player->roll_force);
+            ImGui::InputFloat("Player Roll Force", &player->roll_acceleration);
             ImGui::InputFloat("Player Roll Time", &player->roll_time);
             ImGui::InputFloat("Player Roll Time CD", &player->roll_cd);
             ImGui::InputFloat("Player Dash Acceleration", &player->dash_acceleration);

@@ -20,7 +20,7 @@ PlayerStatesJump::On_enter()
     player.object_color = PLAYER_JUMP_COLOR;
 
     CONTROLER_FALSE(player.player_controler, PLAYER_CONTROL_CLICK_JUMP);
-    player.can_jump--;
+    player.can_jump_count--;
 
     if(player.movement_velocity.vy > 0) player.movement_velocity.vy = 0;
 
@@ -38,7 +38,7 @@ void
 PlayerStatesJump::On_update(float delta_time)
 {
     jump_timer.on_update(delta_time);
-    player.movement_acceleration.vy -= player.jump_force;
+    player.movement_acceleration.vy -= player.jump_acceleration;
 }
 
 void
