@@ -22,8 +22,11 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
         }
         else
         {
-            // 如果速度不为0
-            if(player.movement_velocity.vx)
+            if(player.movement_velocity.vx) // 如果有竖直速度
+            {
+                player.Switch_to_state(PLAYER_STATE_LEVIATE);
+            }
+            else if(player.movement_velocity.vx) // 如果速度不为0
             {
                 if(player.Is_try_walk())
                 {

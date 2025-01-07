@@ -13,11 +13,34 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player)
     : StateNode(PLAYER_STATE_ATTACK)
     , player(player)
 {
+    static TimerCallback timer_callback = [&player]() {
+        // 攻击动作计时结束，退出攻击状态
+        if(!player.is_on_ground) // 如果不在地面
+        {
+            player.Switch_to_state(PLAYER_STATE_LEVIATE);
+        }
+        else if(player.movement_velocity.vx) // 如果速度不为0
+        {
+            if(player.Is_try_walk())
+            {
+                // 如果尝试行走，切换到 walk 状态
+                player.Switch_to_state(PLAYER_STATE_WALK);
+            }
+            else // (player.Is_try_run())
+            {
+                // 如果尝试奔跑，切换到 run 状态
+                player.Switch_to_state(PLAYER_STATE_RUN);
+            }
+        }
+        else
+        {
+            player.Switch_to_state(PLAYER_STATE_IDLE);
+        }
+    };
+
     // 攻击动作计时器初始化
     attack_action_timer.set_one_shot(true);
-    attack_action_timer.set_on_timeout([&]() {
-        player.Switch_to_state(PLAYER_STATE_IDLE);
-    }); // 攻击动作计时结束，退出攻击状态
+    attack_action_timer.set_on_timeout(timer_callback);
 
     // 攻击效果等待计时器初始化
     attack_effect_wait_timer.set_one_shot(true);
@@ -38,9 +61,10 @@ PlayerStatesAttack::On_enter()
 {
     player.object_color = PLAYER_ATTACK_COLOR;
 
-    player.attack_cd_done     = false;
+    player.is_Lock_facing_dir = true;
     player.is_lock_action_dir = true;
 
+    player.attack_cd_done = false;
     player.attack_cd_timer.set_wait_time(player.attack_cd);
     player.attack_cd_timer.restart();
 
@@ -93,6 +117,7 @@ PlayerStatesAttack::On_update_after(float delta_time)
 void
 PlayerStatesAttack::On_exit()
 {
+    player.is_Lock_facing_dir = false;
     player.is_lock_action_dir = false;
 
     // 销毁攻击碰撞盒

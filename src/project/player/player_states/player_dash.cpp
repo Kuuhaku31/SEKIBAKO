@@ -21,9 +21,18 @@ PlayerStatesDash::On_enter()
 void
 PlayerStatesDash::On_update(float delta_time)
 {
-    if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
-        player.Is_try_move_x_on_one_dir() &&
-        (player.movement_velocity.vx > player.dash_min_speed || player.movement_velocity.vx < -player.dash_min_speed)
+    if(!player.is_on_ground) // 如果不在地面
+    {
+        player.Switch_to_state(PLAYER_STATE_LEVIATE);
+    }
+    else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_JUMP) && player.can_jump_count > 0)
+    {
+        // 如果尝试跳跃，切换到 jump 状态
+        player.Switch_to_state(PLAYER_STATE_JUMP);
+    }
+    else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
+            player.Is_try_move_x_on_one_dir() &&
+            (player.movement_velocity.vx > player.dash_min_speed || player.movement_velocity.vx < -player.dash_min_speed)
 
     )
     {
@@ -35,8 +44,7 @@ PlayerStatesDash::On_update(float delta_time)
     }
     else // 否则退出冲刺状态
     {
-        // 如果速度不为0
-        if(player.movement_velocity.vx)
+        if(player.movement_velocity.vx) // 如果速度不为0
         {
             if(player.Is_try_walk())
             {
