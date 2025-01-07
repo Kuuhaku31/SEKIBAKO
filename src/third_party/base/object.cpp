@@ -23,10 +23,12 @@ Object::Object(float radius, float mass, const Color& color)
 void
 Object::On_update(float delta_time)
 {
-    float v_mod = 0.0f;
+    static float v_mod, f_mod = 0.0f;
+    float        vel_x_before = movement_velocity.vx;
+
     if(v_mod = movement_velocity.module()) // 如果有速度，需要计算阻力
     {
-        float f_mod = 0.0f;
+        f_mod = 0.0f;
         if(is_use_air_resistance) f_mod += v_mod * v_mod * movement_air_resistance; // 计算空气阻力
         if(is_use_friction) f_mod += movement_friction;                             // 计算摩擦力
         if(f_mod) movement_acceleration -= (movement_velocity / v_mod) * f_mod;     // 计算阻力加速度
@@ -34,7 +36,9 @@ Object::On_update(float delta_time)
 
     // 更新速度
     movement_velocity += (movement_acceleration * delta_time);
-    if(movement_velocity.module() < 0.1f) movement_velocity.to_zero();
+
+    // 如果速度方向改变，速度置0
+    if(vel_x_before * movement_velocity.vx < 0) movement_velocity.vx = 0;
 
     // 更新位置
     movement_position += (movement_velocity * delta_time);

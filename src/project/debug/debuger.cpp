@@ -7,6 +7,8 @@
 #include "resources_pool.h"
 #include "util.h"
 
+#include <bitset>
+
 Debuger* Debuger::instance = nullptr;
 Debuger&
 Debuger::Instance()
@@ -26,15 +28,18 @@ Debuger::ImGuiWin_Debug(bool* is_open)
 
     ImGui::Begin("Hello, ImGuiWin_Debug!", is_open);
     ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SmileySans));
+    ImGui::Text("Hello, ImGuiWin_Debug!");
+    ImGui::SameLine();
+    ImGui::Text("中文测试");
+
+    ImGui::Separator();
+    ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SweiAliasLegCJKjp));
 
     {
-        ImGui::Text("Hello, ImGuiWin_Debug!");
-        ImGui::SameLine();
-        ImGui::Text("中文测试");
-
         Player* player = game.player;
         if(player)
         {
+            ImGui::Text("Player Controler: %s", std::bitset<32>(player->player_controler).to_string().c_str());
             ImGui::Text("Player State: %s", player->Current_state());
             ImGui::Text("Player Hight: %.2f", game.player_hight);
             ImGui::Text("Player Position: (%.2f, %.2f)", player->Get_position().vx, player->Get_position().vy);
@@ -44,6 +49,7 @@ Debuger::ImGuiWin_Debug(bool* is_open)
             ImGui::Text("Player Is Use Air Resistance: %s", player->is_use_air_resistance ? "true" : "false");
             ImGui::Text("Player Can Jump Count: %d", player->can_jump_count);
             ImGui::Text("Player Mass: %.2f", player->Get_mass());
+            ImGui::InputFloat("Player Walk Acceleration", &player->walk_acceleration);
             ImGui::InputFloat("Player Run Acceleration", &player->run_acceleration);
             ImGui::InputFloat("Player Jump Force", &player->jump_acceleration);
             ImGui::InputFloat("Player Jump Time", &player->jump_time);
@@ -52,13 +58,14 @@ Debuger::ImGuiWin_Debug(bool* is_open)
             ImGui::InputFloat("Player Roll Time CD", &player->roll_cd);
             ImGui::InputFloat("Player Dash Acceleration", &player->dash_acceleration);
             ImGui::InputFloat("Player Dash Min Speed", &player->dash_min_speed);
-            ImGui::InputFloat("Player Friction", &player->movement_friction);
-            ImGui::InputFloat("Player Air Resistance", &player->movement_air_resistance);
+            ImGui::InputFloat("Player Friction", &player->player_friction);
+            ImGui::InputFloat("Player Air Resistance", &player->player_air_resistance);
+            ImGui::InputFloat("Player Friction Walk", &player->player_friction_walk);
+            ImGui::InputFloat("Player Air Resistance Walk", &player->player_air_resistance_walk);
         }
     }
 
     ImGui::Separator();
-    ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SweiAliasLegCJKjp));
 
     { // 视野参数
         const View& view = game.game_view;

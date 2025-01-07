@@ -8,31 +8,43 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
     : StateNode(PLAYER_STATE_ROLL)
     , player(player)
 {
-    roll_timer.set_one_shot(true);
-    roll_timer.set_on_timeout([&player]() {
+    static TimerCallback timer_callback = [&player]() {
         // 退出翻滚状态
         if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
             player.Is_try_move_x_on_one_dir() &&
             (player.movement_velocity.vx > player.dash_min_speed || player.movement_velocity.vx < -player.dash_min_speed))
         {
-            // 如果按住冲刺键
-            // 并且有水平速度
-            // 并且当前速度大于最小冲刺速度
+            // 1. 如果按住冲刺键
+            // 2. 且有水平速度
+            // 3. 且当前速度大于最小冲刺速度
             // 切换到 dash 状态
             player.Switch_to_state(PLAYER_STATE_DASH);
         }
         else
         {
+            // 如果速度不为0
             if(player.movement_velocity.vx)
             {
-                player.Switch_to_state(PLAYER_STATE_RUN);
+                if(player.Is_try_walk())
+                {
+                    // 如果尝试行走，切换到 walk 状态
+                    player.Switch_to_state(PLAYER_STATE_WALK);
+                }
+                else // (player.Is_try_run())
+                {
+                    // 如果尝试奔跑，切换到 run 状态
+                    player.Switch_to_state(PLAYER_STATE_RUN);
+                }
             }
             else
             {
                 player.Switch_to_state(PLAYER_STATE_IDLE);
             }
         }
-    }); // 翻滚计时结束
+    };
+
+    roll_timer.set_one_shot(true);
+    roll_timer.set_on_timeout(timer_callback); // 翻滚计时结束
 }
 
 void

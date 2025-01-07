@@ -11,6 +11,7 @@ Player::Player()
 {
     // 创建状态
     static PlayerStatesIdle    state_idel(*this);
+    static PlayerStatesWalk    state_walk(*this);
     static PlayerStatesRun     state_run(*this);
     static PlayerStatesLeviate state_leviate(*this);
     static PlayerStatesJump    state_jump(*this);
@@ -19,6 +20,7 @@ Player::Player()
 
     // 注册状态
     Register_state(&state_idel);
+    Register_state(&state_walk);
     Register_state(&state_run);
     Register_state(&state_leviate);
     Register_state(&state_jump);
@@ -78,7 +80,7 @@ Player::On_update(float delta_time)
     if(is_on_ground) can_jump_count = can_jump_count_max;
 
     // 更新角色加速度
-    movement_acceleration += Get_try_move_dir() * run_acceleration;
+    movement_acceleration += Get_try_move_dir() * current_move_acceleration;
 
     // 更新角色朝向
     // 要求朝向没有被锁定并且尝试朝一个方向移动
@@ -149,6 +151,18 @@ Player::Get_try_move_dir() const
     move_dir.to_unit();
 
     return move_dir;
+}
+
+bool
+Player::Is_try_walk() const
+{
+    return Is_try_move_x_on_one_dir() && CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_L_ALT);
+}
+
+bool
+Player::Is_try_run() const
+{
+    return Is_try_move_x_on_one_dir() && !CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_L_ALT);
 }
 
 // 获取角色面朝方向

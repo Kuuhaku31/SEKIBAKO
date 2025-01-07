@@ -85,7 +85,7 @@ public:
 #define VECTOR2_UNIT_LEFT Vector2{ -1.0f, 0.0f }
 #define VECTOR2_UNIT_RIGHT Vector2{ 1.0f, 0.0f }
 
-
+typedef std::function<void()> TimerCallback;
 class Timer
 {
 public:
@@ -110,7 +110,7 @@ private:
     bool  one_shot  = false; // 计时器是否为一次性触发
 
     // 超时回调函数
-    std::function<void()> on_timeout = nullptr;
+    TimerCallback on_timeout = nullptr;
 };
 
 

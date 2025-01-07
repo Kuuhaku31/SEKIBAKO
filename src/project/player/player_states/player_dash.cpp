@@ -27,17 +27,27 @@ PlayerStatesDash::On_update(float delta_time)
 
     )
     {
-        // 只有在冲刺键按下
-        // 并且只按下一个水平移动键
-        // 并且当前速度大于最小冲刺速度
+        // 1.只有在冲刺键按下
+        // 2.并且只按下一个水平移动键
+        // 3.并且当前速度大于最小冲刺速度
         // 时，才能冲刺
         player.movement_acceleration += (player.Get_facing_vector() * player.dash_acceleration);
     }
     else // 否则退出冲刺状态
     {
+        // 如果速度不为0
         if(player.movement_velocity.vx)
         {
-            player.Switch_to_state(PLAYER_STATE_RUN);
+            if(player.Is_try_walk())
+            {
+                // 如果尝试行走，切换到 walk 状态
+                player.Switch_to_state(PLAYER_STATE_WALK);
+            }
+            else // (player.Is_try_run())
+            {
+                // 如果尝试奔跑，切换到 run 状态
+                player.Switch_to_state(PLAYER_STATE_RUN);
+            }
         }
         else
         {

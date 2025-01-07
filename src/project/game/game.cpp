@@ -50,14 +50,12 @@ Game::Game()
     game_view.Set_unit_size(50.f);
 
     player = new Player();
-    player->Set_position(Vector2{ 1, 3 });
+    player->Set_position(Vector2{ -0.5, 3 });
     player->Set_mass(1.0f);
     player->Set_radius(0.5);
 
-    player->is_use_friction         = true;
-    player->is_use_air_resistance   = true;
-    player->movement_friction       = 20.0f;
-    player->movement_air_resistance = 0.1f;
+    player->is_use_friction       = true;
+    player->is_use_air_resistance = true;
 }
 
 int
@@ -112,12 +110,12 @@ Game::input_event()
 
     static Vector2 move_dir;
 
-    { // 控制摄像机
+    { // 控制摄像机，I，J，K，L
         move_dir.to_zero();
-        if(ImGui::IsKeyDown(ImGuiKey_UpArrow)) move_dir += VECTOR2_UNIT_UP;
-        if(ImGui::IsKeyDown(ImGuiKey_DownArrow)) move_dir += VECTOR2_UNIT_DOWN;
-        if(ImGui::IsKeyDown(ImGuiKey_LeftArrow)) move_dir += VECTOR2_UNIT_LEFT;
-        if(ImGui::IsKeyDown(ImGuiKey_RightArrow)) move_dir += VECTOR2_UNIT_RIGHT;
+        if(ImGui::IsKeyDown(ImGuiKey_I)) move_dir += VECTOR2_UNIT_UP;
+        if(ImGui::IsKeyDown(ImGuiKey_K)) move_dir += VECTOR2_UNIT_DOWN;
+        if(ImGui::IsKeyDown(ImGuiKey_J)) move_dir += VECTOR2_UNIT_LEFT;
+        if(ImGui::IsKeyDown(ImGuiKey_L)) move_dir += VECTOR2_UNIT_RIGHT;
 
         move_dir.to_unit();
         move_dir /= (game_view.Get_unit_size() * 0.1f);
@@ -131,13 +129,15 @@ Game::input_event()
         game_view.Set_unit_size(size);
     }
 
-    { // 控制玩家
+    { // 控制玩家，W，A，S，D，空格，Alt
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_LEFT, ImGui::IsKeyDown(ImGuiKey_A));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_RIGHT, ImGui::IsKeyDown(ImGuiKey_D));
 
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_JUMP, ImGui::IsKeyChordPressed(ImGuiKey_Space) || ImGui::IsKeyChordPressed(ImGuiKey_W));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_DASH, ImGui::IsKeyChordPressed(ImGuiKey_LeftShift) || ImGui::IsKeyChordPressed(ImGuiKey_S));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_DASH, ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_S));
+
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_L_ALT, ImGui::IsKeyDown(ImGuiKey_LeftAlt));
     }
 }
 

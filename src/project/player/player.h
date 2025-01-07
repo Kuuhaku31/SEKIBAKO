@@ -7,12 +7,13 @@
 #include "state_machine.h"
 
 /*
-    idle -> run, leviate, jump, roll
-    run -> idle, leviate, jump, roll
-    leviate -> idle, run, jump
-    jump -> leviate
-    roll -> idle, run, dash
-    dash -> run
+    idle    ->  | X         | walk      | run       | leviate   | jump      | roll      | X
+    walk    ->  | idle      | X         | run       | leviate   | jump      | roll      | X
+    run     ->  | idle      | walk      | X         | leviate   | jump      | roll      | X
+    leviate ->  | idle      | walk      | run       | X         | jump      | X         | X
+    jump    ->  | X         | X         | X         | leviate   | X         | X         | X
+    roll    ->  | idle      | walk      | run       | X         | X         | X         | dash
+    dash    ->  | X         | walk      | run       | X         | X         | X         | X
 */
 
 typedef uint32_t PlayerControler;
@@ -25,6 +26,7 @@ typedef uint32_t PlayerControler;
 #define PLAYER_CONTROL_CLICK_JUMP PlayerControler(1 << 4)
 #define PLAYER_CONTROL_CLICK_DASH PlayerControler(1 << 5)
 #define PLAYER_CONTROL_PRESS_DASH PlayerControler(1 << 6)
+#define PLAYER_CONTROL_PRESS_L_ALT PlayerControler(1 << 7)
 
 #define CONTROLER_GET(controler, flag) (controler & flag)
 #define CONTROLER_TRUE(controler, flag) (controler |= flag)
@@ -36,6 +38,7 @@ class Player : public Object, public StateMachine
     friend class Debuger;
 
     friend class PlayerStatesIdle;
+    friend class PlayerStatesWalk;
     friend class PlayerStatesRun;
     friend class PlayerStatesLeviate;
     friend class PlayerStatesJump;
@@ -60,6 +63,8 @@ public:
     bool Is_try_move_x() const;            // 角色是否至少按下一个水平移动键
     bool Is_try_move_x_on_one_dir() const; // 角色是否只按下一个水平移动键
     bool Is_back_to_velocity() const;      // 角色面朝方向是否背对速度
+    bool Is_try_walk() const;              // 角色是否尝试行走
+    bool Is_try_run() const;               // 角色是否尝试奔跑
 
     const Vector2& Get_try_move_dir() const;  // 获取角色尝试移动的方向
     const Vector2& Get_facing_vector() const; // 获取角色面朝方向
@@ -75,7 +80,15 @@ private:
     bool         is_Lock_facing = false;                             // 是否锁定朝向
 
     // 移动
-    float run_acceleration = 30.0f; // 跑步加速度
+    float current_move_acceleration = 0.0f;  // 当前移动加速度
+    float walk_acceleration         = 29.0f; // 行走加速度
+    float run_acceleration          = 30.0f; // 跑步加速度
+
+    // 阻力
+    float player_friction            = 20.0f; // 角色摩擦力
+    float player_air_resistance      = 0.1f;  // 角色空气阻力
+    float player_friction_walk       = 20.0f; // 角色行走摩擦力
+    float player_air_resistance_walk = 1.0f;  // 角色行走空气阻力
 
     // 跳跃
     float   jump_acceleration  = 250.0f; // 跳跃加速度

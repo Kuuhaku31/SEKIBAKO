@@ -25,12 +25,21 @@ PlayerStatesLeviate::On_enter()
 void
 PlayerStatesLeviate::On_update(float delta_time)
 {
-    if(player.movement_position.vy >= player.floor_correct_y) // 如果碰到地面
+    if(player.movement_position.vy >= player.floor_correct_y)
     {
-        if(player.movement_velocity.vx)
+        // 如果接触到地面，必须退出 leviate 状态
+        if(player.movement_velocity.vx) // 如果速度不为0
         {
-            // 如果速度不为0，切换到 run 状态
-            player.Switch_to_state(PLAYER_STATE_RUN);
+            if(player.Is_try_walk())
+            {
+                // 如果尝试行走，切换到 walk 状态
+                player.Switch_to_state(PLAYER_STATE_WALK);
+            }
+            else // (player.Is_try_run())
+            {
+                // 如果尝试奔跑，切换到 run 状态
+                player.Switch_to_state(PLAYER_STATE_RUN);
+            }
         }
         else
         {
@@ -40,10 +49,13 @@ PlayerStatesLeviate::On_update(float delta_time)
     }
     else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_JUMP) && player.can_jump_count > 0)
     {
-        // 如果尝试跳跃，切换到 jump 状态
+        // 1. 如果尝试跳跃
+        // 2. 且可以跳跃
+        // 切换到 jump 状态
         player.Switch_to_state(PLAYER_STATE_JUMP);
     }
 }
+
 
 void
 PlayerStatesLeviate::On_exit()
