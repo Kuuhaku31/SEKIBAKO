@@ -59,6 +59,7 @@ Debuger::ImGuiWin_Debug(bool* is_open)
 
             ImGui::Separator();
             ImGui::InputFloat("Player Attack Action Time", &player->attack_action_time);
+            ImGui::InputFloat("Player Attack Effect Wait Time", &player->attack_effect_wait_time);
             ImGui::InputFloat("Player Attack Effect Time", &player->attack_effect_time);
             ImGui::InputFloat("Player Attack CD", &player->attack_cd);
             ImGui::Separator();

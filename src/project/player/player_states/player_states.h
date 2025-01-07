@@ -184,8 +184,9 @@ public:
 
 private:
     Player& player;
-    Timer   attack_action_timer; // 攻击动作计时器
-    Timer   attack_effect_timer; // 攻击效果计时器
+    Timer   attack_action_timer;      // 攻击动作计时器
+    Timer   attack_effect_wait_timer; // 攻击效果等待计时器
+    Timer   attack_effect_timer;      // 攻击效果计时器
 
     CollisionBox* attack_box = nullptr; // 攻击碰撞盒
 

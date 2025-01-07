@@ -122,11 +122,12 @@ private:
     float dash_min_speed    = 20.0f; // 冲刺最小速度
 
     // 攻击
-    float attack_action_time = 0.2f; // 攻击动作时间
-    float attack_effect_time = 0.1f; // 攻击效果时间
-    float attack_cd          = 0.5f; // 攻击冷却
-    bool  attack_cd_done     = true; // 攻击冷却是否完成
-    Timer attack_cd_timer;           // 攻击冷却计时器
+    float attack_action_time      = 1.2f; // 攻击动作时间
+    float attack_effect_wait_time = 0.4f; // 攻击效果等待时间
+    float attack_effect_time      = 0.4f; // 攻击效果时间
+    float attack_cd               = 1.5f; // 攻击冷却
+    bool  attack_cd_done          = true; // 攻击冷却是否完成
+    Timer attack_cd_timer;                // 攻击冷却计时器
 
     // 状态
     bool is_on_ground   = false; // 是否在地面上

@@ -26,7 +26,7 @@ class CollisionBox : public FRect
     };
 
 public:
-    bool enable = true; // 是否启用碰撞盒
+    bool enable = false; // 是否启用碰撞盒
 
     CollisionCallback on_collision; // 碰撞回调函数
 
