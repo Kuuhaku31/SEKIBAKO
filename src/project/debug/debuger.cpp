@@ -56,6 +56,13 @@ Debuger::ImGuiWin_Debug(bool* is_open)
             ImGui::InputFloat("Player Roll Force", &player->roll_acceleration);
             ImGui::InputFloat("Player Roll Time", &player->roll_time);
             ImGui::InputFloat("Player Roll Time CD", &player->roll_cd);
+
+            ImGui::Separator();
+            ImGui::InputFloat("Player Attack Action Time", &player->attack_action_time);
+            ImGui::InputFloat("Player Attack Effect Time", &player->attack_effect_time);
+            ImGui::InputFloat("Player Attack CD", &player->attack_cd);
+            ImGui::Separator();
+
             ImGui::InputFloat("Player Dash Acceleration", &player->dash_acceleration);
             ImGui::InputFloat("Player Dash Min Speed", &player->dash_min_speed);
             ImGui::InputFloat("Player Friction", &player->player_friction);

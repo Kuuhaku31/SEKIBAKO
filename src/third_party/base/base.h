@@ -8,16 +8,15 @@
 #include <functional>
 
 
-class IRect
+struct IRect
 {
-public:
     int32_t x = 0;
     int32_t y = 0;
     int32_t w = 0;
     int32_t h = 0;
 };
 
-class FRect
+struct FRect
 {
     float x = 0;
     float y = 0;

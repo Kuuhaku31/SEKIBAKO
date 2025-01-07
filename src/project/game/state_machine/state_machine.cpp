@@ -17,6 +17,13 @@ StateMachine::StateMachine()
 }
 
 void
+StateMachine::On_render() const
+{
+    // 调用on_render函数
+    current_state->On_render();
+}
+
+void
 StateMachine::On_update(float delta)
 {
     // 调用on_update函数

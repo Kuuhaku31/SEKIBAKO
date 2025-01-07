@@ -64,6 +64,13 @@ PlayerStatesIdle::On_update(float delta_time)
         // 切换到 roll 状态
         player.Switch_to_state(PLAYER_STATE_ROLL);
     }
+    else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_ARROW_RIGHT) && player.attack_cd_done)
+    {
+        // 1. 如果尝试攻击
+        // 2. 且 CD 完成
+        // 切换到 attack 状态
+        player.Switch_to_state(PLAYER_STATE_ATTACK);
+    }
 }
 
 void

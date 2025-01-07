@@ -50,7 +50,7 @@ Game::Game()
     game_view.Set_unit_size(50.f);
 
     player = new Player();
-    player->Set_position(Vector2{ -0.5, 3 });
+    player->Set_position(Vector2{ 0, -0.5 });
     player->Set_mass(1.0f);
     player->Set_radius(0.5);
 
@@ -132,6 +132,8 @@ Game::input_event()
     { // 控制玩家，W，A，S，D，空格，Alt
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_LEFT, ImGui::IsKeyDown(ImGuiKey_A));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_RIGHT, ImGui::IsKeyDown(ImGuiKey_D));
+
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_ARROW_RIGHT, ImGui::IsKeyChordPressed(ImGuiKey_RightArrow));
 
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_JUMP, ImGui::IsKeyChordPressed(ImGuiKey_Space) || ImGui::IsKeyChordPressed(ImGuiKey_W));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_DASH, ImGui::IsKeyChordPressed(ImGuiKey_LeftShift) || ImGui::IsKeyChordPressed(ImGuiKey_S));

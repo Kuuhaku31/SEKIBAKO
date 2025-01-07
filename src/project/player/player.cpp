@@ -17,6 +17,7 @@ Player::Player()
     static PlayerStatesJump    state_jump(*this);
     static PlayerStatesRoll    state_roll(*this);
     static PlayerStatesDash    state_dash(*this);
+    static PlayerStatesAttack  state_attack(*this);
 
     // 注册状态
     Register_state(&state_idel);
@@ -26,12 +27,16 @@ Player::Player()
     Register_state(&state_jump);
     Register_state(&state_roll);
     Register_state(&state_dash);
+    Register_state(&state_attack);
 
     Switch_to_state(PLAYER_STATE_IDLE);
 
     // 计时器
     roll_cd_timer.set_one_shot(true);
     roll_cd_timer.set_on_timeout([&]() { roll_cd_done = true; }); // 翻滚冷却计时结束
+
+    attack_cd_timer.set_one_shot(true);
+    attack_cd_timer.set_on_timeout([&]() { attack_cd_done = true; }); // 攻击冷却计时结束
 }
 
 void
@@ -50,7 +55,7 @@ Player::On_render() const
 
     switch(facing)
     {
-    case PalyerFacing::Player_Facing_Left:
+    case PalyerFacingDirection::Player_Facing_Left:
         painter.DrawLine(
             movement_position.vx,
             movement_position.vy,
@@ -59,7 +64,7 @@ Player::On_render() const
             COLOR_YELLOW);
         break;
 
-    case PalyerFacing::Player_Facing_Right:
+    case PalyerFacingDirection::Player_Facing_Right:
         painter.DrawLine(
             movement_position.vx,
             movement_position.vy,
@@ -68,6 +73,8 @@ Player::On_render() const
             COLOR_YELLOW);
         break;
     }
+
+    StateMachine::On_render();
 }
 
 void
@@ -88,11 +95,11 @@ Player::On_update(float delta_time)
     {
         if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_LEFT))
         {
-            facing = PalyerFacing::Player_Facing_Left;
+            facing = PalyerFacingDirection::Player_Facing_Left;
         }
         else if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_RIGHT))
         {
-            facing = PalyerFacing::Player_Facing_Right;
+            facing = PalyerFacingDirection::Player_Facing_Right;
         }
     }
 
@@ -110,6 +117,7 @@ Player::On_update(float delta_time)
 
     // 更新计时器
     roll_cd_timer.on_update(delta_time);
+    attack_cd_timer.on_update(delta_time);
 }
 
 // 角色是否至少按下一个水平移动键
@@ -133,8 +141,8 @@ Player::Is_back_to_velocity() const
 {
     switch(facing)
     {
-    case PalyerFacing::Player_Facing_Left: return movement_velocity.vx > 0;
-    case PalyerFacing::Player_Facing_Right: return movement_velocity.vx < 0;
+    case PalyerFacingDirection::Player_Facing_Left: return movement_velocity.vx > 0;
+    case PalyerFacingDirection::Player_Facing_Right: return movement_velocity.vx < 0;
     default: return false;
     }
 }
@@ -172,8 +180,8 @@ Player::Get_facing_vector() const
     static Vector2 facing_vector;
     switch(facing)
     {
-    case PalyerFacing::Player_Facing_Left: facing_vector = VECTOR2_UNIT_LEFT; break;
-    case PalyerFacing::Player_Facing_Right: facing_vector = VECTOR2_UNIT_RIGHT; break;
+    case PalyerFacingDirection::Player_Facing_Left: facing_vector = VECTOR2_UNIT_LEFT; break;
+    case PalyerFacingDirection::Player_Facing_Right: facing_vector = VECTOR2_UNIT_RIGHT; break;
     default: facing_vector = VECTOR2_UNIT_RIGHT; break;
     }
     return facing_vector;

@@ -7,13 +7,15 @@
 #include "state_machine.h"
 
 /*
-    idle    ->  | X         | walk      | run       | leviate   | jump      | roll      | X
-    walk    ->  | idle      | X         | run       | leviate   | jump      | roll      | X
-    run     ->  | idle      | walk      | X         | leviate   | jump      | roll      | X
-    leviate ->  | idle      | walk      | run       | X         | jump      | X         | X
-    jump    ->  | X         | X         | X         | leviate   | X         | X         | X
-    roll    ->  | idle      | walk      | run       | X         | X         | X         | dash
-    dash    ->  | X         | walk      | run       | X         | X         | X         | X
+    角色状态机
+    idle    ->  | X         | walk      | run       | leviate   | jump      | roll      | X         | attack
+    walk    ->  | idle      | X         | run       | leviate   | jump      | roll      | X         | X
+    run     ->  | idle      | walk      | X         | leviate   | jump      | roll      | X         | X
+    leviate ->  | idle      | walk      | run       | X         | jump      | X         | X         | X
+    jump    ->  | X         | X         | X         | leviate   | X         | X         | X         | X
+    roll    ->  | idle      | walk      | run       | X         | X         | X         | dash      | X
+    dash    ->  | X         | walk      | run       | X         | X         | X         | X         | X
+    attack  ->  | idle      | X         | X         | X         | X         | X         | X         | X
 */
 
 typedef uint32_t PlayerControler;
@@ -27,6 +29,7 @@ typedef uint32_t PlayerControler;
 #define PLAYER_CONTROL_CLICK_DASH PlayerControler(1 << 5)
 #define PLAYER_CONTROL_PRESS_DASH PlayerControler(1 << 6)
 #define PLAYER_CONTROL_PRESS_L_ALT PlayerControler(1 << 7)
+#define PLAYER_CONTROL_CLICK_ARROW_RIGHT PlayerControler(1 << 8)
 
 #define CONTROLER_GET(controler, flag) (controler & flag)
 #define CONTROLER_TRUE(controler, flag) (controler |= flag)
@@ -44,11 +47,20 @@ class Player : public Object, public StateMachine
     friend class PlayerStatesJump;
     friend class PlayerStatesRoll;
     friend class PlayerStatesDash;
+    friend class PlayerStatesAttack;
 
-    enum class PalyerFacing
+    enum class PalyerFacingDirection
     {
         Player_Facing_Left,
         Player_Facing_Right
+    };
+
+    enum class PalyerActionDirection
+    {
+        Player_Action_Up,
+        Player_Action_Down,
+        Player_Action_Left,
+        Player_Action_Right
     };
 
 public:
@@ -76,8 +88,10 @@ public:
 
 private:
     // 朝向
-    PalyerFacing facing         = PalyerFacing::Player_Facing_Right; // 朝向
-    bool         is_Lock_facing = false;                             // 是否锁定朝向
+    PalyerFacingDirection facing = PalyerFacingDirection::Player_Facing_Right; // 朝向
+    PalyerActionDirection action = PalyerActionDirection::Player_Action_Right; // 动作朝向
+
+    bool is_Lock_facing = false; // 是否锁定朝向
 
     // 移动
     float current_move_acceleration = 0.0f;  // 当前移动加速度
@@ -106,6 +120,13 @@ private:
     // 冲刺
     float dash_acceleration = 50.0f; // 冲刺加速度
     float dash_min_speed    = 20.0f; // 冲刺最小速度
+
+    // 攻击
+    float attack_action_time = 0.2f; // 攻击动作时间
+    float attack_effect_time = 0.1f; // 攻击效果时间
+    float attack_cd          = 0.5f; // 攻击冷却
+    bool  attack_cd_done     = true; // 攻击冷却是否完成
+    Timer attack_cd_timer;           // 攻击冷却计时器
 
     // 状态
     bool is_on_ground   = false; // 是否在地面上

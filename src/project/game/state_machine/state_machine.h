@@ -14,9 +14,10 @@ public:
     StateNode(const char* id);
     ~StateNode() = default;
 
-    virtual void On_enter() {};
-    virtual void On_update(float delta_time) {};
-    virtual void On_exit() {};
+    virtual void On_enter() {}
+    virtual void On_render() const {}
+    virtual void On_update(float delta_time) {}
+    virtual void On_exit() {}
 
     const char* const state_id;
 };
@@ -29,6 +30,7 @@ public:
     StateMachine();
     ~StateMachine() = default;
 
+    void On_render() const;
     void On_update(float delta_time);
 
     void Switch_to_state(const char* id);       // 切换状态

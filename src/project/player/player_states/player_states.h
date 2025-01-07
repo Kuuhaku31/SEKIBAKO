@@ -29,6 +29,7 @@ class Player;
 #define PLAYER_JUMP_COLOR COLOR_BLUE
 #define PLAYER_ROLL_COLOR COLOR_RED
 #define PLAYER_LEVIATE_COLOR COLOR_ORANGE
+#define PLAYER_ATTACK_COLOR COLOR_WHITE
 
 // 角色空闲
 class PlayerStatesIdle : public StateNode
@@ -165,4 +166,29 @@ public:
 
 private:
     Player& player;
+};
+
+class CollisionBox;
+
+// 角色攻击
+class PlayerStatesAttack : public StateNode
+{
+public:
+    PlayerStatesAttack(Player& player);
+    ~PlayerStatesAttack() = default;
+
+    void On_enter() override;
+    void On_render() const override;
+    void On_update(float delta_time) override;
+    void On_exit() override;
+
+private:
+    Player& player;
+    Timer   attack_action_timer; // 攻击动作计时器
+    Timer   attack_effect_timer; // 攻击效果计时器
+
+    CollisionBox* attack_box = nullptr; // 攻击碰撞盒
+
+private:
+    void attack_box_follow_player();
 };
