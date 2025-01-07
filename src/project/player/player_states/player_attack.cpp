@@ -38,7 +38,9 @@ PlayerStatesAttack::On_enter()
 {
     player.object_color = PLAYER_ATTACK_COLOR;
 
-    player.attack_cd_done = false;
+    player.attack_cd_done     = false;
+    player.is_lock_action_dir = true;
+
     player.attack_cd_timer.set_wait_time(player.attack_cd);
     player.attack_cd_timer.restart();
 
@@ -79,7 +81,11 @@ PlayerStatesAttack::On_update(float delta_time)
     attack_action_timer.on_update(delta_time);
     attack_effect_wait_timer.on_update(delta_time);
     attack_effect_timer.on_update(delta_time);
+}
 
+void
+PlayerStatesAttack::On_update_after(float delta_time)
+{
     // 更新位置
     attack_box_follow_player();
 }
@@ -87,6 +93,8 @@ PlayerStatesAttack::On_update(float delta_time)
 void
 PlayerStatesAttack::On_exit()
 {
+    player.is_lock_action_dir = false;
+
     // 销毁攻击碰撞盒
     collision_manager.Destroy_collision_box(attack_box);
 }
@@ -94,6 +102,26 @@ PlayerStatesAttack::On_exit()
 void
 PlayerStatesAttack::attack_box_follow_player()
 {
-    attack_box->x = player.movement_position.vx;
-    attack_box->y = player.movement_position.vy;
+    switch(player.action_dir)
+    {
+    case Player::Action_Dir::Up:
+        attack_box->x = player.movement_position.vx - attack_box->w / 2;
+        attack_box->y = player.movement_position.vy - attack_box->h;
+        break;
+
+    case Player::Action_Dir::Down:
+        attack_box->x = player.movement_position.vx - attack_box->w / 2;
+        attack_box->y = player.movement_position.vy;
+        break;
+
+    case Player::Action_Dir::Left:
+        attack_box->x = player.movement_position.vx - attack_box->w;
+        attack_box->y = player.movement_position.vy - attack_box->h / 2;
+        break;
+
+    case Player::Action_Dir::Right:
+        attack_box->x = player.movement_position.vx;
+        attack_box->y = player.movement_position.vy - attack_box->h / 2;
+        break;
+    }
 }

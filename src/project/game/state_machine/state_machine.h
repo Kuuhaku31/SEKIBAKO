@@ -17,6 +17,7 @@ public:
     virtual void On_enter() {}
     virtual void On_render() const {}
     virtual void On_update(float delta_time) {}
+    virtual void On_update_after(float delta_time) {}
     virtual void On_exit() {}
 
     const char* const state_id;
@@ -30,8 +31,9 @@ public:
     StateMachine();
     ~StateMachine() = default;
 
-    void On_render() const;
-    void On_update(float delta_time);
+    void On_render() const { current_state->On_render(); }
+    void On_update(float delta_time) { current_state->On_update(delta_time); }
+    void On_update_after(float delta_time) { current_state->On_update_after(delta_time); }
 
     void Switch_to_state(const char* id);       // 切换状态
     void Register_state(StateNode* state_node); // 注册状态

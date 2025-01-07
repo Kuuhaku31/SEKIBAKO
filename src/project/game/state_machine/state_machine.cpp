@@ -16,20 +16,6 @@ StateMachine::StateMachine()
     current_state = &empty_state;
 }
 
-void
-StateMachine::On_render() const
-{
-    // 调用on_render函数
-    current_state->On_render();
-}
-
-void
-StateMachine::On_update(float delta)
-{
-    // 调用on_update函数
-    current_state->On_update(delta);
-}
-
 // 切换状态
 void
 StateMachine::Switch_to_state(const char* id)

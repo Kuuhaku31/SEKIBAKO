@@ -15,7 +15,7 @@ PlayerStatesDash::On_enter()
 {
     player.object_color = PLAYER_DASH_COLOR;
 
-    player.is_Lock_facing = true;
+    player.is_Lock_facing_dir = true;
 }
 
 void
@@ -59,5 +59,5 @@ PlayerStatesDash::On_update(float delta_time)
 void
 PlayerStatesDash::On_exit()
 {
-    player.is_Lock_facing = false;
+    player.is_Lock_facing_dir = false;
 }

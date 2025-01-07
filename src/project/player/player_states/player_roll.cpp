@@ -52,8 +52,8 @@ PlayerStatesRoll::On_enter()
 {
     player.object_color = PLAYER_ROLL_COLOR;
 
-    player.roll_cd_done   = false;
-    player.is_Lock_facing = true;
+    player.roll_cd_done       = false;
+    player.is_Lock_facing_dir = true;
 
     roll_timer.set_wait_time(player.roll_time);
     roll_timer.restart();
@@ -73,5 +73,5 @@ PlayerStatesRoll::On_update(float delta_time)
 void
 PlayerStatesRoll::On_exit()
 {
-    player.is_Lock_facing = false;
+    player.is_Lock_facing_dir = false;
 }

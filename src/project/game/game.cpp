@@ -133,7 +133,15 @@ Game::input_event()
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_LEFT, ImGui::IsKeyDown(ImGuiKey_A));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_RIGHT, ImGui::IsKeyDown(ImGuiKey_D));
 
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_ARROW_UP, ImGui::IsKeyChordPressed(ImGuiKey_UpArrow));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_ARROW_DOWN, ImGui::IsKeyChordPressed(ImGuiKey_DownArrow));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_ARROW_LEFT, ImGui::IsKeyChordPressed(ImGuiKey_LeftArrow));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_ARROW_RIGHT, ImGui::IsKeyChordPressed(ImGuiKey_RightArrow));
+
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_ARROW_UP, ImGui::IsKeyDown(ImGuiKey_UpArrow));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_ARROW_DOWN, ImGui::IsKeyDown(ImGuiKey_DownArrow));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_ARROW_LEFT, ImGui::IsKeyDown(ImGuiKey_LeftArrow));
+        CONTROLER_SET(player->player_controler, PLAYER_CONTROL_PRESS_ARROW_RIGHT, ImGui::IsKeyDown(ImGuiKey_RightArrow));
 
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_JUMP, ImGui::IsKeyChordPressed(ImGuiKey_Space) || ImGui::IsKeyChordPressed(ImGuiKey_W));
         CONTROLER_SET(player->player_controler, PLAYER_CONTROL_CLICK_DASH, ImGui::IsKeyChordPressed(ImGuiKey_LeftShift) || ImGui::IsKeyChordPressed(ImGuiKey_S));

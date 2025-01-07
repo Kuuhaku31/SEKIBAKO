@@ -53,9 +53,9 @@ Player::On_render() const
 
     );
 
-    switch(facing)
+    switch(facing_dir)
     {
-    case PalyerFacingDirection::Player_Facing_Left:
+    case Facing_Dir::Left:
         painter.DrawLine(
             movement_position.vx,
             movement_position.vy,
@@ -64,7 +64,7 @@ Player::On_render() const
             COLOR_YELLOW);
         break;
 
-    case PalyerFacingDirection::Player_Facing_Right:
+    case Facing_Dir::Right:
         painter.DrawLine(
             movement_position.vx,
             movement_position.vy,
@@ -91,15 +91,36 @@ Player::On_update(float delta_time)
 
     // 更新角色朝向
     // 要求朝向没有被锁定并且尝试朝一个方向移动
-    if(!is_Lock_facing && Is_try_move_x_on_one_dir())
+    if(!is_Lock_facing_dir && Is_try_move_x_on_one_dir())
     {
         if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_LEFT))
         {
-            facing = PalyerFacingDirection::Player_Facing_Left;
+            facing_dir = Facing_Dir::Left;
         }
         else if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_RIGHT))
         {
-            facing = PalyerFacingDirection::Player_Facing_Right;
+            facing_dir = Facing_Dir::Right;
+        }
+    }
+
+    // 更新动作朝向
+    if(!is_lock_action_dir)
+    {
+        if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_ARROW_UP))
+        {
+            action_dir = Action_Dir::Up;
+        }
+        else if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_ARROW_DOWN))
+        {
+            action_dir = Action_Dir::Down;
+        }
+        else if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_ARROW_LEFT))
+        {
+            action_dir = Action_Dir::Left;
+        }
+        else if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_ARROW_RIGHT))
+        {
+            action_dir = Action_Dir::Right;
         }
     }
 
@@ -114,6 +135,9 @@ Player::On_update(float delta_time)
 
     // 修正位置
     if(movement_position.vy > floor_correct_y) movement_velocity.vy = movement_position.vy = floor_correct_y;
+
+    // 更新状态机
+    StateMachine::On_update_after(delta_time);
 
     // 更新计时器
     roll_cd_timer.on_update(delta_time);
@@ -139,10 +163,10 @@ Player::Is_try_move_x_on_one_dir() const
 bool
 Player::Is_back_to_velocity() const
 {
-    switch(facing)
+    switch(facing_dir)
     {
-    case PalyerFacingDirection::Player_Facing_Left: return movement_velocity.vx > 0;
-    case PalyerFacingDirection::Player_Facing_Right: return movement_velocity.vx < 0;
+    case Facing_Dir::Left: return movement_velocity.vx > 0;
+    case Facing_Dir::Right: return movement_velocity.vx < 0;
     default: return false;
     }
 }
@@ -178,10 +202,10 @@ const Vector2&
 Player::Get_facing_vector() const
 {
     static Vector2 facing_vector;
-    switch(facing)
+    switch(facing_dir)
     {
-    case PalyerFacingDirection::Player_Facing_Left: facing_vector = VECTOR2_UNIT_LEFT; break;
-    case PalyerFacingDirection::Player_Facing_Right: facing_vector = VECTOR2_UNIT_RIGHT; break;
+    case Facing_Dir::Left: facing_vector = VECTOR2_UNIT_LEFT; break;
+    case Facing_Dir::Right: facing_vector = VECTOR2_UNIT_RIGHT; break;
     default: facing_vector = VECTOR2_UNIT_RIGHT; break;
     }
     return facing_vector;

@@ -19,7 +19,6 @@
 */
 
 typedef uint32_t PlayerControler;
-// 冲刺键（按下） | 冲刺键（点击） | 跳跃键（点击） | 右移键（按下） | 左移键（按下） | 下移键（按下） | 上移键（按下） |
 #define PLAYER_CONTROL_PRESS_UP PlayerControler(1 << 0)
 #define PLAYER_CONTROL_PRESS_DOWN PlayerControler(1 << 1)
 #define PLAYER_CONTROL_PRESS_LEFT PlayerControler(1 << 2)
@@ -29,7 +28,17 @@ typedef uint32_t PlayerControler;
 #define PLAYER_CONTROL_CLICK_DASH PlayerControler(1 << 5)
 #define PLAYER_CONTROL_PRESS_DASH PlayerControler(1 << 6)
 #define PLAYER_CONTROL_PRESS_L_ALT PlayerControler(1 << 7)
-#define PLAYER_CONTROL_CLICK_ARROW_RIGHT PlayerControler(1 << 8)
+
+#define PLAYER_CONTROL_CLICK_ARROW_UP PlayerControler(1 << 8)
+#define PLAYER_CONTROL_CLICK_ARROW_DOWN PlayerControler(1 << 9)
+#define PLAYER_CONTROL_CLICK_ARROW_RIGHT PlayerControler(1 << 10)
+#define PLAYER_CONTROL_CLICK_ARROW_LEFT PlayerControler(1 << 11)
+#define PLAYER_CONTROL_CLICK_ARROW PlayerControler(PLAYER_CONTROL_CLICK_ARROW_UP | PLAYER_CONTROL_CLICK_ARROW_DOWN | PLAYER_CONTROL_CLICK_ARROW_RIGHT | PLAYER_CONTROL_CLICK_ARROW_LEFT)
+
+#define PLAYER_CONTROL_PRESS_ARROW_UP PlayerControler(1 << 12)
+#define PLAYER_CONTROL_PRESS_ARROW_DOWN PlayerControler(1 << 13)
+#define PLAYER_CONTROL_PRESS_ARROW_RIGHT PlayerControler(1 << 14)
+#define PLAYER_CONTROL_PRESS_ARROW_LEFT PlayerControler(1 << 15)
 
 #define CONTROLER_GET(controler, flag) (controler & flag)
 #define CONTROLER_TRUE(controler, flag) (controler |= flag)
@@ -49,18 +58,18 @@ class Player : public Object, public StateMachine
     friend class PlayerStatesDash;
     friend class PlayerStatesAttack;
 
-    enum class PalyerFacingDirection
+    enum class Facing_Dir
     {
-        Player_Facing_Left,
-        Player_Facing_Right
+        Left,
+        Right
     };
 
-    enum class PalyerActionDirection
+    enum class Action_Dir
     {
-        Player_Action_Up,
-        Player_Action_Down,
-        Player_Action_Left,
-        Player_Action_Right
+        Up,
+        Down,
+        Left,
+        Right
     };
 
 public:
@@ -88,10 +97,11 @@ public:
 
 private:
     // 朝向
-    PalyerFacingDirection facing = PalyerFacingDirection::Player_Facing_Right; // 朝向
-    PalyerActionDirection action = PalyerActionDirection::Player_Action_Right; // 动作朝向
+    Facing_Dir facing_dir = Facing_Dir::Right; // 朝向
+    Action_Dir action_dir = Action_Dir::Right; // 动作朝向
 
-    bool is_Lock_facing = false; // 是否锁定朝向
+    bool is_Lock_facing_dir = false; // 是否锁定朝向
+    bool is_lock_action_dir = false; // 是否锁定动作朝向
 
     // 移动
     float current_move_acceleration = 0.0f;  // 当前移动加速度
