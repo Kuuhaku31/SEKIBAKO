@@ -5,7 +5,6 @@
 #include "player_states.h"
 
 #include "collision_manager.h"
-#include "imgui_setup.h"
 #include "player_effect.h"
 
 static CollisionManager& collision_manager = CollisionManager::Instance();
@@ -153,11 +152,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w / 2; // 碰撞盒位置跟随角色
         attack_box->y = player.movement_position.vy - attack_box->h;
 
-        float ph_x = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
-        float ph_y = player.movement_position.vy - current_attack_effect->Get_ph_h();
-
-        current_attack_effect->Set_position_x(ph_x); // 攻击效果位置跟随角色
-        current_attack_effect->Set_position_y(ph_y);
+        current_attack_effect->vx = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
+        current_attack_effect->vy = player.movement_position.vy - current_attack_effect->Get_ph_h();
 
         break;
     }
@@ -167,11 +163,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w / 2;
         attack_box->y = player.movement_position.vy;
 
-        float ph_x = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
-        float ph_y = player.movement_position.vy;
-
-        current_attack_effect->Set_position_x(ph_x);
-        current_attack_effect->Set_position_y(ph_y);
+        current_attack_effect->vx = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
+        current_attack_effect->vy = player.movement_position.vy;
 
         break;
     }
@@ -181,11 +174,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
 
-        float ph_x = player.movement_position.vx - current_attack_effect->Get_ph_w();
-        float ph_y = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
-
-        current_attack_effect->Set_position_x(ph_x);
-        current_attack_effect->Set_position_y(ph_y);
+        current_attack_effect->vx = player.movement_position.vx - current_attack_effect->Get_ph_w();
+        current_attack_effect->vy = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
 
         break;
     }
@@ -196,11 +186,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
 
-        float ph_x = player.movement_position.vx;
-        float ph_y = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
-
-        current_attack_effect->Set_position_x(ph_x);
-        current_attack_effect->Set_position_y(ph_y);
+        current_attack_effect->vx = player.movement_position.vx;
+        current_attack_effect->vy = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
 
         break;
     }

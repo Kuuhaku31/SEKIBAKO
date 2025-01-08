@@ -45,7 +45,7 @@ private:
 };
 
 // 动画实例
-class AnimationInstance
+class AnimationInstance : public Vector2
 {
 public:
     AnimationInstance(const Animation& animation);
@@ -56,23 +56,16 @@ public:
     void On_update(float delta_time) { frame_timer.On_update(delta_time); } // 更新
 
 public:
-    void Set_position_x(float x) { position.vx = x; } // 设置 x 位置
-    void Set_position_y(float y) { position.vy = y; } // 设置 y 位置
-
     void Animation_reset(); // 重置
 
     void Set_on_finished(Callback f) { on_finished = f; } // 设置结束回调
 
-    float Get_ph_x() const { return position.vx; } // 物理 x 位置
-    float Get_ph_y() const { return position.vy; } // 物理 y 位置
-    float Get_ph_w() const { return ph_w; }        // 物理宽
-    float Get_ph_h() const { return ph_h; }        // 物理高
+    float Get_ph_w() const { return ph_w; } // 物理宽
+    float Get_ph_h() const { return ph_h; } // 物理高
 
     const bool& Get_is_finished() const { return is_finished; } // 动画是否结束
 
 private:
-    Vector2 position; // 位置
-
     const Animation& animation;
 
     Timer    frame_timer;           // 帧计时器

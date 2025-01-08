@@ -4,6 +4,8 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "player_effect.h"
+
 PlayerStatesLeviate::PlayerStatesLeviate(Player& player)
     : StateNode(PLAYER_STATE_LEVIATE)
     , player(player)
@@ -28,6 +30,8 @@ PlayerStatesLeviate::On_update(float delta_time)
     if(player.movement_position.vy >= player.floor_correct_y)
     {
         // 如果接触到地面，必须退出 leviate 状态
+        make_land_effect();
+
         if(player.movement_velocity.vx) // 如果速度不为0
         {
             if(player.Is_try_walk())
@@ -67,4 +71,13 @@ PlayerStatesLeviate::On_update(float delta_time)
 void
 PlayerStatesLeviate::On_exit()
 {
+}
+
+void
+PlayerStatesLeviate::make_land_effect()
+{
+    AnimationInstance* land_effect = CreatPlayerLandEffect();
+
+    land_effect->vx = player.movement_position.vx - land_effect->Get_ph_w() / 2;
+    land_effect->vy = player.floor_correct_y - land_effect->Get_ph_h() + player.object_radius;
 }

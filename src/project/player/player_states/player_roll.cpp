@@ -22,7 +22,7 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
         }
         else
         {
-            if(player.movement_velocity.vx) // 如果有竖直速度
+            if(player.movement_velocity.vy) // 如果有竖直速度
             {
                 player.Switch_to_state(PLAYER_STATE_LEVIATE);
             }

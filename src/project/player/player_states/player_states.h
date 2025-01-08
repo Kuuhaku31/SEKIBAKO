@@ -155,6 +155,9 @@ public:
     void On_exit() override;
 
 private:
+    void make_land_effect();
+
+private:
     Player& player;
 };
 

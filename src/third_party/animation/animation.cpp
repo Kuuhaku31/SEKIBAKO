@@ -84,8 +84,8 @@ AnimationInstance::On_render() const
     src_rect.w = animation.frame_w;
     src_rect.h = animation.frame_h;
 
-    dst_rect.x = position.vx;
-    dst_rect.y = position.vy;
+    dst_rect.x = vx;
+    dst_rect.y = vy;
     dst_rect.w = animation.frame_w / texs_size; // w 表示纹理单位长度 = 纹理像素长度 / texs_size
     dst_rect.h = animation.frame_h / texs_size; // h 表示纹理单位长度 = 纹理像素长度 / texs_size
 

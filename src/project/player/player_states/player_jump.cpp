@@ -43,11 +43,8 @@ PlayerStatesJump::On_enter()
     AnimationInstance* jump_effect = CreatPlayerJumpEffect();
 
     // 设置位置
-    float ph_x = player.movement_position.vx - jump_effect->Get_ph_w() / 2;
-    float ph_y = player.movement_position.vy - jump_effect->Get_ph_h() + player.object_radius;
-
-    jump_effect->Set_position_x(ph_x);
-    jump_effect->Set_position_y(ph_y);
+    jump_effect->vx = player.movement_position.vx - jump_effect->Get_ph_w() / 2;
+    jump_effect->vy = player.movement_position.vy - jump_effect->Get_ph_h() + player.object_radius;
 }
 
 void
