@@ -27,9 +27,12 @@ PlayerStatesRun::On_enter()
 void
 PlayerStatesRun::On_update(float delta_time)
 {
-    if(!player.movement_velocity.vx)
+    if(!player.Is_try_move_x_on_one_dir() && !player.movement_velocity.vx)
     {
-        // 如果速度为0，切换到 idle 状态
+        // 且
+        // 1. 没有按下水平移动键
+        // 2. 且速度为0
+        // 切换到 idle 状态
         player.Switch_to_state(PLAYER_STATE_IDLE);
     }
     else if(player.Is_try_walk())

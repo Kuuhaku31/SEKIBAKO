@@ -30,7 +30,7 @@ Player::Player()
 
         attack_effect_info[0].interval = attack_effect_info[1].interval = attack_effect_info[2].interval = attack_effect_info[3].interval = 0.06f;
         attack_effect_info[0].is_loop = attack_effect_info[1].is_loop = attack_effect_info[2].is_loop = attack_effect_info[3].is_loop = false;
-        attack_effect_info[0].on_finished = attack_effect_info[1].on_finished = attack_effect_info[2].on_finished = attack_effect_info[3].on_finished = []() { printf("attack effect finished\n"); };
+        attack_effect_info[0].on_finished = attack_effect_info[1].on_finished = attack_effect_info[2].on_finished = attack_effect_info[3].on_finished = []() {};
     }
 
     // 创建状态
