@@ -67,7 +67,7 @@ Game::game_init()
 {
     // 初始化基本
     painter.Init("Game", IRect{ SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 1200 });
-    resources_pool.LoadResources(painter.renderer);
+    resources_pool.LoadResources();
 
     // 初始化部件
     game_view.Set_unit_size(50.f);

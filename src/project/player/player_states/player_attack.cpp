@@ -4,13 +4,15 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation.h"
 #include "collision_manager.h"
+#include "effect_master.h"
 #include "imgui_setup.h"
+#include "resources_name.h"
+#include "resources_pool.h"
 
 static CollisionManager& collision_manager = CollisionManager::Instance();
 
-PlayerStatesAttack::PlayerStatesAttack(Player& player, const AnimationInfo* attack_effect_infos)
+PlayerStatesAttack::PlayerStatesAttack(Player& player)
     : StateNode(PLAYER_STATE_ATTACK)
     , player(player)
 {
@@ -55,20 +57,19 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player, const AnimationInfo* atta
     attack_effect_timer.Set_on_timeout([&]() {
         attack_box->enable = false;
     }); // 攻击效果计时结束，无效攻击碰撞盒
-
-    // 创建攻击效果动画
-    for(int i = 0; i < 4; i++) attack_effect_list[i] = new Animation(attack_effect_infos[i]);
 }
 
 PlayerStatesAttack::~PlayerStatesAttack()
 {
     collision_manager.Destroy_collision_box(attack_box);
-    for(int i = 0; i < 4; i++) delete attack_effect_list[i];
 }
 
 void
 PlayerStatesAttack::On_enter()
 {
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+    static EffectMaster&  effect_master  = EffectMaster::Instance();
+
     player.object_color = PLAYER_ATTACK_COLOR;
 
     player.is_Lock_facing_dir = true;
@@ -93,13 +94,12 @@ PlayerStatesAttack::On_enter()
     // 开始攻击效果动画
     switch(player.action_dir)
     {
-    case Player::Action_Dir::Up: current_attack_effect = attack_effect_list[0]; break;
-    case Player::Action_Dir::Down: current_attack_effect = attack_effect_list[1]; break;
-    case Player::Action_Dir::Left: current_attack_effect = attack_effect_list[2]; break;
-    default: //
-    case Player::Action_Dir::Right: current_attack_effect = attack_effect_list[3]; break;
+    case Player::Action_Dir::Up: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_U)); break;
+    case Player::Action_Dir::Down: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_D)); break;
+    case Player::Action_Dir::Left: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_L)); break;
+    default: // case Player::Action_Dir::Right:
+    case Player::Action_Dir::Right: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_R)); break;
     }
-    current_attack_effect->Animation_reset();
 
     attack_follow_player();
 }
@@ -118,9 +118,6 @@ PlayerStatesAttack::On_render() const
         true
 
     );
-
-    // 绘制攻击效果
-    current_attack_effect->On_render();
 }
 
 void
@@ -130,9 +127,6 @@ PlayerStatesAttack::On_update(float delta_time)
     attack_action_timer.On_update(delta_time);
     attack_effect_wait_timer.On_update(delta_time);
     attack_effect_timer.On_update(delta_time);
-
-    // 更新动画
-    current_attack_effect->On_update(delta_time);
 }
 
 void
@@ -155,6 +149,8 @@ PlayerStatesAttack::On_exit()
 void
 PlayerStatesAttack::attack_follow_player()
 {
+    if(!current_attack_effect) return;
+
     switch(player.action_dir)
     {
     case Player::Action_Dir::Up:
@@ -162,8 +158,11 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w / 2; // 碰撞盒位置跟随角色
         attack_box->y = player.movement_position.vy - attack_box->h;
 
-        current_attack_effect->Set_x(player.movement_position.vx - current_attack_effect->Get_w() / 2);
-        current_attack_effect->Set_y(player.movement_position.vy - current_attack_effect->Get_h());
+        float ph_x = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
+        float ph_y = player.movement_position.vy - current_attack_effect->Get_ph_h();
+
+        current_attack_effect->Set_position_x(ph_x); // 攻击效果位置跟随角色
+        current_attack_effect->Set_position_y(ph_y);
 
         break;
     }
@@ -173,8 +172,11 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w / 2;
         attack_box->y = player.movement_position.vy;
 
-        current_attack_effect->Set_x(player.movement_position.vx - current_attack_effect->Get_w() / 2);
-        current_attack_effect->Set_y(player.movement_position.vy);
+        float ph_x = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
+        float ph_y = player.movement_position.vy;
+
+        current_attack_effect->Set_position_x(ph_x);
+        current_attack_effect->Set_position_y(ph_y);
 
         break;
     }
@@ -184,8 +186,11 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
 
-        current_attack_effect->Set_x(player.movement_position.vx - current_attack_effect->Get_w());
-        current_attack_effect->Set_y(player.movement_position.vy - current_attack_effect->Get_h() / 2);
+        float ph_x = player.movement_position.vx - current_attack_effect->Get_ph_w();
+        float ph_y = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
+
+        current_attack_effect->Set_position_x(ph_x);
+        current_attack_effect->Set_position_y(ph_y);
 
         break;
     }
@@ -196,8 +201,11 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
 
-        current_attack_effect->Set_x(player.movement_position.vx);
-        current_attack_effect->Set_y(player.movement_position.vy - current_attack_effect->Get_h() / 2);
+        float ph_x = player.movement_position.vx;
+        float ph_y = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
+
+        current_attack_effect->Set_position_x(ph_x);
+        current_attack_effect->Set_position_y(ph_y);
 
         break;
     }

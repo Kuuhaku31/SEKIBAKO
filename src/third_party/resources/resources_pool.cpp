@@ -3,6 +3,9 @@
 
 #include "resources_pool.h"
 
+#include "animation.h"
+#include "imgui_setup.h"
+
 #include "cJSON.h"
 
 ResourcesPool* ResourcesPool::instance = nullptr;
@@ -15,8 +18,10 @@ ResourcesPool::Instance()
 }
 
 bool
-ResourcesPool::LoadResources(Renderer* renderer)
+ResourcesPool::LoadResources()
 {
+    static SDL_Renderer* renderer = Painter::Instance().renderer;
+
     static ImGuiIO& io = ImGui::GetIO();
 
     static const char resources_path[] = "resources.json";
@@ -123,6 +128,49 @@ ResourcesPool::LoadResources(Renderer* renderer)
         }
     }
 
+    { // 加载动画
+        cJSON* animation_info_list = cJSON_GetObjectItem(root, "animations");
+        if(cJSON_IsArray(animation_info_list))
+        {
+            cJSON* item = nullptr;
+            cJSON_ArrayForEach(item, animation_info_list)
+            {
+                AnimationInfo info;
+
+                uint16_t* frame_idx_list = nullptr;
+                uint16_t  frame_count    = 0;
+
+                { // 读取帧索引列表
+                    cJSON* frame_idx_list_item = cJSON_GetObjectItem(item, "frame-idx-list");
+                    if(!cJSON_IsArray(frame_idx_list_item)) continue;
+
+                    frame_count = cJSON_GetArraySize(frame_idx_list_item);
+
+                    frame_idx_list        = new uint16_t[frame_count];
+                    cJSON* frame_idx_item = nullptr;
+                    cJSON_ArrayForEach(frame_idx_item, frame_idx_list_item)
+                    {
+                        frame_idx_list[frame_idx_item->valueint] = frame_idx_item->valueint;
+                    }
+                }
+
+                info.texture        = texture_pool[cJSON_GetObjectItem(item, "source-texture")->valuestring];
+                info.num_x          = cJSON_GetObjectItem(item, "num-x")->valueint;
+                info.num_y          = cJSON_GetObjectItem(item, "num-y")->valueint;
+                info.frame_idx_list = frame_idx_list;
+                info.frame_count    = frame_count;
+                info.frame_interval = cJSON_GetObjectItem(item, "frame-interval")->valuedouble;
+                info.angle          = cJSON_GetObjectItem(item, "angle")->valuedouble;
+                info.texs_size      = cJSON_GetObjectItem(item, "texture-size")->valuedouble;
+                info.is_loop        = cJSON_GetObjectItem(item, "is-loop")->valueint;
+
+                animation_pool[cJSON_GetObjectItem(item, "label")->valuestring] = new Animation(info);
+
+                delete[] frame_idx_list;
+            }
+        }
+    }
+
     bool flag = true;
 
     // 检查加载纹理
@@ -181,6 +229,19 @@ ResourcesPool::LoadResources(Renderer* renderer)
         }
     }
 
+    // 检查加载动画
+    for(const auto& pair : animation_pool)
+    {
+        if(!pair.second)
+        {
+            printf("Error: Load Animation: %s\n", pair.first.c_str());
+            flag = false;
+        }
+        else
+        {
+            printf("Load Animation: %s\n", pair.first.c_str());
+        }
+    }
 
     return flag;
 }

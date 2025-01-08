@@ -4,10 +4,11 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation.h"
 #include "effect_master.h"
+#include "resources_name.h"
+#include "resources_pool.h"
 
-PlayerStatesJump::PlayerStatesJump(Player& player, const AnimationInfo& info)
+PlayerStatesJump::PlayerStatesJump(Player& player)
     : StateNode(PLAYER_STATE_JUMP)
     , player(player)
 {
@@ -15,8 +16,6 @@ PlayerStatesJump::PlayerStatesJump(Player& player, const AnimationInfo& info)
     jump_timer.Set_on_timeout([&player]() {
         player.Switch_to_state(PLAYER_STATE_LEVIATE);
     }); // 跳跃计时结束，切换到 leviate 状态
-
-    jump_effect_info = info;
 }
 
 PlayerStatesJump::~PlayerStatesJump()
@@ -26,7 +25,8 @@ PlayerStatesJump::~PlayerStatesJump()
 void
 PlayerStatesJump::On_enter()
 {
-    static EffectMaster& effect_master = EffectMaster::Instance();
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+    static EffectMaster&  effect_master  = EffectMaster::Instance();
 
     player.object_color = PLAYER_JUMP_COLOR;
 
@@ -44,15 +44,15 @@ PlayerStatesJump::On_enter()
     jump_timer.Set_wait_time(player.jump_time);
     jump_timer.Restart();
 
-    // 跳跃效果
-    Animation* jump_effect = effect_master.Create_effect(jump_effect_info);
+    // 在管理器中创建特效
+    AnimationInstance* jump_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Action_Effect_Jump));
 
     // 设置位置
-    jump_effect->Set_x(player.movement_position.vx - jump_effect->Get_w() / 2);
-    jump_effect->Set_y(player.movement_position.vy - jump_effect->Get_h() + player.object_radius);
+    float ph_x = player.movement_position.vx - jump_effect->Get_ph_w() / 2;
+    float ph_y = player.movement_position.vy - jump_effect->Get_ph_h() + player.object_radius;
 
-    // 设置动画
-    jump_effect->Animation_reset();
+    jump_effect->Set_position_x(ph_x);
+    jump_effect->Set_position_y(ph_y);
 }
 
 void

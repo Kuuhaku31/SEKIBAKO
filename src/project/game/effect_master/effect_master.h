@@ -5,7 +5,7 @@
 
 #include "animation.h"
 
-typedef std::vector<Animation*> EffectList;
+typedef std::vector<AnimationInstance*> EffectList;
 
 // 特效管理器（单例）
 class EffectMaster
@@ -14,7 +14,7 @@ public:
     static EffectMaster& Instance();
 
 public:
-    Animation* Create_effect(const AnimationInfo& effect_info); // 创建特效
+    AnimationInstance* Create_effect(const Animation* animtion); // 创建特效
 
     void On_update(float delta_time); // 更新特效
     void On_render() const;           // 渲染特效

@@ -99,7 +99,7 @@ private:
 class PlayerStatesJump : public StateNode
 {
 public:
-    PlayerStatesJump(Player& player, const AnimationInfo& info);
+    PlayerStatesJump(Player& player);
     ~PlayerStatesJump();
 
     void On_enter() override;
@@ -110,8 +110,6 @@ public:
 private:
     Player& player;
     Timer   jump_timer; // 跳跃计时器
-
-    AnimationInfo jump_effect_info; // 跳跃效果信息
 };
 
 // 角色翻滚
@@ -179,7 +177,7 @@ private:
 class PlayerStatesAttack : public StateNode
 {
 public:
-    PlayerStatesAttack(Player& player, const AnimationInfo* attack_effect_infos);
+    PlayerStatesAttack(Player& player);
     ~PlayerStatesAttack();
 
     void On_enter() override;
@@ -194,10 +192,8 @@ private:
     Timer   attack_effect_wait_timer; // 攻击效果等待计时器
     Timer   attack_effect_timer;      // 攻击效果计时器
 
-    CollisionBox* attack_box = nullptr; // 攻击碰撞盒
-
-    Animation* attack_effect_list[4] = { nullptr }; // 攻击效果列表，上下左右
-    Animation* current_attack_effect = nullptr;     // 当前攻击效果
+    CollisionBox*      attack_box            = nullptr; // 攻击碰撞盒
+    AnimationInstance* current_attack_effect = nullptr; // 当前攻击效果
 
 private:
     void attack_follow_player();

@@ -9,58 +9,80 @@
 struct AnimationInfo
 {
     // 必须设置的参数
-    Texture*        texture        = nullptr; // 纹理
-    const uint16_t* frame_idx_list = nullptr; // 帧索引列表
-    uint16_t        frame_count    = 0;       // 帧数
-    uint16_t        num_x          = 0;       // 纹理横向切成多少帧
-    uint16_t        num_y          = 0;       // 纹理纵向切成多少帧
-    float           texs_size      = 0.0f;    // 对于这个纹理，一个单位长度等于 texs_size 个像素
+    Texture*  texture;        // 纹理
+    uint16_t  num_x;          // 纹理横向切成多少帧
+    uint16_t  num_y;          // 纹理纵向切成多少帧
+    uint16_t* frame_idx_list; // 帧索引列表
+    uint16_t  frame_count;    // 帧数
 
     // 可选参数
-    float    interval    = 0.0f;    // 帧间隔
-    bool     is_loop     = true;    // 是否循环播放
-    Callback on_finished = nullptr; // 动画结束回调
+    float frame_interval = 0.0f; // 帧间隔
+    float angle          = 0.0f; // 渲染角度
+    float texs_size      = 0.0f; // 渲染大小，对于这个纹理，一个单位长度等于 texs_size 个像素
+    bool  is_loop        = true; // 是否循环播放
 };
 
-// 动画类，支持多种方式添加帧，支持循环播放，支持回调，支持设置渲染中心
-class Animation : private FRect, private Timer
+// 动画类
+class Animation
 {
+    friend class AnimationInstance;
+
 public:
     Animation(const AnimationInfo& info);
     ~Animation();
 
+private:
+    Texture* texture;        // 纹理
+    Point*   frame_src_list; // 帧源列表
+    uint16_t frame_w;        // 帧宽
+    uint16_t frame_h;        // 帧高
+    uint16_t frame_count;    // 帧数
+
+    float frame_interval = 0.1f; // 帧间隔
+    float angle          = 0.0f; // 渲染角度
+    float texs_size      = 1.0f; // 渲染大小，对于这个纹理，一个单位长度等于 texs_size 个像素
+    bool  is_loop        = true; // 是否循环播放
+};
+
+// 动画实例
+class AnimationInstance
+{
 public:
-    void On_render() const;                                            // 渲染
-    void On_update(float delta_time) { Timer::On_update(delta_time); } // 更新
+    AnimationInstance(const Animation& animation);
+    ~AnimationInstance() = default;
 
 public:
-    double angle   = 0;    // 渲染角度
-    bool   is_loop = true; // 是否循环播放
+    void On_render() const;                                                 // 渲染
+    void On_update(float delta_time) { frame_timer.On_update(delta_time); } // 更新
 
-    void Animation_reset();                                        // 重置
-    void Set_on_finished(Callback f) { on_finished = f; }          // 设置结束回调
-    void Set_interval(float interval) { Set_wait_time(interval); } // 设置帧间隔
+public:
+    void Set_position_x(float x) { position.vx = x; } // 设置 x 位置
+    void Set_position_y(float y) { position.vy = y; } // 设置 y 位置
 
-    void Set_x(float x) { this->x = x; } // 设置 x
-    void Set_y(float y) { this->y = y; } // 设置 y
+    void Animation_reset(); // 重置
 
-    const float& Get_x() const { return x; } // 获取 x
-    const float& Get_y() const { return y; } // 获取 y
-    const float& Get_w() const { return w; } // 获取 w
-    const float& Get_h() const { return h; } // 获取 h
+    void Set_on_finished(Callback f) { on_finished = f; } // 设置结束回调
+
+    float Get_ph_x() const { return position.vx; } // 物理 x 位置
+    float Get_ph_y() const { return position.vy; } // 物理 y 位置
+    float Get_ph_w() const { return ph_w; }        // 物理宽
+    float Get_ph_h() const { return ph_h; }        // 物理高
 
     const bool& Get_is_finished() const { return is_finished; } // 动画是否结束
 
 private:
-    Texture* texture       = nullptr; // 纹理
-    IRect*   rect_src_list = nullptr; // 源矩形列表，用于裁剪纹理
-    uint16_t frame_current = 0;       // 当前帧
-    uint16_t frame_count   = 0;       // 帧数
-    uint16_t frame_w       = 0;       // 帧宽
-    uint16_t frame_h       = 0;       // 帧高
+    Vector2 position; // 位置
 
-    float texs_size = 0.0f; // 对于这个纹理，一个单位长度等于 texs_size 个像素
+    const Animation& animation;
 
-    bool     is_finished = false; // 动画是否结束
-    Callback on_finished;         // 动画结束回调
+    Timer    frame_timer;           // 帧计时器
+    uint16_t frame_current = 0;     // 当前帧
+    bool     is_finished   = false; // 动画是否结束
+
+    float angle;     // 渲染角度
+    float texs_size; // 渲染大小，对于这个纹理，一个单位长度等于 texs_size 个像素
+    float ph_w;      // 物理宽
+    float ph_h;      // 物理高
+
+    Callback on_finished; // 动画结束回调
 };

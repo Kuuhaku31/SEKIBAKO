@@ -14,47 +14,15 @@ Player::Player()
 {
     static ResourcesPool& resources_pool = ResourcesPool::Instance();
 
-    // 初始化动画信息
-    AnimationInfo   attack_effect_info[4];
-    AnimationInfo   jump_effect_info;
-    static uint16_t frame_idx_list[] = { 0, 1, 2, 3, 4 };
-    {
-        attack_effect_info[0].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_U);
-        attack_effect_info[1].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_D);
-        attack_effect_info[2].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_L);
-        attack_effect_info[3].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_R);
-
-        attack_effect_info[0].frame_idx_list = attack_effect_info[1].frame_idx_list = attack_effect_info[2].frame_idx_list = attack_effect_info[3].frame_idx_list = frame_idx_list;
-        attack_effect_info[0].frame_count = attack_effect_info[1].frame_count = attack_effect_info[2].frame_count = attack_effect_info[3].frame_count = 5;
-        attack_effect_info[0].num_x = attack_effect_info[1].num_x = attack_effect_info[2].num_x = attack_effect_info[3].num_x = 5;
-        attack_effect_info[0].num_y = attack_effect_info[1].num_y = attack_effect_info[2].num_y = attack_effect_info[3].num_y = 1;
-        attack_effect_info[0].texs_size = attack_effect_info[1].texs_size = attack_effect_info[2].texs_size = attack_effect_info[3].texs_size = 100.0f;
-
-        attack_effect_info[0].interval = attack_effect_info[1].interval = attack_effect_info[2].interval = attack_effect_info[3].interval = 0.06f;
-        attack_effect_info[0].is_loop = attack_effect_info[1].is_loop = attack_effect_info[2].is_loop = attack_effect_info[3].is_loop = false;
-        attack_effect_info[0].on_finished = attack_effect_info[1].on_finished = attack_effect_info[2].on_finished = attack_effect_info[3].on_finished = []() {};
-
-        // 跳跃效果
-        jump_effect_info.texture        = resources_pool.Get_texture(Tex_Player_Action_Effect_Jump);
-        jump_effect_info.frame_idx_list = frame_idx_list;
-        jump_effect_info.frame_count    = 4;
-        jump_effect_info.num_x          = 4;
-        jump_effect_info.num_y          = 1;
-        jump_effect_info.texs_size      = 100.0f;
-        jump_effect_info.interval       = 0.06f;
-        jump_effect_info.is_loop        = false;
-        jump_effect_info.on_finished    = []() {};
-    }
-
     // 创建状态
     static PlayerStatesIdle    state_idel(*this);
     static PlayerStatesWalk    state_walk(*this);
     static PlayerStatesRun     state_run(*this);
     static PlayerStatesLeviate state_leviate(*this);
-    static PlayerStatesJump    state_jump(*this, jump_effect_info);
+    static PlayerStatesJump    state_jump(*this);
     static PlayerStatesRoll    state_roll(*this);
     static PlayerStatesDash    state_dash(*this);
-    static PlayerStatesAttack  state_attack(*this, attack_effect_info);
+    static PlayerStatesAttack  state_attack(*this);
 
     // 注册状态
     Register_state(&state_idel);
