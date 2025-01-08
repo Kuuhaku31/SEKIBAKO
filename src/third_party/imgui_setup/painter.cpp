@@ -72,6 +72,7 @@ Painter::Init(const char* title, const IRect& layout)
     imgui_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     imgui_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
     imgui_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
+    imgui_io->Fonts->AddFontDefault();
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();

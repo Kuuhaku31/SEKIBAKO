@@ -6,6 +6,7 @@
 
 #include "animation.h"
 #include "imgui_setup.h"
+#include "resources_name.h"
 #include "resources_pool.h"
 
 Player::Player()
@@ -17,10 +18,10 @@ Player::Player()
     AnimationInfo attack_effect_info[4];
     uint16_t      frame_idx_list[] = { 0, 1, 2, 3, 4 };
     {
-        attack_effect_info[0].texture = resources_pool.get_texture_pool().at(ResourcesID::Tex_Player_Attack_Effect_Up);
-        attack_effect_info[1].texture = resources_pool.get_texture_pool().at(ResourcesID::Tex_Player_Attack_Effect_Down);
-        attack_effect_info[2].texture = resources_pool.get_texture_pool().at(ResourcesID::Tex_Player_Attack_Effect_Left);
-        attack_effect_info[3].texture = resources_pool.get_texture_pool().at(ResourcesID::Tex_Player_Attack_Effect_Right);
+        attack_effect_info[0].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_U);
+        attack_effect_info[1].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_D);
+        attack_effect_info[2].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_L);
+        attack_effect_info[3].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_R);
 
         attack_effect_info[0].frame_idx_list = attack_effect_info[1].frame_idx_list = attack_effect_info[2].frame_idx_list = attack_effect_info[3].frame_idx_list = frame_idx_list;
         attack_effect_info[0].frame_count = attack_effect_info[1].frame_count = attack_effect_info[2].frame_count = attack_effect_info[3].frame_count = 5;

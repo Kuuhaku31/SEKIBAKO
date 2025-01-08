@@ -4,6 +4,7 @@
 #include "debuger.h"
 
 #include "game.h"
+#include "resources_name.h"
 #include "resources_pool.h"
 #include "util.h"
 
@@ -27,13 +28,13 @@ Debuger::ImGuiWin_Debug(bool* is_open)
     if(is_open && !*is_open) return;
 
     ImGui::Begin("Hello, ImGuiWin_Debug!", is_open);
-    ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SmileySans));
+    ImGui::PushFont(resources_pool.Get_font(Font_SmileySans_X15));
     ImGui::Text("Hello, ImGuiWin_Debug!");
     ImGui::SameLine();
     ImGui::Text("中文测试");
 
     ImGui::Separator();
-    ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_SweiAliasLegCJKjp));
+    ImGui::PushFont(resources_pool.Get_font(Font_SweiAliasLegCJKjp_X15));
 
     {
         Player* player = game.player;
@@ -84,7 +85,6 @@ Debuger::ImGuiWin_Debug(bool* is_open)
     ImGui::Separator();
 
     {
-
         ImGui::Text("日本語テスト");
 
         // 显示帧率
@@ -99,7 +99,7 @@ Debuger::ImGuiWin_Debug(bool* is_open)
     ImGui::Separator();
 
     {
-        ImGui::PushFont(resources_pool.get_font_pool().at(ResourcesID::Font_ipix));
+        ImGui::PushFont(resources_pool.Get_font(Font_Ipix_X12));
         // 调整颜色
         {
             static float color_buffer[4] = { 0 };
@@ -128,7 +128,7 @@ Debuger::ImGuiWin_Debug(bool* is_open)
             }
             else
             {
-                Mix_PlayMusic(resources_pool.get_music_pool().at(ResourcesID::Music_Test), -1);
+                Mix_PlayMusic(resources_pool.Get_music(Sound_Music_Test), -1);
             }
 
             is_playing = !is_playing;
@@ -144,7 +144,7 @@ Debuger::ImGuiWin_Debug(bool* is_open)
         ImGui::Text("图片测试");
         ImGui::DragFloat("Scale", &scale, 0.01f, 0.1f, 2.0f);
 
-        Texture* texture = resources_pool.get_texture_pool().at(ResourcesID::Tex_Test);
+        Texture* texture = resources_pool.Get_texture(Tex_Test);
         SDL_QueryTexture(texture, nullptr, nullptr, (int*)&w, (int*)&h);
         ImGui::Image((ImTextureID)texture, ImVec2(w * scale, h * scale));
     }

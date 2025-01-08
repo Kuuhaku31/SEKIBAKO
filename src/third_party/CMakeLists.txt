@@ -3,8 +3,9 @@ project(third_party)
 
 set(PATH
     ${CMAKE_CURRENT_LIST_DIR}/base
-    ${CMAKE_CURRENT_LIST_DIR}/game
+    ${CMAKE_CURRENT_LIST_DIR}/resources
     ${CMAKE_CURRENT_LIST_DIR}/animation
+    ${CMAKE_CURRENT_LIST_DIR}/state_machine
     ${CMAKE_CURRENT_LIST_DIR}/imgui_setup
 )
 
@@ -81,6 +82,19 @@ if(SDL2_MIXER_FOUND)
     target_link_libraries(${PROJECT_NAME} ${SDL2_MIXER_LIBRARIES})
 else()
     message(FATAL_ERROR "SDL2_mixer not found!")
+endif()
+
+# 添加cJSON库
+set(cJSON_INCLUDE_DIRS "E:/software/msys64/mingw64/include/cjson")
+set(cJSON_LIBRARIES "E:/software/msys64/mingw64/lib/libcjson.a")
+set(cJSON_FOUND TRUE)
+
+if(cJSON_FOUND)
+    message(STATUS "==cJSON FOUND==")
+    target_include_directories(${PROJECT_NAME} PUBLIC ${cJSON_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} ${cJSON_LIBRARIES})
+else()
+    message(FATAL_ERROR "cJSON not found!")
 endif()
 
 # 设置include目录

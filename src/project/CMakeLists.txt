@@ -3,7 +3,6 @@ project(main_project)
 
 set(PATHS
     ${CMAKE_CURRENT_LIST_DIR}/game
-    ${CMAKE_CURRENT_LIST_DIR}/game/state_machine
     ${CMAKE_CURRENT_LIST_DIR}/game/collision_manager
     ${CMAKE_CURRENT_LIST_DIR}/debug
     ${CMAKE_CURRENT_LIST_DIR}/imgui_windows

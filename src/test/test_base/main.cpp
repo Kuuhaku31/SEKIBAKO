@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "imgui_setup.h"
+#include "resources_name.h"
 #include "resources_pool.h"
 
 static Painter&       painter        = Painter::Instance();
