@@ -72,13 +72,6 @@ Animation::Animation_reset()
     Restart();
 }
 
-// 设置动画结束回调
-void
-Animation::Set_on_finished(Callback f)
-{
-    on_finished = f;
-}
-
 // 渲染
 void
 Animation::On_render() const
