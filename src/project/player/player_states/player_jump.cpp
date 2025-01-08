@@ -48,8 +48,8 @@ PlayerStatesJump::On_enter()
     Animation* jump_effect = effect_master.Create_effect(jump_effect_info);
 
     // 设置位置
-    jump_effect->x = player.movement_position.vx - jump_effect->w / 2;
-    jump_effect->y = player.movement_position.vy - jump_effect->h + player.object_radius;
+    jump_effect->Set_x(player.movement_position.vx - jump_effect->Get_w() / 2);
+    jump_effect->Set_y(player.movement_position.vy - jump_effect->Get_h() + player.object_radius);
 
     // 设置动画
     jump_effect->Animation_reset();

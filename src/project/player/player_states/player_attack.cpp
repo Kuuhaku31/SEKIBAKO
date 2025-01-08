@@ -162,8 +162,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w / 2; // 碰撞盒位置跟随角色
         attack_box->y = player.movement_position.vy - attack_box->h;
 
-        current_attack_effect->x = player.movement_position.vx - current_attack_effect->w / 2; // 特效位置跟随角色
-        current_attack_effect->y = player.movement_position.vy - current_attack_effect->h;
+        current_attack_effect->Set_x(player.movement_position.vx - current_attack_effect->Get_w() / 2);
+        current_attack_effect->Set_y(player.movement_position.vy - current_attack_effect->Get_h());
 
         break;
     }
@@ -173,8 +173,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w / 2;
         attack_box->y = player.movement_position.vy;
 
-        current_attack_effect->x = player.movement_position.vx - current_attack_effect->w / 2;
-        current_attack_effect->y = player.movement_position.vy;
+        current_attack_effect->Set_x(player.movement_position.vx - current_attack_effect->Get_w() / 2);
+        current_attack_effect->Set_y(player.movement_position.vy);
 
         break;
     }
@@ -184,8 +184,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx - attack_box->w;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
 
-        current_attack_effect->x = player.movement_position.vx - current_attack_effect->w;
-        current_attack_effect->y = player.movement_position.vy - current_attack_effect->h / 2;
+        current_attack_effect->Set_x(player.movement_position.vx - current_attack_effect->Get_w());
+        current_attack_effect->Set_y(player.movement_position.vy - current_attack_effect->Get_h() / 2);
 
         break;
     }
@@ -196,8 +196,8 @@ PlayerStatesAttack::attack_follow_player()
         attack_box->x = player.movement_position.vx;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
 
-        current_attack_effect->x = player.movement_position.vx;
-        current_attack_effect->y = player.movement_position.vy - current_attack_effect->h / 2;
+        current_attack_effect->Set_x(player.movement_position.vx);
+        current_attack_effect->Set_y(player.movement_position.vy - current_attack_effect->Get_h() / 2);
 
         break;
     }

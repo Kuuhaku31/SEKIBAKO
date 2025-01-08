@@ -23,7 +23,7 @@ struct AnimationInfo
 };
 
 // 动画类，支持多种方式添加帧，支持循环播放，支持回调，支持设置渲染中心
-class Animation : public FRect, private Timer
+class Animation : private FRect, private Timer
 {
 public:
     Animation(const AnimationInfo& info);
@@ -40,6 +40,14 @@ public:
     void Animation_reset();                                        // 重置
     void Set_on_finished(Callback f) { on_finished = f; }          // 设置结束回调
     void Set_interval(float interval) { Set_wait_time(interval); } // 设置帧间隔
+
+    void Set_x(float x) { this->x = x; } // 设置 x
+    void Set_y(float y) { this->y = y; } // 设置 y
+
+    const float& Get_x() const { return x; } // 获取 x
+    const float& Get_y() const { return y; } // 获取 y
+    const float& Get_w() const { return w; } // 获取 w
+    const float& Get_h() const { return h; } // 获取 h
 
     const bool& Get_is_finished() const { return is_finished; } // 动画是否结束
 

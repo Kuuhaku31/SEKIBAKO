@@ -129,7 +129,7 @@ private:
 
     // 冲刺
     float dash_acceleration = 50.0f; // 冲刺加速度
-    float dash_min_speed    = 20.0f; // 冲刺最小速度
+    float dash_min_speed    = 15.0f; // 冲刺最小速度
 
     // 攻击
     float attack_action_time      = 0.3f;  // 攻击动作时间
