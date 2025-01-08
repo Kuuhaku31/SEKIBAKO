@@ -7,6 +7,8 @@
 
 #include <functional>
 
+typedef std::function<void()> Callback;
+
 
 struct IRect
 {
@@ -84,12 +86,15 @@ public:
 #define VECTOR2_UNIT_LEFT Vector2{ -1.0f, 0.0f }
 #define VECTOR2_UNIT_RIGHT Vector2{ 1.0f, 0.0f }
 
-typedef std::function<void()> Callback;
+
 class Timer
 {
 public:
     Timer()  = default;
     ~Timer() = default;
+
+public:
+    void On_update(float dt);
 
 public:
     void restart();
@@ -98,8 +103,7 @@ public:
     void set_on_timeout(std::function<void()> f);
     void pause();  // 暂停计时器
     void resume(); // 恢复计时器
-    void on_update(float dt);
-    void shot(); // 立即触发
+    void shot();   // 立即触发
 
 private:
     float pass_time = 0;     // 计时器已经过去的时间

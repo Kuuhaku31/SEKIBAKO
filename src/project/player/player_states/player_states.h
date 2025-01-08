@@ -7,6 +7,9 @@
 #include "state_machine.h"
 
 class Player;
+class CollisionBox;
+class Animation;
+struct AnimationInfo;
 
 // 角色状态
 #define PLAYER_STATE_IDLE "player_idle"       // 角色空闲
@@ -95,16 +98,19 @@ private:
 class PlayerStatesJump : public StateNode
 {
 public:
-    PlayerStatesJump(Player& player);
-    ~PlayerStatesJump() = default;
+    PlayerStatesJump(Player& player, const AnimationInfo& jump_effect_info);
+    ~PlayerStatesJump();
 
     void On_enter() override;
+    void On_render() const override;
     void On_update(float delta_time) override;
     void On_exit() override;
 
 private:
     Player& player;
     Timer   jump_timer; // 跳跃计时器
+
+    Animation* jump_effect = nullptr; // 跳跃效果
 };
 
 // 角色翻滚
@@ -167,10 +173,6 @@ public:
 private:
     Player& player;
 };
-
-class CollisionBox;
-class Animation;
-struct AnimationInfo;
 
 // 角色攻击
 class PlayerStatesAttack : public StateNode

@@ -127,12 +127,12 @@ void
 PlayerStatesAttack::On_update(float delta_time)
 {
     // 更新计时器
-    attack_action_timer.on_update(delta_time);
-    attack_effect_wait_timer.on_update(delta_time);
-    attack_effect_timer.on_update(delta_time);
+    attack_action_timer.On_update(delta_time);
+    attack_effect_wait_timer.On_update(delta_time);
+    attack_effect_timer.On_update(delta_time);
 
     // 更新动画
-    current_attack_effect->on_update(delta_time);
+    current_attack_effect->On_update(delta_time);
 }
 
 void

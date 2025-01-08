@@ -16,6 +16,7 @@ Player::Player()
 
     // 初始化动画信息
     AnimationInfo attack_effect_info[4];
+    AnimationInfo jump_effect_info;
     uint16_t      frame_idx_list[] = { 0, 1, 2, 3, 4 };
     {
         attack_effect_info[0].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_U);
@@ -32,6 +33,17 @@ Player::Player()
         attack_effect_info[0].interval = attack_effect_info[1].interval = attack_effect_info[2].interval = attack_effect_info[3].interval = 0.06f;
         attack_effect_info[0].is_loop = attack_effect_info[1].is_loop = attack_effect_info[2].is_loop = attack_effect_info[3].is_loop = false;
         attack_effect_info[0].on_finished = attack_effect_info[1].on_finished = attack_effect_info[2].on_finished = attack_effect_info[3].on_finished = []() {};
+
+        // 跳跃效果
+        jump_effect_info.texture        = resources_pool.Get_texture(Tex_Player_Action_Effect_Jump);
+        jump_effect_info.frame_idx_list = frame_idx_list;
+        jump_effect_info.frame_count    = 4;
+        jump_effect_info.num_x          = 4;
+        jump_effect_info.num_y          = 1;
+        jump_effect_info.texs_size      = 100.0f;
+        jump_effect_info.interval       = 0.06f;
+        jump_effect_info.is_loop        = false;
+        jump_effect_info.on_finished    = []() {};
     }
 
     // 创建状态
@@ -39,7 +51,7 @@ Player::Player()
     static PlayerStatesWalk    state_walk(*this);
     static PlayerStatesRun     state_run(*this);
     static PlayerStatesLeviate state_leviate(*this);
-    static PlayerStatesJump    state_jump(*this);
+    static PlayerStatesJump    state_jump(*this, jump_effect_info);
     static PlayerStatesRoll    state_roll(*this);
     static PlayerStatesDash    state_dash(*this);
     static PlayerStatesAttack  state_attack(*this, attack_effect_info);
@@ -165,8 +177,8 @@ Player::On_update(float delta_time)
     StateMachine::On_update_after(delta_time);
 
     // 更新计时器
-    roll_cd_timer.on_update(delta_time);
-    attack_cd_timer.on_update(delta_time);
+    roll_cd_timer.On_update(delta_time);
+    attack_cd_timer.On_update(delta_time);
 }
 
 // 角色是否至少按下一个水平移动键

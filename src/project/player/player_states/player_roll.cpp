@@ -68,7 +68,7 @@ PlayerStatesRoll::On_enter()
 void
 PlayerStatesRoll::On_update(float delta_time)
 {
-    roll_timer.on_update(delta_time);
+    roll_timer.On_update(delta_time);
 
     player.movement_acceleration += (player.Get_facing_vector() * player.roll_acceleration);
 }

@@ -49,7 +49,7 @@ Timer::resume()
 
 // 更新计时器
 void
-Timer::on_update(float dt)
+Timer::On_update(float dt)
 {
     // 如果计时器暂停，则不更新
     if(paused)
