@@ -4,11 +4,13 @@
 #include "game.h"
 
 #include "debuger.h"
+#include "effect_master.h"
 #include "imgui_windows.h"
 #include "resources_pool.h"
 
 static Painter&       painter        = Painter::Instance();
 static ResourcesPool& resources_pool = ResourcesPool::Instance();
+static EffectMaster&  effect_master  = EffectMaster::Instance();
 static Debuger&       debuger        = Debuger::Instance();
 
 Game* Game::instance = nullptr;
@@ -45,6 +47,8 @@ Game::Game()
         painter.DrawRect(0, 0, 1, 1, COLOR_LIGHT_GRAY, true);
 
         player->On_render();
+
+        effect_master.On_render();
     };
 }
 
@@ -90,7 +94,9 @@ Game::game_loop()
 
         debuger.ImGuiWin_Debug(&is_open_debug_window);
 
-        on_uodate_player(painter.imgui_io->DeltaTime);
+        on_update_player(painter.imgui_io->DeltaTime);
+
+        effect_master.On_update(painter.imgui_io->DeltaTime);
 
         painter.On_frame_end(render_callback);
     }
@@ -165,7 +171,7 @@ Game::on_update_view()
 }
 
 void
-Game::on_uodate_player(const float& delta_time)
+Game::on_update_player(const float& delta_time)
 {
     player->On_update(delta_time);
 

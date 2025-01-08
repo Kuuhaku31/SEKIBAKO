@@ -15,9 +15,9 @@ Player::Player()
     static ResourcesPool& resources_pool = ResourcesPool::Instance();
 
     // 初始化动画信息
-    AnimationInfo attack_effect_info[4];
-    AnimationInfo jump_effect_info;
-    uint16_t      frame_idx_list[] = { 0, 1, 2, 3, 4 };
+    AnimationInfo   attack_effect_info[4];
+    AnimationInfo   jump_effect_info;
+    static uint16_t frame_idx_list[] = { 0, 1, 2, 3, 4 };
     {
         attack_effect_info[0].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_U);
         attack_effect_info[1].texture = resources_pool.Get_texture(Tex_Player_Attack_Effect_D);

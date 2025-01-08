@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "animation.h"
 #include "base.h"
 #include "state_machine.h"
 
@@ -98,7 +99,7 @@ private:
 class PlayerStatesJump : public StateNode
 {
 public:
-    PlayerStatesJump(Player& player, const AnimationInfo& jump_effect_info);
+    PlayerStatesJump(Player& player, const AnimationInfo& info);
     ~PlayerStatesJump();
 
     void On_enter() override;
@@ -110,7 +111,7 @@ private:
     Player& player;
     Timer   jump_timer; // 跳跃计时器
 
-    Animation* jump_effect = nullptr; // 跳跃效果
+    AnimationInfo jump_effect_info; // 跳跃效果信息
 };
 
 // 角色翻滚

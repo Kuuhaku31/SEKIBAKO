@@ -38,7 +38,7 @@ private:
     void input_event();
 
     void on_update_view();
-    void on_uodate_player(const float& delta_time);
+    void on_update_player(const float& delta_time);
 
     EventCallback event_callback;
     Callback      render_callback;

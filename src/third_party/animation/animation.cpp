@@ -34,15 +34,16 @@ Animation::Animation(const AnimationInfo& info)
     // 帧切换计时器
     Callback f = [&]() {
         frame_current++;
-        if(frame_current >= frame_count)
+        if(frame_current >= frame_count) // 如果超出帧数
         {
-            if(is_loop)
+            if(is_loop) // 如果是循环播放
             {
                 frame_current = 0;
             }
-            else
+            else // 如果不是循环播放
             {
-                is_paused     = true;
+                is_paused     = true; // 暂停计时器
+                is_finished   = true; // 动画结束
                 frame_current = frame_count - 1;
                 if(on_finished) on_finished();
             }
@@ -64,8 +65,9 @@ Animation::~Animation()
 
 // 重置
 void
-Animation::Reset()
+Animation::Animation_reset()
 {
+    is_finished   = false;
     frame_current = 0;
     Restart();
 }

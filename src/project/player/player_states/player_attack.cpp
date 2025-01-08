@@ -99,7 +99,7 @@ PlayerStatesAttack::On_enter()
     default: //
     case Player::Action_Dir::Right: current_attack_effect = attack_effect_list[3]; break;
     }
-    current_attack_effect->Reset();
+    current_attack_effect->Animation_reset();
 
     attack_follow_player();
 }

@@ -36,8 +36,10 @@ public:
     double angle   = 0;    // 渲染角度
     bool   is_loop = true; // 是否循环播放
 
-    void Reset();                     // 重置
+    void Animation_reset();           // 重置
     void Set_on_finished(Callback f); // 设置动画结束回调
+
+    const bool& Get_is_finished() const { return is_finished; } // 动画是否结束
 
 private:
     Texture* texture       = nullptr; // 纹理
@@ -49,5 +51,6 @@ private:
 
     float texs_size = 0.0f; // 对于这个纹理，一个单位长度等于 texs_size 个像素
 
-    Callback on_finished; // 动画结束回调
+    bool     is_finished = false; // 动画是否结束
+    Callback on_finished;         // 动画结束回调
 };
