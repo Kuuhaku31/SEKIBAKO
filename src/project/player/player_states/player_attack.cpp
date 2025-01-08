@@ -5,10 +5,8 @@
 #include "player_states.h"
 
 #include "collision_manager.h"
-#include "effect_master.h"
 #include "imgui_setup.h"
-#include "resources_name.h"
-#include "resources_pool.h"
+#include "player_effect.h"
 
 static CollisionManager& collision_manager = CollisionManager::Instance();
 
@@ -67,9 +65,6 @@ PlayerStatesAttack::~PlayerStatesAttack()
 void
 PlayerStatesAttack::On_enter()
 {
-    static ResourcesPool& resources_pool = ResourcesPool::Instance();
-    static EffectMaster&  effect_master  = EffectMaster::Instance();
-
     player.object_color = PLAYER_ATTACK_COLOR;
 
     player.is_Lock_facing_dir = true;
@@ -94,11 +89,11 @@ PlayerStatesAttack::On_enter()
     // 开始攻击效果动画
     switch(player.action_dir)
     {
-    case Player::Action_Dir::Up: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_U)); break;
-    case Player::Action_Dir::Down: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_D)); break;
-    case Player::Action_Dir::Left: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_L)); break;
-    default: // case Player::Action_Dir::Right:
-    case Player::Action_Dir::Right: current_attack_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Attack_Effect_R)); break;
+    case Player::Action_Dir::Up: current_attack_effect = CreatPlayerAttackEffectUp(); break;
+    case Player::Action_Dir::Down: current_attack_effect = CreatPlayerAttackEffectDown(); break;
+    case Player::Action_Dir::Left: current_attack_effect = CreatPlayerAttackEffectLeft(); break;
+    default:
+    case Player::Action_Dir::Right: current_attack_effect = CreatPlayerAttackEffectRight(); break;
     }
 
     attack_follow_player();

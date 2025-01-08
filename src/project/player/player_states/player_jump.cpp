@@ -4,9 +4,7 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "effect_master.h"
-#include "resources_name.h"
-#include "resources_pool.h"
+#include "player_effect.h"
 
 PlayerStatesJump::PlayerStatesJump(Player& player)
     : StateNode(PLAYER_STATE_JUMP)
@@ -25,9 +23,6 @@ PlayerStatesJump::~PlayerStatesJump()
 void
 PlayerStatesJump::On_enter()
 {
-    static ResourcesPool& resources_pool = ResourcesPool::Instance();
-    static EffectMaster&  effect_master  = EffectMaster::Instance();
-
     player.object_color = PLAYER_JUMP_COLOR;
 
     CONTROLER_FALSE(player.player_controler, PLAYER_CONTROL_CLICK_JUMP);
@@ -45,7 +40,7 @@ PlayerStatesJump::On_enter()
     jump_timer.Restart();
 
     // 在管理器中创建特效
-    AnimationInstance* jump_effect = effect_master.Create_effect(resources_pool.Get_animation(Ani_Player_Action_Effect_Jump));
+    AnimationInstance* jump_effect = CreatPlayerJumpEffect();
 
     // 设置位置
     float ph_x = player.movement_position.vx - jump_effect->Get_ph_w() / 2;
