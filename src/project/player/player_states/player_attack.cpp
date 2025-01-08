@@ -4,16 +4,17 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "animation.h"
 #include "collision_manager.h"
 #include "imgui_setup.h"
 
 static CollisionManager& collision_manager = CollisionManager::Instance();
 
-PlayerStatesAttack::PlayerStatesAttack(Player& player)
+PlayerStatesAttack::PlayerStatesAttack(Player& player, const AnimationInfo* attack_effect_infos)
     : StateNode(PLAYER_STATE_ATTACK)
     , player(player)
 {
-    static TimerCallback timer_callback = [&player]() {
+    static Callback timer_callback = [&player]() {
         // 攻击动作计时结束，退出攻击状态
         if(!player.is_on_ground) // 如果不在地面
         {
@@ -54,6 +55,15 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player)
     attack_effect_timer.set_on_timeout([&]() {
         attack_box->enable = false;
     }); // 攻击效果计时结束，无效攻击碰撞盒
+
+    // 创建攻击效果动画
+    for(int i = 0; i < 4; i++) attack_effect_list[i] = new Animation(attack_effect_infos[i]);
+}
+
+PlayerStatesAttack::~PlayerStatesAttack()
+{
+    collision_manager.Destroy_collision_box(attack_box);
+    for(int i = 0; i < 4; i++) delete attack_effect_list[i];
 }
 
 void
@@ -79,7 +89,19 @@ PlayerStatesAttack::On_enter()
     attack_box    = collision_manager.Create_collision_box();
     attack_box->w = 2.0f;
     attack_box->h = 2.0f;
-    attack_box_follow_player();
+
+    // 开始攻击效果动画
+    switch(player.action_dir)
+    {
+    case Player::Action_Dir::Up: current_attack_effect = attack_effect_list[0]; break;
+    case Player::Action_Dir::Down: current_attack_effect = attack_effect_list[1]; break;
+    case Player::Action_Dir::Left: current_attack_effect = attack_effect_list[2]; break;
+    default: //
+    case Player::Action_Dir::Right: current_attack_effect = attack_effect_list[3]; break;
+    }
+    current_attack_effect->Reset();
+
+    attack_follow_player();
 }
 
 void
@@ -96,6 +118,9 @@ PlayerStatesAttack::On_render() const
         true
 
     );
+
+    // 绘制攻击效果
+    current_attack_effect->On_render();
 }
 
 void
@@ -105,13 +130,16 @@ PlayerStatesAttack::On_update(float delta_time)
     attack_action_timer.on_update(delta_time);
     attack_effect_wait_timer.on_update(delta_time);
     attack_effect_timer.on_update(delta_time);
+
+    // 更新动画
+    current_attack_effect->on_update(delta_time);
 }
 
 void
 PlayerStatesAttack::On_update_after(float delta_time)
 {
     // 更新位置
-    attack_box_follow_player();
+    attack_follow_player();
 }
 
 void
@@ -125,28 +153,53 @@ PlayerStatesAttack::On_exit()
 }
 
 void
-PlayerStatesAttack::attack_box_follow_player()
+PlayerStatesAttack::attack_follow_player()
 {
     switch(player.action_dir)
     {
     case Player::Action_Dir::Up:
-        attack_box->x = player.movement_position.vx - attack_box->w / 2;
+    {
+        attack_box->x = player.movement_position.vx - attack_box->w / 2; // 碰撞盒位置跟随角色
         attack_box->y = player.movement_position.vy - attack_box->h;
+
+        current_attack_effect->x = player.movement_position.vx - current_attack_effect->w / 2; // 特效位置跟随角色
+        current_attack_effect->y = player.movement_position.vy - current_attack_effect->h;
+
         break;
+    }
 
     case Player::Action_Dir::Down:
+    {
         attack_box->x = player.movement_position.vx - attack_box->w / 2;
         attack_box->y = player.movement_position.vy;
+
+        current_attack_effect->x = player.movement_position.vx - current_attack_effect->w / 2;
+        current_attack_effect->y = player.movement_position.vy;
+
         break;
+    }
 
     case Player::Action_Dir::Left:
+    {
         attack_box->x = player.movement_position.vx - attack_box->w;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
-        break;
 
+        current_attack_effect->x = player.movement_position.vx - current_attack_effect->w;
+        current_attack_effect->y = player.movement_position.vy - current_attack_effect->h / 2;
+
+        break;
+    }
+
+    default: //
     case Player::Action_Dir::Right:
+    {
         attack_box->x = player.movement_position.vx;
         attack_box->y = player.movement_position.vy - attack_box->h / 2;
+
+        current_attack_effect->x = player.movement_position.vx;
+        current_attack_effect->y = player.movement_position.vy - current_attack_effect->h / 2;
+
         break;
+    }
     }
 }

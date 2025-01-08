@@ -23,8 +23,7 @@ typedef ImFont       Font;
 typedef Mix_Chunk    Sound;
 typedef Mix_Music    Music;
 
-typedef std::function<void(const Event&)> EventCallback;    // 事件回调函数
-typedef std::function<void()>             RendererCallback; // 渲染回调函数
+typedef std::function<void(const Event&)> EventCallback; // 事件回调函数
 
 // Painter
 class Painter
@@ -38,7 +37,7 @@ public:
     int Quit();
 
     void On_frame_begin(EventCallback f = nullptr) const;
-    void On_frame_end(RendererCallback f = nullptr) const;
+    void On_frame_end(Callback f = nullptr) const;
 
 public:
     float Get_delta_time() const;
@@ -80,7 +79,7 @@ public:
     void DrawRect(float x, float y, float w, float h, const Color& color = COLOR_BLACK, bool is_solid = true) const;
     void DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, float c_y, const Color& color = COLOR_BLACK, bool is_solid = true) const;
 
-    void DrawTexture(Texture* texture, const IRect& rect_src, const IRect& rect_dst, float angle) const;
+    void DrawTexture(Texture* texture, const IRect& rect_src, const FRect& rect_dst, float angle = 0.0f) const;
 
 private:
     int init_flag = 1; // 1:未初始化 0:初始化成功 -1:初始化失败

@@ -10,7 +10,11 @@
 enum class ResourcesID
 {
     // 纹理
-    Tex_Test, // 测试纹理
+    Tex_Test,                       // 测试纹理
+    Tex_Player_Attack_Effect_Up,    // 玩家攻击特效上
+    Tex_Player_Attack_Effect_Down,  // 玩家攻击特效下
+    Tex_Player_Attack_Effect_Left,  // 玩家攻击特效左
+    Tex_Player_Attack_Effect_Right, // 玩家攻击特效右
 
     // 特效
 

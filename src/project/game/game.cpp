@@ -46,16 +46,6 @@ Game::Game()
 
         player->On_render();
     };
-
-    game_view.Set_unit_size(50.f);
-
-    player = new Player();
-    player->Set_position(Vector2{ 0, -0.5 });
-    player->Set_mass(1.0f);
-    player->Set_radius(0.5);
-
-    player->is_use_friction       = true;
-    player->is_use_air_resistance = true;
 }
 
 int
@@ -71,8 +61,20 @@ Game::PlayGame()
 void
 Game::game_init()
 {
+    // 初始化基本
     painter.Init("Game", IRect{ SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 1200 });
     resources_pool.LoadResources(painter.renderer);
+
+    // 初始化部件
+    game_view.Set_unit_size(50.f);
+
+    player = new Player();
+    player->Set_position(Vector2{ 0, -0.5 });
+    player->Set_mass(1.0f);
+    player->Set_radius(0.5);
+
+    player->is_use_friction       = true;
+    player->is_use_air_resistance = true;
 }
 
 void

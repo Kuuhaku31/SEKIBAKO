@@ -4,6 +4,7 @@ project(third_party)
 set(PATH
     ${CMAKE_CURRENT_LIST_DIR}/base
     ${CMAKE_CURRENT_LIST_DIR}/game
+    ${CMAKE_CURRENT_LIST_DIR}/animation
     ${CMAKE_CURRENT_LIST_DIR}/imgui_setup
 )
 

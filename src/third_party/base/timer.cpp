@@ -9,6 +9,7 @@ Timer::restart()
 {
     pass_time = 0;
     shotted   = false;
+    paused    = false;
 }
 
 // 设置等待时间

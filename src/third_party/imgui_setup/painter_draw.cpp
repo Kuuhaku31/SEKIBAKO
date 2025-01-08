@@ -550,8 +550,9 @@ Painter::DrawTriangle(float a_x, float a_y, float b_x, float b_y, float c_x, flo
     }
 }
 
+// tex_size
 void
-Painter::DrawTexture(Texture* texture, const IRect& rect_src, const IRect& rect_dst, float angle) const
+Painter::DrawTexture(Texture* texture, const IRect& rect_src, const FRect& rect_dst, float angle) const
 {
     if(!painter_view) return;
 
@@ -563,10 +564,7 @@ Painter::DrawTexture(Texture* texture, const IRect& rect_src, const IRect& rect_
     static SDL_Rect src;
     static SDL_Rect dst;
 
-    src.x = (rect_src.x - view_left_top_position_x) * unit_size;
-    src.y = (rect_src.y - view_left_top_position_y) * unit_size;
-    src.w = rect_src.w * unit_size;
-    src.h = rect_src.h * unit_size;
+    src = { rect_src.x, rect_src.y, rect_src.w, rect_src.h };
 
     dst.x = (rect_dst.x - view_left_top_position_x) * unit_size;
     dst.y = (rect_dst.y - view_left_top_position_y) * unit_size;

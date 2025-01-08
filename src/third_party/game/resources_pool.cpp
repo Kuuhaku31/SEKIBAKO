@@ -19,6 +19,11 @@ ResourcesPool::LoadResources(Renderer* renderer)
 
     { // 加载纹理
         texture_pool[ResourcesID::Tex_Test] = IMG_LoadTexture(renderer, "pictures/kana.jpg");
+
+        texture_pool[ResourcesID::Tex_Player_Attack_Effect_Up]    = IMG_LoadTexture(renderer, "pictures/vfx_attack_up.png");
+        texture_pool[ResourcesID::Tex_Player_Attack_Effect_Down]  = IMG_LoadTexture(renderer, "pictures/vfx_attack_down.png");
+        texture_pool[ResourcesID::Tex_Player_Attack_Effect_Left]  = IMG_LoadTexture(renderer, "pictures/vfx_attack_left.png");
+        texture_pool[ResourcesID::Tex_Player_Attack_Effect_Right] = IMG_LoadTexture(renderer, "pictures/vfx_attack_right.png");
     }
 
     { // 加载音乐

@@ -169,13 +169,15 @@ private:
 };
 
 class CollisionBox;
+class Animation;
+struct AnimationInfo;
 
 // 角色攻击
 class PlayerStatesAttack : public StateNode
 {
 public:
-    PlayerStatesAttack(Player& player);
-    ~PlayerStatesAttack() = default;
+    PlayerStatesAttack(Player& player, const AnimationInfo* attack_effect_infos);
+    ~PlayerStatesAttack();
 
     void On_enter() override;
     void On_render() const override;
@@ -191,6 +193,9 @@ private:
 
     CollisionBox* attack_box = nullptr; // 攻击碰撞盒
 
+    Animation* attack_effect_list[4] = { nullptr }; // 攻击效果列表，上下左右
+    Animation* current_attack_effect = nullptr;     // 当前攻击效果
+
 private:
-    void attack_box_follow_player();
+    void attack_follow_player();
 };

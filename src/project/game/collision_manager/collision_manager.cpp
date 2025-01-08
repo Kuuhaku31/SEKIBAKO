@@ -27,11 +27,16 @@ CollisionManager::Create_collision_box()
 void
 CollisionManager::Destroy_collision_box(CollisionBox* collision_box)
 {
-    // 从列表中移除碰撞盒
-    collision_box_list.erase(std::remove(collision_box_list.begin(), collision_box_list.end(), collision_box), collision_box_list.end());
+    if(!collision_box) return;
 
-    // 释放碰撞盒内存
-    delete collision_box;
+    // 查找碰撞盒在列表中的位置
+    auto it = std::find(collision_box_list.begin(), collision_box_list.end(), collision_box);
+
+    if(it != collision_box_list.end())
+    {
+        collision_box_list.erase(it); // 从列表中移除碰撞盒
+        delete collision_box;         // 释放碰撞盒内存
+    }
 }
 
 // 处理碰撞

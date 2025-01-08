@@ -125,7 +125,7 @@ Painter::On_frame_begin(EventCallback f) const
 }
 
 void
-Painter::On_frame_end(RendererCallback f) const
+Painter::On_frame_end(Callback f) const
 {
     ImGui::Render(); // Rendering
 

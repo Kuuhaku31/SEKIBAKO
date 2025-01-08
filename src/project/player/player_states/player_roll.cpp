@@ -8,7 +8,7 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
     : StateNode(PLAYER_STATE_ROLL)
     , player(player)
 {
-    static TimerCallback timer_callback = [&player]() {
+    static Callback timer_callback = [&player]() {
         // 退出翻滚状态
         if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
             player.Is_try_move_x_on_one_dir() &&
