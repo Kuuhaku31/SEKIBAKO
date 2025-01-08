@@ -40,19 +40,19 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player, const AnimationInfo* atta
     };
 
     // 攻击动作计时器初始化
-    attack_action_timer.set_one_shot(true);
-    attack_action_timer.set_on_timeout(timer_callback);
+    attack_action_timer.is_one_shot = true;
+    attack_action_timer.Set_on_timeout(timer_callback);
 
     // 攻击效果等待计时器初始化
-    attack_effect_wait_timer.set_one_shot(true);
-    attack_effect_wait_timer.set_on_timeout([&]() {
+    attack_effect_wait_timer.is_one_shot = true;
+    attack_effect_wait_timer.Set_on_timeout([&]() {
         attack_box->enable = true;
-        attack_effect_timer.restart();
+        attack_effect_timer.Restart();
     }); // 攻击效果等待计时结束，有效攻击碰撞盒
 
     // 攻击效果计时器初始化
-    attack_effect_timer.set_one_shot(true);
-    attack_effect_timer.set_on_timeout([&]() {
+    attack_effect_timer.is_one_shot = true;
+    attack_effect_timer.Set_on_timeout([&]() {
         attack_box->enable = false;
     }); // 攻击效果计时结束，无效攻击碰撞盒
 
@@ -75,15 +75,15 @@ PlayerStatesAttack::On_enter()
     player.is_lock_action_dir = true;
 
     player.attack_cd_done = false;
-    player.attack_cd_timer.set_wait_time(player.attack_cd);
-    player.attack_cd_timer.restart();
+    player.attack_cd_timer.Set_wait_time(player.attack_cd);
+    player.attack_cd_timer.Restart();
 
-    attack_action_timer.set_wait_time(player.attack_action_time);
-    attack_effect_wait_timer.set_wait_time(player.attack_effect_wait_time);
-    attack_effect_timer.set_wait_time(player.attack_effect_time);
+    attack_action_timer.Set_wait_time(player.attack_action_time);
+    attack_effect_wait_timer.Set_wait_time(player.attack_effect_wait_time);
+    attack_effect_timer.Set_wait_time(player.attack_effect_time);
 
-    attack_action_timer.restart();
-    attack_effect_wait_timer.restart();
+    attack_action_timer.Restart();
+    attack_effect_wait_timer.Restart();
 
     // 创建攻击碰撞盒
     attack_box    = collision_manager.Create_collision_box();

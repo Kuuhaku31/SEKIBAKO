@@ -46,8 +46,8 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
         }
     };
 
-    roll_timer.set_one_shot(true);
-    roll_timer.set_on_timeout(timer_callback); // 翻滚计时结束
+    roll_timer.is_one_shot = true;
+    roll_timer.Set_on_timeout(timer_callback); // 翻滚计时结束
 }
 
 void
@@ -58,11 +58,11 @@ PlayerStatesRoll::On_enter()
     player.roll_cd_done       = false;
     player.is_Lock_facing_dir = true;
 
-    roll_timer.set_wait_time(player.roll_time);
-    roll_timer.restart();
+    roll_timer.Set_wait_time(player.roll_time);
+    roll_timer.Restart();
 
-    player.roll_cd_timer.set_wait_time(player.roll_cd);
-    player.roll_cd_timer.restart();
+    player.roll_cd_timer.Set_wait_time(player.roll_cd);
+    player.roll_cd_timer.Restart();
 }
 
 void

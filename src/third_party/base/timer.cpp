@@ -5,46 +5,12 @@
 
 // 重启计时器
 void
-Timer::restart()
+Timer::Restart(float t)
 {
-    pass_time = 0;
-    shotted   = false;
-    paused    = false;
-}
-
-// 设置等待时间
-void
-Timer::set_wait_time(float t)
-{
-    wait_time = t;
-}
-
-// 设置是否为一次性触发
-void
-Timer::set_one_shot(bool flag)
-{
-    one_shot = flag;
-}
-
-// 设置超时回调函数
-void
-Timer::set_on_timeout(std::function<void()> f)
-{
-    on_timeout = f;
-}
-
-// 暂停计时器
-void
-Timer::pause()
-{
-    paused = true;
-}
-
-// 恢复计时器
-void
-Timer::resume()
-{
-    paused = false;
+    if(t > 0.0f) wait_time = t;
+    pass_time  = 0.0f;
+    is_shotted = false;
+    is_paused  = false;
 }
 
 // 更新计时器
@@ -52,10 +18,7 @@ void
 Timer::On_update(float dt)
 {
     // 如果计时器暂停，则不更新
-    if(paused)
-    {
-        return;
-    }
+    if(is_paused) return;
 
     // 更新计时器
     pass_time += dt;
@@ -63,25 +26,21 @@ Timer::On_update(float dt)
     // 如果计时器超时
     if(pass_time >= wait_time)
     {
-        // 如果计时器为一次性触发，则不再触发
-        bool can_shot = (!one_shot || (one_shot && !shotted));
-        shotted       = true;
-
-        // 如果可以触发超时回调函数
-        if(can_shot && on_timeout)
-        {
-            on_timeout();
-        }
-
-        // 重置计时器
         pass_time -= wait_time;
+
+        // 在保证有回调函数的情况下：
+        // 只有 is_one_shot 和 is_shotted 都为 true 时
+        // 即计时器为一次性触发且已经触发过一次时
+        // 不再触发回调函数
+        // 否则触发回调函数
+        if(!(is_one_shot && is_shotted) && on_timeout) is_shotted = true, on_timeout();
     }
 }
 
 // 立即触发
 void
-Timer::shot()
+Timer::Shot()
 {
-    shotted = true;
+    is_shotted = true;
     on_timeout();
 }

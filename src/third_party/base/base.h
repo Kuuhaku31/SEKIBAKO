@@ -95,25 +95,25 @@ public:
 
 public:
     void On_update(float dt);
+    void Restart(float t = 0);
+    void Shot(); // 立即触发
 
 public:
-    void restart();
-    void set_wait_time(float t);
-    void set_one_shot(bool flag);
-    void set_on_timeout(std::function<void()> f);
-    void pause();  // 暂停计时器
-    void resume(); // 恢复计时器
-    void shot();   // 立即触发
+    bool is_paused   = false; // 计时器是否暂停
+    bool is_one_shot = false; // 计时器是否为一次性触发
+
+    void Set_wait_time(float t) { t > 0.0f ? wait_time = t : wait_time = 0.0f; }
+    void Set_on_timeout(Callback f) { on_timeout = f; }
+
+    const float& Get_pass_time() const { return pass_time; }
+    const bool&  Get_is_shotted() const { return is_shotted; }
 
 private:
-    float pass_time = 0;     // 计时器已经过去的时间
-    float wait_time = 0;     // 计时器等待的时间
-    bool  paused    = false; // 计时器是否暂停
-    bool  shotted   = false; // 计时器是否已经触发过一次
-    bool  one_shot  = false; // 计时器是否为一次性触发
+    float pass_time  = 0;     // 计时器已经过去的时间
+    float wait_time  = 0;     // 计时器等待的时间
+    bool  is_shotted = false; // 计时器是否已经触发过一次
 
-    // 超时回调函数
-    Callback on_timeout = nullptr;
+    Callback on_timeout = nullptr; // 超时回调函数
 };
 
 

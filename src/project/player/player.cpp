@@ -69,11 +69,11 @@ Player::Player()
     Switch_to_state(PLAYER_STATE_IDLE);
 
     // 计时器
-    roll_cd_timer.set_one_shot(true);
-    roll_cd_timer.set_on_timeout([&]() { roll_cd_done = true; }); // 翻滚冷却计时结束
+    roll_cd_timer.is_one_shot = true;
+    roll_cd_timer.Set_on_timeout([&]() { roll_cd_done = true; }); // 翻滚冷却计时结束
 
-    attack_cd_timer.set_one_shot(true);
-    attack_cd_timer.set_on_timeout([&]() { attack_cd_done = true; }); // 攻击冷却计时结束
+    attack_cd_timer.is_one_shot = true;
+    attack_cd_timer.Set_on_timeout([&]() { attack_cd_done = true; }); // 攻击冷却计时结束
 }
 
 void

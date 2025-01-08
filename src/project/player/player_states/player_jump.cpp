@@ -10,8 +10,8 @@ PlayerStatesJump::PlayerStatesJump(Player& player, const AnimationInfo& jump_eff
     : StateNode(PLAYER_STATE_JUMP)
     , player(player)
 {
-    jump_timer.set_one_shot(true);
-    jump_timer.set_on_timeout([&player]() {
+    jump_timer.is_one_shot = true;
+    jump_timer.Set_on_timeout([&player]() {
         player.Switch_to_state(PLAYER_STATE_LEVIATE);
     }); // 跳跃计时结束，切换到 leviate 状态
 
@@ -40,8 +40,8 @@ PlayerStatesJump::On_enter()
     player.is_use_friction       = false;
     player.is_use_air_resistance = true;
 
-    jump_timer.set_wait_time(player.jump_time);
-    jump_timer.restart();
+    jump_timer.Set_wait_time(player.jump_time);
+    jump_timer.Restart();
 
     // 跳跃效果
     // 设置位置

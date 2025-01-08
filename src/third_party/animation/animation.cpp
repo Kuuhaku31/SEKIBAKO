@@ -31,7 +31,7 @@ Animation::Animation(const AnimationInfo& info)
         rect_src.h = frame_h;
     }
 
-    // lambda 表达式
+    // 帧切换计时器
     Callback f = [&]() {
         frame_current++;
         if(frame_current >= frame_count)
@@ -42,18 +42,17 @@ Animation::Animation(const AnimationInfo& info)
             }
             else
             {
-                pause(); // 暂停计时器
+                is_paused     = true;
                 frame_current = frame_count - 1;
                 if(on_finished) on_finished();
             }
         }
     };
-
-    set_one_shot(false); // 默认设置为循环播放
-    set_on_timeout(f);   // 设置回调函数
+    Set_on_timeout(f);   // 设置回调函数
+    is_one_shot = false; // 默认设置为循环播放
 
     // 其他参数
-    set_wait_time(info.interval);
+    Set_wait_time(info.interval);
     is_loop     = info.is_loop;
     on_finished = info.on_finished;
 }
@@ -68,7 +67,7 @@ void
 Animation::Reset()
 {
     frame_current = 0;
-    restart();
+    Restart();
 }
 
 // 设置动画结束回调
