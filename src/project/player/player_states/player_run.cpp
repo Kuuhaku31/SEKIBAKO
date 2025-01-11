@@ -4,10 +4,17 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "effect_master.h"
+#include "resources_name.h"
+
+
+static EffectMaster& effect_master = EffectMaster::Instance();
+
 PlayerStatesRun::PlayerStatesRun(Player& player)
     : StateNode(PLAYER_STATE_RUN)
     , player(player)
 {
+    player_run = effect_master.Create_animtion("Ani-SEKIBAKO-run-R");
 }
 
 void
@@ -22,6 +29,12 @@ PlayerStatesRun::On_enter()
     player.is_use_air_resistance = true;
 
     player.movement_acceleration.vy = player.movement_velocity.vy = 0;
+}
+
+void
+PlayerStatesRun::On_render() const
+{
+    player_run->On_render();
 }
 
 void
@@ -67,6 +80,14 @@ PlayerStatesRun::On_update(float delta_time)
         // 切换到 attack 状态
         player.Switch_to_state(PLAYER_STATE_ATTACK);
     }
+}
+
+void
+PlayerStatesRun::On_update_after(float delta_time)
+{
+    player_run->On_update(delta_time);
+    player_run->vx = player.movement_position.vx - player_run->Get_ph_w() / 2;
+    player_run->vy = player.movement_position.vy - player_run->Get_ph_h() + player.object_radius;
 }
 
 void

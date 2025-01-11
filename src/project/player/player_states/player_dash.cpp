@@ -4,10 +4,13 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "effect_master.h"
+
 PlayerStatesDash::PlayerStatesDash(Player& player)
     : StateNode(PLAYER_STATE_DASH)
     , player(player)
 {
+    player_dash = EffectMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
 }
 
 void
@@ -16,6 +19,12 @@ PlayerStatesDash::On_enter()
     player.object_color = PLAYER_DASH_COLOR;
 
     player.is_Lock_facing_dir = true;
+}
+
+void
+PlayerStatesDash::On_render() const
+{
+    player_dash->On_render();
 }
 
 void
@@ -62,6 +71,14 @@ PlayerStatesDash::On_update(float delta_time)
             player.Switch_to_state(PLAYER_STATE_IDLE);
         }
     }
+}
+
+void
+PlayerStatesDash::On_update_after(float delta_time)
+{
+    player_dash->On_update(delta_time);
+    player_dash->vx = player.movement_position.vx - player_dash->Get_ph_w() / 2;
+    player_dash->vy = player.movement_position.vy - player_dash->Get_ph_h();
 }
 
 void

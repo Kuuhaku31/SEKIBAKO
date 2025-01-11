@@ -146,12 +146,8 @@ ResourcesPool::LoadResources()
 
                     frame_count = cJSON_GetArraySize(frame_idx_list_item);
 
-                    frame_idx_list        = new uint16_t[frame_count];
-                    cJSON* frame_idx_item = nullptr;
-                    cJSON_ArrayForEach(frame_idx_item, frame_idx_list_item)
-                    {
-                        frame_idx_list[frame_idx_item->valueint] = frame_idx_item->valueint;
-                    }
+                    frame_idx_list = new uint16_t[frame_count];
+                    for(uint32_t i = 0; i < frame_count; i++) frame_idx_list[i] = cJSON_GetArrayItem(frame_idx_list_item, i)->valueint;
                 }
 
                 info.texture        = texture_pool[cJSON_GetObjectItem(item, "source-texture")->valuestring];

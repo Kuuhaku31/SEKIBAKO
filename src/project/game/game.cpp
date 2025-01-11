@@ -24,7 +24,7 @@ Game::Instance()
 
 Game::Game()
 {
-    clear_color = { 0x33, 0x33, 0x33, 0xFF };
+    clear_color = { 0x00, 0x00, 0x33, 0xFF };
 
     event_callback = [this](const Event& e) {
         if(e.type == SDL_QUIT) is_running = false;

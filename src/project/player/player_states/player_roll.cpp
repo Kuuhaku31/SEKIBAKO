@@ -4,6 +4,8 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "effect_master.h"
+
 PlayerStatesRoll::PlayerStatesRoll(Player& player)
     : StateNode(PLAYER_STATE_ROLL)
     , player(player)
@@ -48,6 +50,9 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
 
     roll_timer.is_one_shot = true;
     roll_timer.Set_on_timeout(timer_callback); // 翻滚计时结束
+
+    // 动画
+    roll_effect = EffectMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
 }
 
 void
@@ -66,11 +71,26 @@ PlayerStatesRoll::On_enter()
 }
 
 void
+PlayerStatesRoll::On_render() const
+{
+    roll_effect->On_render();
+}
+
+void
 PlayerStatesRoll::On_update(float delta_time)
 {
     roll_timer.On_update(delta_time);
 
     player.movement_acceleration += (player.Get_facing_vector() * player.roll_acceleration);
+}
+
+void
+PlayerStatesRoll::On_update_after(float delta_time)
+{
+    // 更新动画
+    roll_effect->On_update(delta_time);
+    roll_effect->vx = player.movement_position.vx - roll_effect->Get_ph_w() / 2;
+    roll_effect->vy = player.movement_position.vy - roll_effect->Get_ph_h();
 }
 
 void

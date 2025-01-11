@@ -9,8 +9,6 @@
 
 class Player;
 class CollisionBox;
-class Animation;
-struct AnimationInfo;
 
 // 角色状态
 #define PLAYER_STATE_IDLE "player_idle"       // 角色空闲
@@ -43,11 +41,15 @@ public:
     ~PlayerStatesIdle() = default;
 
     void On_enter() override;
+    void On_render() const override;
     void On_update(float delta_time) override;
+    void On_update_after(float delta_time) override;
     void On_exit() override;
 
 private:
     Player& player;
+
+    AnimationInstance* player_idel;
 };
 
 // 角色行走
@@ -73,11 +75,15 @@ public:
     ~PlayerStatesRun() = default;
 
     void On_enter() override;
+    void On_render() const override;
     void On_update(float delta_time) override;
+    void On_update_after(float delta_time) override;
     void On_exit() override;
 
 private:
     Player& player;
+
+    AnimationInstance* player_run;
 };
 
 // 角色冲刺
@@ -88,11 +94,15 @@ public:
     ~PlayerStatesDash() = default;
 
     void On_enter() override;
+    void On_render() const override;
     void On_update(float delta_time) override;
+    void On_update_after(float delta_time) override;
     void On_exit() override;
 
 private:
     Player& player;
+
+    AnimationInstance* player_dash;
 };
 
 // 角色跳跃
@@ -120,12 +130,16 @@ public:
     ~PlayerStatesRoll() = default;
 
     void On_enter() override;
+    void On_render() const override;
     void On_update(float delta_time) override;
+    void On_update_after(float delta_time) override;
     void On_exit() override;
 
 private:
     Player& player;
     Timer   roll_timer; // 翻滚计时器
+
+    AnimationInstance* roll_effect = nullptr; // 翻滚效果
 };
 
 // 角色上升

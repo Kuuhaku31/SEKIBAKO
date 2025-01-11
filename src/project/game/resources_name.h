@@ -27,3 +27,6 @@
 
 #define Ani_Player_Action_Effect_Jump "Ani-Player-Action-Effect-Jump"
 #define Ani_Player_Action_Effect_Land "Ani-Player-Action-Effect-Land"
+
+#define Ani_SEKIBAKO_idel_R "Ani-SEKIBAKO-idel-R"
+#define Ani_SEKIBAKO_run_R "Ani-SEKIBAKO-run-R"

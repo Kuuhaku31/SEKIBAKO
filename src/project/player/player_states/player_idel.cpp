@@ -4,10 +4,15 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "effect_master.h"
+#include "resources_name.h"
+
 PlayerStatesIdle::PlayerStatesIdle(Player& player)
     : StateNode(PLAYER_STATE_IDLE)
     , player(player)
 {
+    // 初始化 idle 动画
+    player_idel = EffectMaster::Instance().Create_animtion(Ani_SEKIBAKO_idel_R);
 }
 
 void
@@ -25,6 +30,12 @@ PlayerStatesIdle::On_enter()
 
     player.current_move_acceleration = player.run_acceleration;
     player.On_stop_move();
+}
+
+void
+PlayerStatesIdle::On_render() const
+{
+    player_idel->On_render();
 }
 
 void
@@ -71,6 +82,16 @@ PlayerStatesIdle::On_update(float delta_time)
         // 切换到 attack 状态
         player.Switch_to_state(PLAYER_STATE_ATTACK);
     }
+}
+
+void
+PlayerStatesIdle::On_update_after(float delta_time)
+{
+    // 角色动画更新
+    player_idel->vx = player.movement_position.vx - player_idel->Get_ph_w() / 4;
+    player_idel->vy = player.movement_position.vy - player_idel->Get_ph_h() + player.object_radius;
+
+    player_idel->On_update(delta_time);
 }
 
 void
