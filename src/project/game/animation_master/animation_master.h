@@ -1,5 +1,5 @@
 
-// effect_master.h
+// animation_master.h
 
 #pragma once
 
@@ -10,10 +10,10 @@
 typedef std::vector<AnimationInstance*> EffectList;
 
 // 特效管理器（单例）
-class EffectMaster
+class AnimationMaster
 {
 public:
-    static EffectMaster& Instance();
+    static AnimationMaster& Instance();
 
 public:
     AnimationInstance* Create_effect(const Animation* animtion);  // 创建特效
@@ -27,10 +27,10 @@ private:
     EffectList animation_list;
 
 private:
-    EffectMaster() = default;
-    ~EffectMaster();
-    EffectMaster(const EffectMaster&)            = delete;
-    EffectMaster& operator=(const EffectMaster&) = delete;
+    AnimationMaster() = default;
+    ~AnimationMaster();
+    AnimationMaster(const AnimationMaster&)            = delete;
+    AnimationMaster& operator=(const AnimationMaster&) = delete;
 
-    static EffectMaster* instance;
+    static AnimationMaster* instance;
 };

@@ -1,7 +1,7 @@
 
-// effect_master.cpp
+// animation_master.cpp
 
-#include "effect_master.h"
+#include "animation_master.h"
 
 #include "resources_pool.h"
 
@@ -9,16 +9,16 @@
 
 static ResourcesPool& resources_pool = ResourcesPool::Instance();
 
-EffectMaster* EffectMaster::instance = nullptr;
-EffectMaster&
-EffectMaster::Instance()
+AnimationMaster* AnimationMaster::instance = nullptr;
+AnimationMaster&
+AnimationMaster::Instance()
 {
     if(instance) return *instance;
-    instance = new EffectMaster();
+    instance = new AnimationMaster();
     return *instance;
 }
 
-EffectMaster::~EffectMaster()
+AnimationMaster::~AnimationMaster()
 {
     for(auto& effect : effect_list) delete effect;
     for(auto& effect : animation_list) delete effect;
@@ -27,7 +27,7 @@ EffectMaster::~EffectMaster()
 }
 
 AnimationInstance*
-EffectMaster::Create_effect(const Animation* animtion)
+AnimationMaster::Create_effect(const Animation* animtion)
 {
     if(!animtion) return nullptr;
     AnimationInstance* new_effect = new AnimationInstance(*animtion);
@@ -36,7 +36,7 @@ EffectMaster::Create_effect(const Animation* animtion)
 }
 
 AnimationInstance*
-EffectMaster::Create_animtion(const std::string& label)
+AnimationMaster::Create_animtion(const std::string& label)
 {
     static Animation* ani = nullptr;
 
@@ -48,7 +48,7 @@ EffectMaster::Create_animtion(const std::string& label)
 }
 
 void
-EffectMaster::On_update(float delta_time)
+AnimationMaster::On_update(float delta_time)
 {
     // 遍历特效列表
     for(auto it = effect_list.begin(); it != effect_list.end();)
@@ -68,7 +68,7 @@ EffectMaster::On_update(float delta_time)
 }
 
 void
-EffectMaster::On_render() const
+AnimationMaster::On_render() const
 {
     // 遍历特效列表
     for(auto& effect : effect_list) effect->On_render();

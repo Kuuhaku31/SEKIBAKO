@@ -4,7 +4,7 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "effect_master.h"
+#include "animation_master.h"
 
 PlayerStatesRoll::PlayerStatesRoll(Player& player)
     : StateNode(PLAYER_STATE_ROLL)
@@ -52,7 +52,7 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
     roll_timer.Set_on_timeout(timer_callback); // 翻滚计时结束
 
     // 动画
-    roll_effect = EffectMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
+    roll_effect = AnimationMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
 }
 
 void

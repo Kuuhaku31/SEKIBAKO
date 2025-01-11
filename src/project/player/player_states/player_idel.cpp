@@ -4,7 +4,7 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "effect_master.h"
+#include "animation_master.h"
 #include "resources_name.h"
 
 PlayerStatesIdle::PlayerStatesIdle(Player& player)
@@ -12,7 +12,7 @@ PlayerStatesIdle::PlayerStatesIdle(Player& player)
     , player(player)
 {
     // 初始化 idle 动画
-    player_idel = EffectMaster::Instance().Create_animtion(Ani_SEKIBAKO_idel_R);
+    player_idel = AnimationMaster::Instance().Create_animtion(Ani_SEKIBAKO_idel_R);
 }
 
 void

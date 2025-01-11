@@ -4,17 +4,17 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "effect_master.h"
+#include "animation_master.h"
 #include "resources_name.h"
 
 
-static EffectMaster& effect_master = EffectMaster::Instance();
+static AnimationMaster& animation_master = AnimationMaster::Instance();
 
 PlayerStatesRun::PlayerStatesRun(Player& player)
     : StateNode(PLAYER_STATE_RUN)
     , player(player)
 {
-    player_run = effect_master.Create_animtion("Ani-SEKIBAKO-run-R");
+    player_run = animation_master.Create_animtion("Ani-SEKIBAKO-run-R");
 }
 
 void

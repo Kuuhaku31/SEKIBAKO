@@ -4,13 +4,13 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "effect_master.h"
+#include "animation_master.h"
 
 PlayerStatesDash::PlayerStatesDash(Player& player)
     : StateNode(PLAYER_STATE_DASH)
     , player(player)
 {
-    player_dash = EffectMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
+    player_dash = AnimationMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
 }
 
 void

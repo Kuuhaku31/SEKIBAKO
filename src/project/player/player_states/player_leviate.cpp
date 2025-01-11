@@ -4,14 +4,14 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "effect_master.h"
+#include "animation_master.h"
 #include "player_effect.h"
 
 PlayerStatesLeviate::PlayerStatesLeviate(Player& player)
     : StateNode(PLAYER_STATE_LEVIATE)
     , player(player)
 {
-    player_leviate = EffectMaster::Instance().Create_animtion("Ani-SEKIBAKO-Leviate-R");
+    player_leviate = AnimationMaster::Instance().Create_animtion("Ani-SEKIBAKO-Leviate-R");
 }
 
 void

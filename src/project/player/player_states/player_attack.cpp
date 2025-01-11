@@ -4,11 +4,12 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "animation_master.h"
 #include "collision_manager.h"
-#include "effect_master.h"
 #include "player_effect.h"
 
-static EffectMaster&     effect_master     = EffectMaster::Instance();
+
+static AnimationMaster&  animation_master  = AnimationMaster::Instance();
 static CollisionManager& collision_manager = CollisionManager::Instance();
 
 PlayerStatesAttack::PlayerStatesAttack(Player& player)
@@ -45,7 +46,7 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player)
     // attack_action_timer.Set_on_timeout(timer_callback);
 
     // 动画
-    player_attack = effect_master.Create_animtion("Ani-SEKIBAKO-attack-R");
+    player_attack = animation_master.Create_animtion("Ani-SEKIBAKO-attack-R");
     player_attack->Set_on_finished(timer_callback);
 
     // 攻击效果等待计时器初始化

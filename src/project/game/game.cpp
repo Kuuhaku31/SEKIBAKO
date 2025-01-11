@@ -3,15 +3,16 @@
 
 #include "game.h"
 
+#include "animation_master.h"
 #include "debuger.h"
-#include "effect_master.h"
 #include "imgui_windows.h"
 #include "resources_pool.h"
 
-static Painter&       painter        = Painter::Instance();
-static ResourcesPool& resources_pool = ResourcesPool::Instance();
-static EffectMaster&  effect_master  = EffectMaster::Instance();
-static Debuger&       debuger        = Debuger::Instance();
+
+static Painter&         painter          = Painter::Instance();
+static ResourcesPool&   resources_pool   = ResourcesPool::Instance();
+static AnimationMaster& animation_master = AnimationMaster::Instance();
+static Debuger&         debuger          = Debuger::Instance();
 
 Game* Game::instance = nullptr;
 Game&
@@ -48,7 +49,7 @@ Game::Game()
 
         player->On_render();
 
-        effect_master.On_render();
+        animation_master.On_render();
     };
 }
 
@@ -96,7 +97,7 @@ Game::game_loop()
 
         on_update_player(painter.imgui_io->DeltaTime);
 
-        effect_master.On_update(painter.imgui_io->DeltaTime);
+        animation_master.On_update(painter.imgui_io->DeltaTime);
 
         painter.On_frame_end(render_callback);
     }
