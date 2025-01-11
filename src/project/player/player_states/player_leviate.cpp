@@ -4,12 +4,14 @@
 #include "player.h"
 #include "player_states.h"
 
+#include "effect_master.h"
 #include "player_effect.h"
 
 PlayerStatesLeviate::PlayerStatesLeviate(Player& player)
     : StateNode(PLAYER_STATE_LEVIATE)
     , player(player)
 {
+    player_leviate = EffectMaster::Instance().Create_animtion("Ani-SEKIBAKO-Leviate-R");
 }
 
 void
@@ -22,6 +24,12 @@ PlayerStatesLeviate::On_enter()
 
     player.is_use_friction       = false;
     player.is_use_air_resistance = true;
+}
+
+void
+PlayerStatesLeviate::On_render() const
+{
+    player_leviate->On_render();
 }
 
 void
@@ -67,6 +75,13 @@ PlayerStatesLeviate::On_update(float delta_time)
     }
 }
 
+void
+PlayerStatesLeviate::On_update_after(float delta_time)
+{
+    player_leviate->On_update(delta_time);
+    player_leviate->vx = player.movement_position.vx - player_leviate->Get_ph_w() / 2;
+    player_leviate->vy = player.movement_position.vy - player_leviate->Get_ph_h();
+}
 
 void
 PlayerStatesLeviate::On_exit()

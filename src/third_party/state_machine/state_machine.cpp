@@ -16,6 +16,11 @@ StateMachine::StateMachine()
     current_state = &empty_state;
 }
 
+StateMachine::~StateMachine()
+{
+    Clear_states();
+}
+
 // 切换状态
 void
 StateMachine::Switch_to_state(const char* id)
@@ -34,4 +39,20 @@ void
 StateMachine::Register_state(StateNode* state_node)
 {
     state_pool[state_node->state_id] = state_node;
+}
+
+void
+StateMachine::Clear_states()
+{
+    // 清空状态机
+    for(auto it = state_pool.begin(); it != state_pool.end();)
+    {
+        if(it->second->state_id == STATE_NULL)
+        {
+            ++it;
+            continue;
+        }
+        delete it->second;
+        it = state_pool.erase(it);
+    }
 }

@@ -5,8 +5,10 @@
 #include "player_states.h"
 
 #include "collision_manager.h"
+#include "effect_master.h"
 #include "player_effect.h"
 
+static EffectMaster&     effect_master     = EffectMaster::Instance();
 static CollisionManager& collision_manager = CollisionManager::Instance();
 
 PlayerStatesAttack::PlayerStatesAttack(Player& player)
@@ -39,8 +41,12 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player)
     };
 
     // 攻击动作计时器初始化
-    attack_action_timer.is_one_shot = true;
-    attack_action_timer.Set_on_timeout(timer_callback);
+    // attack_action_timer.is_one_shot = true;
+    // attack_action_timer.Set_on_timeout(timer_callback);
+
+    // 动画
+    player_attack = effect_master.Create_animtion("Ani-SEKIBAKO-attack-R");
+    player_attack->Set_on_finished(timer_callback);
 
     // 攻击效果等待计时器初始化
     attack_effect_wait_timer.is_one_shot = true;
@@ -73,11 +79,12 @@ PlayerStatesAttack::On_enter()
     player.attack_cd_timer.Set_wait_time(player.attack_cd);
     player.attack_cd_timer.Restart();
 
-    attack_action_timer.Set_wait_time(player.attack_action_time);
+    // attack_action_timer.Set_wait_time(player.attack_action_time);
     attack_effect_wait_timer.Set_wait_time(player.attack_effect_wait_time);
     attack_effect_timer.Set_wait_time(player.attack_effect_time);
 
-    attack_action_timer.Restart();
+    // attack_action_timer.Restart();
+    player_attack->Animation_reset();
     attack_effect_wait_timer.Restart();
 
     // 创建攻击碰撞盒
@@ -112,13 +119,16 @@ PlayerStatesAttack::On_render() const
         true
 
     );
+
+    player_attack->On_render();
 }
 
 void
 PlayerStatesAttack::On_update(float delta_time)
 {
     // 更新计时器
-    attack_action_timer.On_update(delta_time);
+    // attack_action_timer.On_update(delta_time);
+    player_attack->On_update(delta_time);
     attack_effect_wait_timer.On_update(delta_time);
     attack_effect_timer.On_update(delta_time);
 }
@@ -128,6 +138,8 @@ PlayerStatesAttack::On_update_after(float delta_time)
 {
     // 更新位置
     attack_follow_player();
+    player_attack->vx = player.movement_position.vx - player_attack->Get_ph_w() / 2;
+    player_attack->vy = player.movement_position.vy - player_attack->Get_ph_h() + player.object_radius;
 }
 
 void

@@ -14,25 +14,15 @@ Player::Player()
 {
     static ResourcesPool& resources_pool = ResourcesPool::Instance();
 
-    // 创建状态
-    static PlayerStatesIdle    state_idel(*this);
-    static PlayerStatesWalk    state_walk(*this);
-    static PlayerStatesRun     state_run(*this);
-    static PlayerStatesLeviate state_leviate(*this);
-    static PlayerStatesJump    state_jump(*this);
-    static PlayerStatesRoll    state_roll(*this);
-    static PlayerStatesDash    state_dash(*this);
-    static PlayerStatesAttack  state_attack(*this);
-
     // 注册状态
-    Register_state(&state_idel);
-    Register_state(&state_walk);
-    Register_state(&state_run);
-    Register_state(&state_leviate);
-    Register_state(&state_jump);
-    Register_state(&state_roll);
-    Register_state(&state_dash);
-    Register_state(&state_attack);
+    Register_state(new PlayerStatesIdle(*this));
+    Register_state(new PlayerStatesWalk(*this));
+    Register_state(new PlayerStatesRun(*this));
+    Register_state(new PlayerStatesLeviate(*this));
+    Register_state(new PlayerStatesJump(*this));
+    Register_state(new PlayerStatesRoll(*this));
+    Register_state(new PlayerStatesDash(*this));
+    Register_state(new PlayerStatesAttack(*this));
 
     Switch_to_state(PLAYER_STATE_IDLE);
 
@@ -42,6 +32,11 @@ Player::Player()
 
     attack_cd_timer.is_one_shot = true;
     attack_cd_timer.Set_on_timeout([&]() { attack_cd_done = true; }); // 攻击冷却计时结束
+}
+
+Player::~Player()
+{
+    Clear_states();
 }
 
 void

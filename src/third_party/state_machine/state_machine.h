@@ -29,7 +29,7 @@ class StateMachine
 {
 public:
     StateMachine();
-    ~StateMachine() = default;
+    ~StateMachine();
 
     void On_render() const { current_state->On_render(); }
     void On_update(float delta_time) { current_state->On_update(delta_time); }
@@ -37,6 +37,7 @@ public:
 
     void Switch_to_state(const char* id);       // 切换状态
     void Register_state(StateNode* state_node); // 注册状态
+    void Clear_states();                        // 清空状态机
 
     const char* Current_state() const { return current_state->state_id; }
 

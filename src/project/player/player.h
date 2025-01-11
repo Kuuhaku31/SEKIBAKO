@@ -74,7 +74,7 @@ class Player : public Object, public StateMachine
 
 public:
     Player();
-    ~Player() = default;
+    ~Player();
 
 public:
     void On_render() const override;

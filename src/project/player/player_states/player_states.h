@@ -165,7 +165,9 @@ public:
     ~PlayerStatesLeviate() = default;
 
     void On_enter() override;
+    void On_render() const override;
     void On_update(float delta_time) override;
+    void On_update_after(float delta_time) override;
     void On_exit() override;
 
 private:
@@ -173,6 +175,8 @@ private:
 
 private:
     Player& player;
+
+    AnimationInstance* player_leviate; // 悬浮动画
 };
 
 // 角色下落
@@ -205,12 +209,14 @@ public:
 
 private:
     Player& player;
-    Timer   attack_action_timer;      // 攻击动作计时器
-    Timer   attack_effect_wait_timer; // 攻击效果等待计时器
-    Timer   attack_effect_timer;      // 攻击效果计时器
+    // Timer   attack_action_timer;      // 攻击动作计时器
+    Timer attack_effect_wait_timer; // 攻击效果等待计时器
+    Timer attack_effect_timer;      // 攻击效果计时器
 
     CollisionBox*      attack_box            = nullptr; // 攻击碰撞盒
     AnimationInstance* current_attack_effect = nullptr; // 当前攻击效果
+
+    AnimationInstance* player_attack; // 攻击动画
 
 private:
     void attack_follow_player();
