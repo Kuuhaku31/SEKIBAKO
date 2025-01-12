@@ -27,10 +27,13 @@ AnimationMaster::~AnimationMaster()
 }
 
 AnimationInstance*
-AnimationMaster::Create_effect(const Animation* animtion)
+AnimationMaster::Create_effect(const std::string& label)
 {
-    if(!animtion) return nullptr;
-    AnimationInstance* new_effect = new AnimationInstance(*animtion);
+    static Animation* ani = nullptr;
+
+    if(!(ani = resources_pool.Get_animation(label))) return nullptr;
+
+    AnimationInstance* new_effect = new AnimationInstance(*ani);
     effect_list.push_back(new_effect);
     return new_effect;
 }
