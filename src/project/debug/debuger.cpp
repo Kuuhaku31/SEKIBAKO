@@ -144,7 +144,7 @@ Debuger::ImGuiWin_Debug(bool* is_open)
         ImGui::Text("图片测试");
         ImGui::DragFloat("Scale", &scale, 0.01f, 0.1f, 2.0f);
 
-        Texture* texture = resources_pool.Get_texture(Tex_Test);
+        Texture* texture = resources_pool.Get_texture("Tex-Test");
         SDL_QueryTexture(texture, nullptr, nullptr, (int*)&w, (int*)&h);
         ImGui::Image((ImTextureID)texture, ImVec2(w * scale, h * scale));
     }

@@ -4,12 +4,14 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation_master.h"
 #include "collision_manager.h"
+#include "effect_master.h"
 #include "imgui_setup.h"
-#include "player_effect.h"
+#include "player_effects.h"
+#include "resources_name.h"
+#include "resources_pool.h"
 
-static AnimationMaster&  animation_master  = AnimationMaster::Instance();
+static ResourcesPool&    resources_pool    = ResourcesPool::Instance();
 static CollisionManager& collision_manager = CollisionManager::Instance();
 
 PlayerStatesAttack::PlayerStatesAttack(Player& player)
@@ -41,13 +43,9 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player)
         }
     };
 
-    // 攻击动作计时器初始化
-    // attack_action_timer.is_one_shot = true;
-    // attack_action_timer.Set_on_timeout(timer_callback);
-
     // 动画
-    player_attack = animation_master.Create_animtion("Ani-SEKIBAKO-attack-R");
-    player_attack->Set_on_finished(timer_callback);
+    player_attack = new AnimationInstance(*resources_pool.Get_animation(Ani_SEKIBAKO_attack_R));
+    player_attack->Set_on_finished(timer_callback); // 攻击动作计时结束，退出攻击状态
 
     // 攻击效果等待计时器初始化
     attack_effect_wait_timer.is_one_shot = true;
@@ -66,11 +64,14 @@ PlayerStatesAttack::PlayerStatesAttack(Player& player)
 PlayerStatesAttack::~PlayerStatesAttack()
 {
     collision_manager.Destroy_collision_box(attack_box);
+    delete player_attack; // 释放攻击动画
 }
 
 void
 PlayerStatesAttack::On_enter()
 {
+    static EffectMaster& effect_master = EffectMaster::Instance();
+
     player.object_color = PLAYER_ATTACK_COLOR;
 
     player.is_Lock_facing_dir = true;
@@ -93,17 +94,54 @@ PlayerStatesAttack::On_enter()
     attack_box->w = 2.0f;
     attack_box->h = 2.0f;
 
-    // 开始攻击效果动画
+    // 注册攻击效果动画
+    uint8_t attack_dir = 0;
     switch(player.action_dir)
     {
-    case Player::Action_Dir::Up: current_attack_effect = CreatPlayerAttackEffectUp(); break;
-    case Player::Action_Dir::Down: current_attack_effect = CreatPlayerAttackEffectDown(); break;
-    case Player::Action_Dir::Left: current_attack_effect = CreatPlayerAttackEffectLeft(); break;
+    case Player::Action_Dir::Up: attack_dir = 0; break;
+    case Player::Action_Dir::Down: attack_dir = 1; break;
+    case Player::Action_Dir::Left: attack_dir = 2; break;
     default:
-    case Player::Action_Dir::Right: current_attack_effect = CreatPlayerAttackEffectRight(); break;
+    case Player::Action_Dir::Right: attack_dir = 3; break;
     }
 
-    attack_follow_player();
+    PlayerAttackEffect* attack_effect = new PlayerAttackEffect(player.movement_position, attack_dir);
+
+    Vector2* effect_pos_corr = &attack_effect->attack_effect_animation.position_correction;
+    float    effect_ph_w     = attack_effect->attack_effect_animation.Get_ph_w();
+    float    effect_ph_h     = attack_effect->attack_effect_animation.Get_ph_h();
+
+    // 设置位置修正
+    switch(player.action_dir)
+    {
+    case Player::Action_Dir::Up:
+    {
+        effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
+        effect_pos_corr->vy = player.movement_position.vy - effect_ph_h;
+        break;
+    }
+    case Player::Action_Dir::Down:
+    {
+        effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
+        effect_pos_corr->vy = player.movement_position.vy;
+        break;
+    }
+    case Player::Action_Dir::Left:
+    {
+        effect_pos_corr->vx = player.movement_position.vx - effect_ph_w;
+        effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
+        break;
+    }
+    default:
+    case Player::Action_Dir::Right:
+    {
+        effect_pos_corr->vx = player.movement_position.vx;
+        effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
+        break;
+    }
+    }
+
+    effect_master.Register_effect(attack_effect);
 }
 
 void
@@ -138,9 +176,12 @@ void
 PlayerStatesAttack::On_update_after(float delta_time)
 {
     // 更新位置
-    attack_follow_player();
     player_attack->vx = player.movement_position.vx - player_attack->Get_ph_w() / 2;
     player_attack->vy = player.movement_position.vy - player_attack->Get_ph_h() + player.object_radius;
+
+    // 更新攻击碰撞盒位置
+    attack_box->x = player.movement_position.vx - attack_box->w / 2;
+    attack_box->y = player.movement_position.vy - attack_box->h / 2;
 }
 
 void
@@ -151,58 +192,4 @@ PlayerStatesAttack::On_exit()
 
     // 销毁攻击碰撞盒
     collision_manager.Destroy_collision_box(attack_box);
-}
-
-void
-PlayerStatesAttack::attack_follow_player()
-{
-    if(!current_attack_effect) return;
-
-    switch(player.action_dir)
-    {
-    case Player::Action_Dir::Up:
-    {
-        attack_box->x = player.movement_position.vx - attack_box->w / 2; // 碰撞盒位置跟随角色
-        attack_box->y = player.movement_position.vy - attack_box->h;
-
-        current_attack_effect->vx = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
-        current_attack_effect->vy = player.movement_position.vy - current_attack_effect->Get_ph_h();
-
-        break;
-    }
-
-    case Player::Action_Dir::Down:
-    {
-        attack_box->x = player.movement_position.vx - attack_box->w / 2;
-        attack_box->y = player.movement_position.vy;
-
-        current_attack_effect->vx = player.movement_position.vx - current_attack_effect->Get_ph_w() / 2;
-        current_attack_effect->vy = player.movement_position.vy;
-
-        break;
-    }
-
-    case Player::Action_Dir::Left:
-    {
-        attack_box->x = player.movement_position.vx - attack_box->w;
-        attack_box->y = player.movement_position.vy - attack_box->h / 2;
-
-        current_attack_effect->vx = player.movement_position.vx - current_attack_effect->Get_ph_w();
-        current_attack_effect->vy = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
-
-        break;
-    }
-
-    default: //
-    case Player::Action_Dir::Right:
-    {
-        attack_box->x = player.movement_position.vx;
-        attack_box->y = player.movement_position.vy - attack_box->h / 2;
-
-        current_attack_effect->vx = player.movement_position.vx;
-        current_attack_effect->vy = player.movement_position.vy - current_attack_effect->Get_ph_h() / 2;
-
-        break;
-    }
-    }
 }

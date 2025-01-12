@@ -3,16 +3,6 @@
 
 #pragma once
 
-#define Tex_Player_Attack_Effect_U "Tex-Player-Attack-Effect-Up"
-#define Tex_Player_Attack_Effect_D "Tex-Player-Attack-Effect-Down"
-#define Tex_Player_Attack_Effect_L "Tex-Player-Attack-Effect-Left"
-#define Tex_Player_Attack_Effect_R "Tex-Player-Attack-Effect-Right"
-
-#define Tex_Player_Action_Effect_Jump "Tex-Player-Action-Effect-Jump"
-#define Tex_Player_Action_Effect_Land "Tex-Player-Action-Effect-Land"
-
-#define Tex_Test "Tex-Test"
-
 #define Sound_Music_Test "Music-Test"
 
 #define Font_Ipix_X12 "Font-ipix-x12"
@@ -30,3 +20,6 @@
 
 #define Ani_SEKIBAKO_idel_R "Ani-SEKIBAKO-idel-R"
 #define Ani_SEKIBAKO_run_R "Ani-SEKIBAKO-run-R"
+#define Ani_SEKIBAKO_roll_R "Ani-SEKIBAKO-roll-R"
+#define Ani_SEKIBAKO_leviate_R "Ani-SEKIBAKO-leviate-R"
+#define Ani_SEKIBAKO_attack_R "Ani-SEKIBAKO-attack-R"

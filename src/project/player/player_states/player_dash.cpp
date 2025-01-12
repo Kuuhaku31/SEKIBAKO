@@ -4,13 +4,21 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation_master.h"
+#include "resources_name.h"
+#include "resources_pool.h"
 
 PlayerStatesDash::PlayerStatesDash(Player& player)
     : StateNode(PLAYER_STATE_DASH)
     , player(player)
 {
-    player_dash = AnimationMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+
+    player_dash = new AnimationInstance(*resources_pool.Get_animation(Ani_SEKIBAKO_roll_R));
+}
+
+PlayerStatesDash::~PlayerStatesDash()
+{
+    delete player_dash;
 }
 
 void

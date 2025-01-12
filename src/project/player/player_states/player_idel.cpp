@@ -4,15 +4,22 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation_master.h"
 #include "resources_name.h"
+#include "resources_pool.h"
 
 PlayerStatesIdle::PlayerStatesIdle(Player& player)
     : StateNode(PLAYER_STATE_IDLE)
     , player(player)
 {
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+
     // 初始化 idle 动画
-    player_idel = AnimationMaster::Instance().Create_animtion(Ani_SEKIBAKO_idel_R);
+    player_idel = new AnimationInstance(*resources_pool.Get_animation(Ani_SEKIBAKO_idel_R));
+}
+
+PlayerStatesIdle::~PlayerStatesIdle()
+{
+    delete player_idel;
 }
 
 void
@@ -30,6 +37,8 @@ PlayerStatesIdle::On_enter()
 
     player.current_move_acceleration = player.run_acceleration;
     player.On_stop_move();
+
+    player_idel->Reset();
 }
 
 void

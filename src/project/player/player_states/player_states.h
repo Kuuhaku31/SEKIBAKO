@@ -38,7 +38,7 @@ class PlayerStatesIdle : public StateNode
 {
 public:
     PlayerStatesIdle(Player& player);
-    ~PlayerStatesIdle() = default;
+    ~PlayerStatesIdle();
 
     void On_enter() override;
     void On_render() const override;
@@ -72,7 +72,7 @@ class PlayerStatesRun : public StateNode
 {
 public:
     PlayerStatesRun(Player& player);
-    ~PlayerStatesRun() = default;
+    ~PlayerStatesRun();
 
     void On_enter() override;
     void On_render() const override;
@@ -91,7 +91,7 @@ class PlayerStatesDash : public StateNode
 {
 public:
     PlayerStatesDash(Player& player);
-    ~PlayerStatesDash() = default;
+    ~PlayerStatesDash();
 
     void On_enter() override;
     void On_render() const override;
@@ -162,7 +162,7 @@ class PlayerStatesLeviate : public StateNode
 {
 public:
     PlayerStatesLeviate(Player& player);
-    ~PlayerStatesLeviate() = default;
+    ~PlayerStatesLeviate();
 
     void On_enter() override;
     void On_render() const override;
@@ -213,11 +213,7 @@ private:
     Timer attack_effect_wait_timer; // 攻击效果等待计时器
     Timer attack_effect_timer;      // 攻击效果计时器
 
-    CollisionBox*      attack_box            = nullptr; // 攻击碰撞盒
-    AnimationInstance* current_attack_effect = nullptr; // 当前攻击效果
+    CollisionBox* attack_box = nullptr; // 攻击碰撞盒
 
     AnimationInstance* player_attack; // 攻击动画
-
-private:
-    void attack_follow_player();
 };

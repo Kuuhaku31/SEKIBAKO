@@ -4,12 +4,15 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation_master.h"
+#include "resources_name.h"
+#include "resources_pool.h"
 
 PlayerStatesRoll::PlayerStatesRoll(Player& player)
     : StateNode(PLAYER_STATE_ROLL)
     , player(player)
 {
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+
     static Callback timer_callback = [&player]() {
         // 退出翻滚状态
         if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
@@ -52,7 +55,7 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
     roll_timer.Set_on_timeout(timer_callback); // 翻滚计时结束
 
     // 动画
-    roll_effect = AnimationMaster::Instance().Create_animtion("Ani-SEKIBAKO-roll-R");
+    roll_effect = new AnimationInstance(*resources_pool.Get_animation(Ani_SEKIBAKO_roll_R));
 }
 
 void
@@ -68,6 +71,8 @@ PlayerStatesRoll::On_enter()
 
     player.roll_cd_timer.Set_wait_time(player.roll_cd);
     player.roll_cd_timer.Restart();
+
+    roll_effect->Reset();
 }
 
 void

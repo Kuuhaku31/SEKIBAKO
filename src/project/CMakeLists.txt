@@ -4,11 +4,12 @@ project(main_project)
 set(PATHS
     ${CMAKE_CURRENT_LIST_DIR}/game
     ${CMAKE_CURRENT_LIST_DIR}/game/collision_manager
-    ${CMAKE_CURRENT_LIST_DIR}/game/animation_master
+    ${CMAKE_CURRENT_LIST_DIR}/game/effect_master
     ${CMAKE_CURRENT_LIST_DIR}/debug
     ${CMAKE_CURRENT_LIST_DIR}/imgui_windows
     ${CMAKE_CURRENT_LIST_DIR}/player
     ${CMAKE_CURRENT_LIST_DIR}/player/player_states
+    ${CMAKE_CURRENT_LIST_DIR}/player/player_effects
 )
 
 set(SRC_PATH

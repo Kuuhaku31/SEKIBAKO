@@ -4,14 +4,23 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation_master.h"
-#include "player_effect.h"
+#include "effect_master.h"
+#include "player_effects.h"
+#include "resources_name.h"
+#include "resources_pool.h"
 
 PlayerStatesLeviate::PlayerStatesLeviate(Player& player)
     : StateNode(PLAYER_STATE_LEVIATE)
     , player(player)
 {
-    player_leviate = AnimationMaster::Instance().Create_animtion("Ani-SEKIBAKO-Leviate-R");
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+
+    player_leviate = new AnimationInstance(*resources_pool.Get_animation(Ani_SEKIBAKO_leviate_R));
+}
+
+PlayerStatesLeviate::~PlayerStatesLeviate()
+{
+    delete player_leviate;
 }
 
 void
@@ -24,6 +33,8 @@ PlayerStatesLeviate::On_enter()
 
     player.is_use_friction       = false;
     player.is_use_air_resistance = true;
+
+    player_leviate->Reset();
 }
 
 void
@@ -91,8 +102,21 @@ PlayerStatesLeviate::On_exit()
 void
 PlayerStatesLeviate::make_land_effect()
 {
-    AnimationInstance* land_effect = CreatPlayerLandEffect();
+    // AnimationInstance* land_effect = CreatPlayerLandEffect();
 
-    land_effect->vx = player.movement_position.vx - land_effect->Get_ph_w() / 2;
-    land_effect->vy = player.floor_correct_y - land_effect->Get_ph_h() + player.object_radius;
+    // land_effect->vx = player.movement_position.vx - land_effect->Get_ph_w() / 2;
+    // land_effect->vy = player.floor_correct_y - land_effect->Get_ph_h() + player.object_radius;
+
+
+    // 创建特效
+    PlayerLandEffect* land_effect = new PlayerLandEffect(player.movement_position);
+    // 特效的动画
+    AnimationInstance* land_effect_ani = &land_effect->land_effect_animation;
+
+    // 设置位置
+    land_effect_ani->vx = player.movement_position.vx - land_effect_ani->Get_ph_w() / 2;
+    land_effect_ani->vy = player.floor_correct_y - land_effect_ani->Get_ph_h() + player.object_radius;
+
+    // 添加到特效管理器
+    EffectMaster::Instance().Register_effect(land_effect);
 }

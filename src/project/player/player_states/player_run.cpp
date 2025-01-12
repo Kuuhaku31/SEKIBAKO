@@ -4,17 +4,21 @@
 #include "player.h"
 #include "player_states.h"
 
-#include "animation_master.h"
 #include "resources_name.h"
-
-
-static AnimationMaster& animation_master = AnimationMaster::Instance();
+#include "resources_pool.h"
 
 PlayerStatesRun::PlayerStatesRun(Player& player)
     : StateNode(PLAYER_STATE_RUN)
     , player(player)
 {
-    player_run = animation_master.Create_animtion("Ani-SEKIBAKO-run-R");
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+
+    player_run = new AnimationInstance(*resources_pool.Get_animation(Ani_SEKIBAKO_run_R));
+}
+
+PlayerStatesRun::~PlayerStatesRun()
+{
+    delete player_run;
 }
 
 void
@@ -29,6 +33,8 @@ PlayerStatesRun::On_enter()
     player.is_use_air_resistance = true;
 
     player.movement_acceleration.vy = player.movement_velocity.vy = 0;
+
+    player_run->Reset();
 }
 
 void
