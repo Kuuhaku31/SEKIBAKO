@@ -6,7 +6,6 @@
 
 #include "animation.h"
 #include "imgui_setup.h"
-#include "resources_name.h"
 #include "resources_pool.h"
 
 Player::Player()

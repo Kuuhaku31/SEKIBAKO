@@ -6,8 +6,8 @@
 
 #include "animation_master.h"
 #include "collision_manager.h"
+#include "imgui_setup.h"
 #include "player_effect.h"
-
 
 static AnimationMaster&  animation_master  = AnimationMaster::Instance();
 static CollisionManager& collision_manager = CollisionManager::Instance();
@@ -85,7 +85,7 @@ PlayerStatesAttack::On_enter()
     attack_effect_timer.Set_wait_time(player.attack_effect_time);
 
     // attack_action_timer.Restart();
-    player_attack->Animation_reset();
+    player_attack->Reset();
     attack_effect_wait_timer.Restart();
 
     // 创建攻击碰撞盒

@@ -29,7 +29,7 @@ AnimationMaster::~AnimationMaster()
 AnimationInstance*
 AnimationMaster::Create_effect(const std::string& label)
 {
-    static Animation* ani = nullptr;
+    static AnimationTemplate* ani = nullptr;
 
     if(!(ani = resources_pool.Get_animation(label))) return nullptr;
 
@@ -41,7 +41,7 @@ AnimationMaster::Create_effect(const std::string& label)
 AnimationInstance*
 AnimationMaster::Create_animtion(const std::string& label)
 {
-    static Animation* ani = nullptr;
+    static AnimationTemplate* ani = nullptr;
 
     if(!(ani = resources_pool.Get_animation(label))) return nullptr;
 
@@ -57,7 +57,7 @@ AnimationMaster::On_update(float delta_time)
     for(auto it = effect_list.begin(); it != effect_list.end();)
     {
         // 如果特效已经触发过一次
-        if((*it)->Get_is_finished()) // 删除特效
+        if((*it)->Is_finished()) // 删除特效
         {
             delete *it;
             it = effect_list.erase(it);

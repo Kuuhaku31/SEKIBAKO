@@ -135,7 +135,7 @@ ResourcesPool::LoadResources()
             cJSON* item = nullptr;
             cJSON_ArrayForEach(item, animation_info_list)
             {
-                AnimationInfo info;
+                AnimationInformation info;
 
                 uint16_t* frame_idx_list = nullptr;
                 uint16_t  frame_count    = 0;
@@ -160,7 +160,7 @@ ResourcesPool::LoadResources()
                 info.texs_size      = cJSON_GetObjectItem(item, "texture-size")->valuedouble;
                 info.is_loop        = cJSON_GetObjectItem(item, "is-loop")->valueint;
 
-                animation_pool[cJSON_GetObjectItem(item, "label")->valuestring] = new Animation(info);
+                animation_pool[cJSON_GetObjectItem(item, "label")->valuestring] = new AnimationTemplate(info);
 
                 delete[] frame_idx_list;
             }

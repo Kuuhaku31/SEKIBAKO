@@ -3,7 +3,10 @@
 
 #include "animation.h"
 
-Animation::Animation(const AnimationInfo& info)
+#include "imgui_setup.h"
+
+// 动画模板
+AnimationTemplate::AnimationTemplate(const AnimationInformation& info)
 {
     // 必须设置的参数
     texture   = info.texture;
@@ -31,21 +34,22 @@ Animation::Animation(const AnimationInfo& info)
     if(info.frame_interval > 0) frame_interval = info.frame_interval;
     angle = info.angle;
     if(info.texs_size > 0) texs_size = info.texs_size;
-    is_loop = info.is_loop;
+    is_loop             = info.is_loop;
+    position_correction = info.position_correction;
 }
 
-Animation::~Animation()
+AnimationTemplate::~AnimationTemplate()
 {
     delete[] frame_src_list;
 }
 
-
-AnimationInstance::AnimationInstance(const Animation& animation)
+// 动画实例
+AnimationInstance::AnimationInstance(const AnimationTemplate& animation, Callback animation_finished_callback)
     : animation(animation)
 {
     // 帧切换计时器
     frame_timer.Set_wait_time(animation.frame_interval);
-    Callback f = [&]() {
+    Callback timer_callback = [&]() {
         frame_current++;
         if(frame_current >= animation.frame_count) // 如果超出帧数
         {
@@ -62,13 +66,18 @@ AnimationInstance::AnimationInstance(const Animation& animation)
             }
         }
     };
-    frame_timer.Set_on_timeout(f);   // 设置回调函数
-    frame_timer.is_one_shot = false; // 默认设置为循环播放
+    frame_timer.Set_on_timeout(timer_callback); // 设置回调函数
+    frame_timer.is_one_shot = false;            // 默认设置为循环播放
 
-    angle     = animation.angle;
-    texs_size = animation.texs_size;
-    ph_w      = animation.frame_w / texs_size;
-    ph_h      = animation.frame_h / texs_size;
+    angle               = animation.angle;
+    position_correction = animation.position_correction;
+
+    frame_interval = animation.frame_interval;
+    texs_size      = animation.texs_size;
+    ph_w           = animation.frame_w / texs_size; // w 表示纹理单位长度 = 纹理像素长度 / texs_size
+    ph_h           = animation.frame_h / texs_size; // h 表示纹理单位长度 = 纹理像素长度 / texs_size
+
+    on_finished = animation_finished_callback;
 }
 
 void
@@ -84,18 +93,72 @@ AnimationInstance::On_render() const
     src_rect.w = animation.frame_w;
     src_rect.h = animation.frame_h;
 
-    dst_rect.x = vx;
-    dst_rect.y = vy;
-    dst_rect.w = animation.frame_w / texs_size; // w 表示纹理单位长度 = 纹理像素长度 / texs_size
-    dst_rect.h = animation.frame_h / texs_size; // h 表示纹理单位长度 = 纹理像素长度 / texs_size
+    dst_rect.x = vx + position_correction.vx;
+    dst_rect.y = vy + position_correction.vy;
+    dst_rect.w = ph_w;
+    dst_rect.h = ph_h;
 
     painter.DrawTexture(animation.texture, src_rect, dst_rect, angle);
 }
 
 void
-AnimationInstance::Animation_reset()
+AnimationInstance::Reset()
 {
     is_finished   = false;
     frame_current = 0;
     frame_timer.Restart();
+}
+
+void
+AnimationInstance::Set_on_finished(Callback f)
+{
+    on_finished = f;
+} // 设置结束回调
+
+void
+AnimationInstance::Set_frame_interval(float interval)
+{
+    if(interval > 0) frame_interval = interval;
+}
+
+void
+AnimationInstance::Set_frame_interval_add(float interval)
+{
+    if(frame_interval + interval > 0) frame_interval += interval;
+}
+
+void
+AnimationInstance::Set_frame_interval_mul(float interval)
+{
+    if(interval > 0) frame_interval *= interval;
+}
+
+void
+AnimationInstance::Set_size(float size)
+{
+    if(size > 0)
+    {
+        texs_size = size;
+        update_ph_vy();
+    }
+}
+
+void
+AnimationInstance::Set_size_add(float size)
+{
+    if(texs_size + size > 0)
+    {
+        texs_size += size;
+        update_ph_vy();
+    }
+}
+
+void
+AnimationInstance::Set_size_mul(float size)
+{
+    if(size > 0)
+    {
+        texs_size *= size;
+        update_ph_vy();
+    }
 }
