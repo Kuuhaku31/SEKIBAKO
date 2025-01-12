@@ -115,11 +115,13 @@ public:
     void On_enter() override;
     void On_render() const override;
     void On_update(float delta_time) override;
+    void On_update_after(float delta_time) override;
     void On_exit() override;
 
 private:
     Player& player;
-    Timer   jump_timer; // 跳跃计时器
+
+    AnimationInstance* player_jump; // 跳跃动画
 };
 
 // 角色翻滚

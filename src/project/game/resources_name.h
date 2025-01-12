@@ -23,3 +23,4 @@
 #define Ani_SEKIBAKO_roll_R "Ani-SEKIBAKO-roll-R"
 #define Ani_SEKIBAKO_leviate_R "Ani-SEKIBAKO-leviate-R"
 #define Ani_SEKIBAKO_attack_R "Ani-SEKIBAKO-attack-R"
+#define Ani_SEKIBAKO_jump_R "Ani-SEKIBAKO-jump-R"

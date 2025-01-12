@@ -6,19 +6,23 @@
 
 #include "effect_master.h"
 #include "player_effects.h"
+#include "resources_name.h"
+#include "resources_pool.h"
 
 PlayerStatesJump::PlayerStatesJump(Player& player)
     : StateNode(PLAYER_STATE_JUMP)
     , player(player)
 {
-    jump_timer.is_one_shot = true;
-    jump_timer.Set_on_timeout([&player]() {
-        player.Switch_to_state(PLAYER_STATE_LEVIATE);
-    }); // 跳跃计时结束，切换到 leviate 状态
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+
+    // 动画
+    player_jump = new AnimationInstance(*resources_pool.Get_animation(Ani_SEKIBAKO_jump_R));
+    player_jump->Set_on_finished([&player]() { player.Switch_to_state(PLAYER_STATE_LEVIATE); }); // 跳跃动画结束，切换到 leviate 状态
 }
 
 PlayerStatesJump::~PlayerStatesJump()
 {
+    delete player_jump;
 }
 
 void
@@ -39,9 +43,6 @@ PlayerStatesJump::On_enter()
     player.is_use_friction       = false;
     player.is_use_air_resistance = true;
 
-    jump_timer.Set_wait_time(player.jump_time);
-    jump_timer.Restart();
-
     // 创建特效
     PlayerJumpEffect* jump_effect = new PlayerJumpEffect(player.movement_position);
 
@@ -54,18 +55,29 @@ PlayerStatesJump::On_enter()
 
     // 添加到特效管理器
     effect_master.Register_effect(jump_effect);
+
+    player_jump->Reset();
 }
 
 void
 PlayerStatesJump::On_render() const
 {
+    player_jump->On_render();
 }
 
 void
 PlayerStatesJump::On_update(float delta_time)
 {
-    jump_timer.On_update(delta_time);
+    player_jump->On_update(delta_time);
+
     player.movement_acceleration.vy -= player.jump_acceleration;
+}
+
+void
+PlayerStatesJump::On_update_after(float delta_time)
+{
+    player_jump->vx = player.movement_position.vx - player_jump->Get_ph_w() / 2;
+    player_jump->vy = player.movement_position.vy - player_jump->Get_ph_h();
 }
 
 void
