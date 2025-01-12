@@ -85,8 +85,9 @@ PlayerStatesAttack::On_enter()
     attack_effect_wait_timer.Set_wait_time(player.attack_effect_wait_time);
     attack_effect_timer.Set_wait_time(player.attack_effect_time);
 
-    // attack_action_timer.Restart();
-    player_attack->Reset();
+    player_attack->Set_play_time(player.attack_action_time);
+    player_attack->Restart();
+
     attack_effect_wait_timer.Restart();
 
     // 创建攻击碰撞盒

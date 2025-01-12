@@ -72,10 +72,9 @@ AnimationInstance::AnimationInstance(const AnimationTemplate& animation, Callbac
     angle               = animation.angle;
     position_correction = animation.position_correction;
 
-    frame_interval = animation.frame_interval;
-    texs_size      = animation.texs_size;
-    ph_w           = animation.frame_w / texs_size; // w 表示纹理单位长度 = 纹理像素长度 / texs_size
-    ph_h           = animation.frame_h / texs_size; // h 表示纹理单位长度 = 纹理像素长度 / texs_size
+    texs_size = animation.texs_size;
+    ph_w      = animation.frame_w / texs_size; // w 表示纹理单位长度 = 纹理像素长度 / texs_size
+    ph_h      = animation.frame_h / texs_size; // h 表示纹理单位长度 = 纹理像素长度 / texs_size
 
     on_finished = animation_finished_callback;
 }
@@ -102,11 +101,19 @@ AnimationInstance::On_render() const
 }
 
 void
-AnimationInstance::Reset()
+AnimationInstance::Restart()
 {
     is_finished   = false;
     frame_current = 0;
     frame_timer.Restart();
+}
+
+void
+AnimationInstance::Set_play_time(float t)
+{
+    if(t <= 0) return;
+
+    frame_timer.Set_wait_time(t / animation.frame_count);
 }
 
 void
@@ -118,19 +125,19 @@ AnimationInstance::Set_on_finished(Callback f)
 void
 AnimationInstance::Set_frame_interval(float interval)
 {
-    if(interval > 0) frame_interval = interval;
+    frame_timer.Set_wait_time(interval);
 }
 
 void
 AnimationInstance::Set_frame_interval_add(float interval)
 {
-    if(frame_interval + interval > 0) frame_interval += interval;
+    frame_timer.Set_wait_time_add(interval);
 }
 
 void
 AnimationInstance::Set_frame_interval_mul(float interval)
 {
-    if(interval > 0) frame_interval *= interval;
+    frame_timer.Set_wait_time_mul(interval);
 }
 
 void

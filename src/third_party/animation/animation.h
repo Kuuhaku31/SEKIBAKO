@@ -56,9 +56,11 @@ public:
 public:
     void On_render() const;                                                 // 渲染
     void On_update(float delta_time) { frame_timer.On_update(delta_time); } // 更新
-    void Reset();                                                           // 重置
 
 public:
+    void Restart();              // 重置
+    void Set_play_time(float t); // 设置播放时间
+
     void Set_on_finished(Callback animation_finished_callback); // 设置结束回调
     void Set_frame_interval(float interval);
     void Set_frame_interval_add(float interval);
@@ -83,10 +85,9 @@ private:
     uint16_t frame_current = 0;     // 当前帧
     bool     is_finished   = false; // 动画是否结束
 
-    float frame_interval = 0.1f; // 帧间隔
-    float texs_size;             // 渲染大小
-    float ph_w;                  // 物理宽
-    float ph_h;                  // 物理高
+    float texs_size; // 渲染大小
+    float ph_w;      // 物理宽
+    float ph_h;      // 物理高
 
     Callback on_finished; // 动画结束回调
 

@@ -38,7 +38,7 @@ PlayerStatesIdle::On_enter()
     player.current_move_acceleration = player.run_acceleration;
     player.On_stop_move();
 
-    player_idel->Reset();
+    player_idel->Restart();
 }
 
 void

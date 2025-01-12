@@ -56,7 +56,8 @@ PlayerStatesJump::On_enter()
     // 添加到特效管理器
     effect_master.Register_effect(jump_effect);
 
-    player_jump->Reset();
+    player_jump->Set_play_time(player.jump_time);
+    player_jump->Restart();
 }
 
 void

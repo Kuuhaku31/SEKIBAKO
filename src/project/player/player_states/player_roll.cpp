@@ -72,7 +72,7 @@ PlayerStatesRoll::On_enter()
     player.roll_cd_timer.Set_wait_time(player.roll_cd);
     player.roll_cd_timer.Restart();
 
-    roll_effect->Reset();
+    roll_effect->Restart();
 }
 
 void

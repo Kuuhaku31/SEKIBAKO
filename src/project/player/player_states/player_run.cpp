@@ -34,7 +34,7 @@ PlayerStatesRun::On_enter()
 
     player.movement_acceleration.vy = player.movement_velocity.vy = 0;
 
-    player_run->Reset();
+    player_run->Restart();
 }
 
 void

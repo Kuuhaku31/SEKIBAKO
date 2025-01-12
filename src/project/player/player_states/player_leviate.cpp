@@ -34,7 +34,7 @@ PlayerStatesLeviate::On_enter()
     player.is_use_friction       = false;
     player.is_use_air_resistance = true;
 
-    player_leviate->Reset();
+    player_leviate->Restart();
 }
 
 void

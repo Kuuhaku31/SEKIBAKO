@@ -136,6 +136,8 @@ public:
     bool is_one_shot = false; // 计时器是否为一次性触发
 
     void Set_wait_time(float t) { t > 0.0f ? wait_time = t : wait_time = 0.0f; }
+    void Set_wait_time_add(float t) { t > 0.0f ? wait_time += t : wait_time = 0.0f; }
+    void Set_wait_time_mul(float t) { t > 0.0f ? wait_time *= t : wait_time = 0.0f; }
     void Set_on_timeout(Callback f) { on_timeout = f; }
 
     const float& Get_pass_time() const { return pass_time; }
