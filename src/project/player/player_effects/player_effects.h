@@ -10,7 +10,7 @@
 class PlayerJumpEffect : public Effect
 {
 public:
-    PlayerJumpEffect(const Vector2& position);
+    PlayerJumpEffect(const Vector2& position, float center_hight = 0.0f);
     ~PlayerJumpEffect();
 
 public:

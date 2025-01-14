@@ -108,39 +108,39 @@ PlayerStatesAttack::On_enter()
 
     PlayerAttackEffect* attack_effect = new PlayerAttackEffect(player.movement_position, attack_dir);
 
-    Vector2* effect_pos_corr = &attack_effect->attack_effect_animation.position_correction;
-    float    effect_ph_w     = attack_effect->attack_effect_animation.Get_ph_w();
-    float    effect_ph_h     = attack_effect->attack_effect_animation.Get_ph_h();
+    // Vector2* effect_pos_corr = &attack_effect->attack_effect_animation.position_correction;
+    // float    effect_ph_w     = attack_effect->attack_effect_animation.Get_ph_w();
+    // float    effect_ph_h     = attack_effect->attack_effect_animation.Get_ph_h();
 
-    // 设置位置修正
-    switch(player.action_dir)
-    {
-    case Player::Action_Dir::Up:
-    {
-        effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
-        effect_pos_corr->vy = player.movement_position.vy - effect_ph_h;
-        break;
-    }
-    case Player::Action_Dir::Down:
-    {
-        effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
-        effect_pos_corr->vy = player.movement_position.vy;
-        break;
-    }
-    case Player::Action_Dir::Left:
-    {
-        effect_pos_corr->vx = player.movement_position.vx - effect_ph_w;
-        effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
-        break;
-    }
-    default:
-    case Player::Action_Dir::Right:
-    {
-        effect_pos_corr->vx = player.movement_position.vx;
-        effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
-        break;
-    }
-    }
+    // // 设置位置修正
+    // switch(player.action_dir)
+    // {
+    // case Player::Action_Dir::Up:
+    // {
+    //     effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
+    //     effect_pos_corr->vy = player.movement_position.vy - effect_ph_h;
+    //     break;
+    // }
+    // case Player::Action_Dir::Down:
+    // {
+    //     effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
+    //     effect_pos_corr->vy = player.movement_position.vy;
+    //     break;
+    // }
+    // case Player::Action_Dir::Left:
+    // {
+    //     effect_pos_corr->vx = player.movement_position.vx - effect_ph_w;
+    //     effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
+    //     break;
+    // }
+    // default:
+    // case Player::Action_Dir::Right:
+    // {
+    //     effect_pos_corr->vx = player.movement_position.vx;
+    //     effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
+    //     break;
+    // }
+    // }
 
     effect_master.Register_effect(attack_effect);
 }

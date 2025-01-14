@@ -34,8 +34,8 @@ AnimationTemplate::AnimationTemplate(const AnimationInformation& info)
     if(info.frame_interval > 0) frame_interval = info.frame_interval;
     angle = info.angle;
     if(info.texs_size > 0) texs_size = info.texs_size;
-    is_loop             = info.is_loop;
-    position_correction = info.position_correction;
+    is_loop       = info.is_loop;
+    on_corrective = info.on_corrective;
 }
 
 AnimationTemplate::~AnimationTemplate()
@@ -69,8 +69,8 @@ AnimationInstance::AnimationInstance(const AnimationTemplate& animation, Callbac
     frame_timer.Set_on_timeout(timer_callback); // 设置回调函数
     frame_timer.is_one_shot = false;            // 默认设置为循环播放
 
-    angle               = animation.angle;
-    position_correction = animation.position_correction;
+    angle         = animation.angle;
+    on_corrective = animation.on_corrective;
 
     texs_size = animation.texs_size;
     ph_w      = animation.frame_w / texs_size; // w 表示纹理单位长度 = 纹理像素长度 / texs_size
@@ -92,10 +92,11 @@ AnimationInstance::On_render() const
     src_rect.w = animation.frame_w;
     src_rect.h = animation.frame_h;
 
-    dst_rect.x = vx + position_correction.vx;
-    dst_rect.y = vy + position_correction.vy;
+    dst_rect.x = vx;
+    dst_rect.y = vy;
     dst_rect.w = ph_w;
     dst_rect.h = ph_h;
+    if(on_corrective) on_corrective(dst_rect.x, dst_rect.y, ph_w, ph_h);
 
     painter.DrawTexture(animation.texture, src_rect, dst_rect, angle);
 }
@@ -115,12 +116,6 @@ AnimationInstance::Set_play_time(float t)
 
     frame_timer.Set_wait_time(t / animation.frame_count);
 }
-
-void
-AnimationInstance::Set_on_finished(Callback f)
-{
-    on_finished = f;
-} // 设置结束回调
 
 void
 AnimationInstance::Set_frame_interval(float interval)

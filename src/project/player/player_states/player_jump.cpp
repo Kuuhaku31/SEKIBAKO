@@ -44,17 +44,8 @@ PlayerStatesJump::On_enter()
     player.is_use_air_resistance = true;
 
     // 创建特效
-    PlayerJumpEffect* jump_effect = new PlayerJumpEffect(player.movement_position);
-
-    // 特效的动画
-    AnimationInstance* jump_effect_ani = &jump_effect->jump_effect_animation;
-
-    // 设置位置
-    jump_effect_ani->vx = player.movement_position.vx - jump_effect_ani->Get_ph_w() / 2;
-    jump_effect_ani->vy = player.movement_position.vy - jump_effect_ani->Get_ph_h() + player.object_radius;
-
     // 添加到特效管理器
-    effect_master.Register_effect(jump_effect);
+    effect_master.Register_effect(new PlayerJumpEffect(player.movement_position, player.object_radius));
 
     player_jump->Set_play_time(player.jump_time);
     player_jump->Restart();

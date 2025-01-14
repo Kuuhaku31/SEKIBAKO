@@ -5,6 +5,9 @@
 
 #include "base.h"
 
+// 位置修正回调函数
+typedef std::function<void(float& dst_x, float& dst_y, const float& src_w, const float& src_h)> CorrectivePos;
+
 // 动画信息
 struct AnimationInformation
 {
@@ -16,11 +19,12 @@ struct AnimationInformation
     uint16_t  frame_count;    // 帧数
 
     // 可选参数
-    float   frame_interval = 0.0f;  // 帧间隔
-    float   angle          = 0.0f;  // 渲染角度
-    float   texs_size      = 0.0f;  // 渲染大小，对于这个纹理，一个单位长度等于 texs_size 个像素
-    bool    is_loop        = false; // 是否循环播放
-    Vector2 position_correction;    // 位置修正
+    float frame_interval = 0.0f;  // 帧间隔
+    float angle          = 0.0f;  // 渲染角度
+    float texs_size      = 0.0f;  // 渲染大小，对于这个纹理，一个单位长度等于 texs_size 个像素
+    bool  is_loop        = false; // 是否循环播放
+
+    CorrectivePos on_corrective; // 位置修正
 };
 
 // 动画模板
@@ -39,11 +43,12 @@ private:
     uint16_t frame_h;        // 帧高
     uint16_t frame_count;    // 帧数
 
-    float   frame_interval = 0.1f;  // 帧间隔
-    float   angle          = 0.0f;  // 渲染角度
-    float   texs_size      = 1.0f;  // 渲染大小，对于这个纹理，一个单位长度等于 texs_size 个像素
-    bool    is_loop        = false; // 是否循环播放
-    Vector2 position_correction;    // 位置修正
+    float frame_interval = 0.1f;  // 帧间隔
+    float angle          = 0.0f;  // 渲染角度
+    float texs_size      = 1.0f;  // 渲染大小，对于这个纹理，一个单位长度等于 texs_size 个像素
+    bool  is_loop        = false; // 是否循环播放
+
+    CorrectivePos on_corrective; // 位置修正
 };
 
 // 动画实例
@@ -61,7 +66,6 @@ public:
     void Restart();              // 重置
     void Set_play_time(float t); // 设置播放时间
 
-    void Set_on_finished(Callback animation_finished_callback); // 设置结束回调
     void Set_frame_interval(float interval);
     void Set_frame_interval_add(float interval);
     void Set_frame_interval_mul(float interval);
@@ -69,14 +73,16 @@ public:
     void Set_size_add(float size);
     void Set_size_mul(float size);
 
+    void Set_on_corrective(CorrectivePos f) { on_corrective = f; }
+    void Set_on_finished(Callback f) { on_finished = f; }
+
 public:
     const float& Get_ph_w() const { return ph_w; }           // 物理宽
     const float& Get_ph_h() const { return ph_h; }           // 物理高
     const bool&  Is_finished() const { return is_finished; } // 动画是否结束
 
 public:
-    float   angle;               // 渲染角度
-    Vector2 position_correction; // 位置修正
+    float angle; // 渲染角度
 
 private:
     const AnimationTemplate& animation;
@@ -88,6 +94,8 @@ private:
     float texs_size; // 渲染大小
     float ph_w;      // 物理宽
     float ph_h;      // 物理高
+
+    CorrectivePos on_corrective; // 位置修正
 
     Callback on_finished; // 动画结束回调
 
