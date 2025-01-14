@@ -49,7 +49,7 @@ PlayerStatesLeviate::On_update(float delta_time)
     if(player.movement_position.vy >= player.floor_correct_y)
     {
         // 如果接触到地面，必须退出 leviate 状态
-        make_land_effect();
+        EffectMaster::Instance().Register_effect(new PlayerLandEffect(player.movement_position, player.object_radius));
 
         if(player.movement_velocity.vx) // 如果速度不为0
         {
@@ -97,26 +97,4 @@ PlayerStatesLeviate::On_update_after(float delta_time)
 void
 PlayerStatesLeviate::On_exit()
 {
-}
-
-void
-PlayerStatesLeviate::make_land_effect()
-{
-    // AnimationInstance* land_effect = CreatPlayerLandEffect();
-
-    // land_effect->vx = player.movement_position.vx - land_effect->Get_ph_w() / 2;
-    // land_effect->vy = player.floor_correct_y - land_effect->Get_ph_h() + player.object_radius;
-
-
-    // 创建特效
-    PlayerLandEffect* land_effect = new PlayerLandEffect(player.movement_position);
-    // 特效的动画
-    AnimationInstance* land_effect_ani = &land_effect->land_effect_animation;
-
-    // 设置位置
-    land_effect_ani->vx = player.movement_position.vx - land_effect_ani->Get_ph_w() / 2;
-    land_effect_ani->vy = player.floor_correct_y - land_effect_ani->Get_ph_h() + player.object_radius;
-
-    // 添加到特效管理器
-    EffectMaster::Instance().Register_effect(land_effect);
 }

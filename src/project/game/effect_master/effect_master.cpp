@@ -57,6 +57,13 @@ EffectMaster::On_update(float delta_time)
 }
 
 void
+EffectMaster::On_update_after(float delta_time)
+{
+    // 遍历特效列表
+    for(auto& effect : effect_list) effect->On_update_after(delta_time);
+}
+
+void
 EffectMaster::On_render() const
 {
     // 遍历特效列表

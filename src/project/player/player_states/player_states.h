@@ -173,9 +173,6 @@ public:
     void On_exit() override;
 
 private:
-    void make_land_effect();
-
-private:
     Player& player;
 
     AnimationInstance* player_leviate; // 悬浮动画

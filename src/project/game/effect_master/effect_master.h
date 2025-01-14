@@ -34,8 +34,9 @@ public:
     static EffectMaster& Instance();
 
 public:
-    void On_update(float delta_time); // 更新特效
     void On_render() const;           // 渲染特效
+    void On_update(float delta_time); // 更新特效
+    void On_update_after(float delta_time);
 
     void Register_effect(Effect* effect); // 创建特效
     void Clear_effects();

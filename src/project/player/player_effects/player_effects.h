@@ -6,7 +6,7 @@
 #include "animation.h"
 #include "effect_master.h"
 
-
+// 角色跳跃特效
 class PlayerJumpEffect : public Effect
 {
 public:
@@ -21,10 +21,11 @@ public:
     AnimationInstance jump_effect_animation;
 };
 
+// 角色着陆特效
 class PlayerLandEffect : public Effect
 {
 public:
-    PlayerLandEffect(const Vector2& position);
+    PlayerLandEffect(const Vector2& position, float center_hight = 0.0f);
     ~PlayerLandEffect();
 
 public:
@@ -35,6 +36,7 @@ public:
     AnimationInstance land_effect_animation;
 };
 
+// 角色攻击特效
 class PlayerAttackEffect : public Effect
 {
 public:

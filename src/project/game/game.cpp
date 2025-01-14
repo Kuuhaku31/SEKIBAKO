@@ -94,9 +94,11 @@ Game::game_loop()
 
         debuger.ImGuiWin_Debug(&is_open_debug_window);
 
-        on_update_player(painter.imgui_io->DeltaTime);
-
-        effect_master.On_update(painter.imgui_io->DeltaTime);
+        {
+            effect_master.On_update(painter.imgui_io->DeltaTime);
+            on_update_player(painter.imgui_io->DeltaTime);
+            effect_master.On_update_after(painter.imgui_io->DeltaTime);
+        }
 
         painter.On_frame_end(render_callback);
     }

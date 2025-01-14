@@ -70,8 +70,6 @@ PlayerStatesAttack::~PlayerStatesAttack()
 void
 PlayerStatesAttack::On_enter()
 {
-    static EffectMaster& effect_master = EffectMaster::Instance();
-
     player.object_color = PLAYER_ATTACK_COLOR;
 
     player.is_Lock_facing_dir = true;
@@ -96,53 +94,7 @@ PlayerStatesAttack::On_enter()
     attack_box->h = 2.0f;
 
     // 注册攻击效果动画
-    uint8_t attack_dir = 0;
-    switch(player.action_dir)
-    {
-    case Player::Action_Dir::Up: attack_dir = 0; break;
-    case Player::Action_Dir::Down: attack_dir = 1; break;
-    case Player::Action_Dir::Left: attack_dir = 2; break;
-    default:
-    case Player::Action_Dir::Right: attack_dir = 3; break;
-    }
-
-    PlayerAttackEffect* attack_effect = new PlayerAttackEffect(player.movement_position, attack_dir);
-
-    // Vector2* effect_pos_corr = &attack_effect->attack_effect_animation.position_correction;
-    // float    effect_ph_w     = attack_effect->attack_effect_animation.Get_ph_w();
-    // float    effect_ph_h     = attack_effect->attack_effect_animation.Get_ph_h();
-
-    // // 设置位置修正
-    // switch(player.action_dir)
-    // {
-    // case Player::Action_Dir::Up:
-    // {
-    //     effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
-    //     effect_pos_corr->vy = player.movement_position.vy - effect_ph_h;
-    //     break;
-    // }
-    // case Player::Action_Dir::Down:
-    // {
-    //     effect_pos_corr->vx = player.movement_position.vx - effect_ph_w / 2;
-    //     effect_pos_corr->vy = player.movement_position.vy;
-    //     break;
-    // }
-    // case Player::Action_Dir::Left:
-    // {
-    //     effect_pos_corr->vx = player.movement_position.vx - effect_ph_w;
-    //     effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
-    //     break;
-    // }
-    // default:
-    // case Player::Action_Dir::Right:
-    // {
-    //     effect_pos_corr->vx = player.movement_position.vx;
-    //     effect_pos_corr->vy = player.movement_position.vy - effect_ph_h / 2;
-    //     break;
-    // }
-    // }
-
-    effect_master.Register_effect(attack_effect);
+    EffectMaster::Instance().Register_effect(new PlayerAttackEffect(player.movement_position, (uint8_t)player.action_dir));
 }
 
 void
