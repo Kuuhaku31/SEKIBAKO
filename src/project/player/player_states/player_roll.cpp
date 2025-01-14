@@ -16,7 +16,7 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
     static Callback timer_callback = [&player]() {
         // 退出翻滚状态
         if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_PRESS_DASH) &&
-            player.Is_try_move_x_on_one_dir() &&
+            player.is_try_move_x_on_one_dir() &&
             (player.movement_velocity.vx > player.dash_min_speed || player.movement_velocity.vx < -player.dash_min_speed))
         {
             // 1. 如果按住冲刺键
@@ -33,7 +33,7 @@ PlayerStatesRoll::PlayerStatesRoll(Player& player)
             }
             else if(player.movement_velocity.vx) // 如果速度不为0
             {
-                if(player.Is_try_walk())
+                if(player.is_try_walk())
                 {
                     // 如果尝试行走，切换到 walk 状态
                     player.Switch_to_state(PLAYER_STATE_WALK);
@@ -86,7 +86,7 @@ PlayerStatesRoll::On_update(float delta_time)
 {
     roll_timer.On_update(delta_time);
 
-    player.movement_acceleration += (player.Get_facing_vector() * player.roll_acceleration);
+    player.movement_acceleration += (player.get_facing_vector() * player.roll_acceleration);
 }
 
 void

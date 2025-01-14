@@ -46,7 +46,7 @@ PlayerStatesRun::On_render() const
 void
 PlayerStatesRun::On_update(float delta_time)
 {
-    if(!player.Is_try_move_x_on_one_dir() && !player.movement_velocity.vx)
+    if(!player.is_try_move_x_on_one_dir() && !player.movement_velocity.vx)
     {
         // 且
         // 1. 没有按下水平移动键
@@ -54,7 +54,7 @@ PlayerStatesRun::On_update(float delta_time)
         // 切换到 idle 状态
         player.Switch_to_state(PLAYER_STATE_IDLE);
     }
-    else if(player.Is_try_walk())
+    else if(player.is_try_walk())
     {
         // 如果尝试行走，切换到 walk 状态
         player.Switch_to_state(PLAYER_STATE_WALK);
@@ -71,7 +71,7 @@ PlayerStatesRun::On_update(float delta_time)
     }
     else if(CONTROLER_GET(player.player_controler, PLAYER_CONTROL_CLICK_DASH) &&
             player.roll_cd_done &&
-            !player.Is_back_to_velocity())
+            !player.is_back_to_velocity())
     {
         // 1. 尝试翻滚
         // 2. CD 完成

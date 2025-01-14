@@ -36,7 +36,8 @@ PlayerStatesIdle::On_enter()
     player.movement_air_resistance = player.player_air_resistance;
 
     player.current_move_acceleration = player.run_acceleration;
-    player.On_stop_move();
+    player.movement_acceleration.to_zero();
+    player.movement_velocity.to_zero();
 
     player_idel->Restart();
 }
@@ -50,14 +51,14 @@ PlayerStatesIdle::On_render() const
 void
 PlayerStatesIdle::On_update(float delta_time)
 {
-    if(player.Is_try_walk() && player.movement_velocity.vx)
+    if(player.is_try_walk() && player.movement_velocity.vx)
     {
         // 1. 如果尝试行走
         // 2. 且有水平速度
         // 切换到 walk 状态
         player.Switch_to_state(PLAYER_STATE_WALK);
     }
-    else if(player.Is_try_run() && player.movement_velocity.vx)
+    else if(player.is_try_run() && player.movement_velocity.vx)
     {
         // 1. 如果尝试奔跑
         // 2. 且有水平速度

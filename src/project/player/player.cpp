@@ -11,8 +11,6 @@
 Player::Player()
     : Object(10.0f, 1.0f, COLOR_RED)
 {
-    static ResourcesPool& resources_pool = ResourcesPool::Instance();
-
     // 注册状态
     Register_state(new PlayerStatesIdle(*this));
     Register_state(new PlayerStatesWalk(*this));
@@ -86,11 +84,11 @@ Player::On_update(float delta_time)
     if(is_on_ground) can_jump_count = can_jump_count_max;
 
     // 更新角色加速度
-    movement_acceleration += Get_try_move_dir() * current_move_acceleration;
+    movement_acceleration += get_try_move_dir() * current_move_acceleration;
 
     // 更新角色朝向
     // 要求朝向没有被锁定并且尝试朝一个方向移动
-    if(!is_Lock_facing_dir && Is_try_move_x_on_one_dir())
+    if(!is_Lock_facing_dir && is_try_move_x_on_one_dir())
     {
         if(CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_LEFT))
         {
@@ -145,22 +143,21 @@ Player::On_update(float delta_time)
 
 // 角色是否至少按下一个水平移动键
 bool
-Player::Is_try_move_x() const
+Player::is_try_move_x() const
 {
     return player_controler & PLAYER_CONTROL_IS_MOVE_X;
 }
 
 // 角色是否只按下一个水平移动键
 bool
-Player::Is_try_move_x_on_one_dir() const
+Player::is_try_move_x_on_one_dir() const
 {
-    return (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_LEFT ||
-           (player_controler & PLAYER_CONTROL_IS_MOVE_X) == PLAYER_CONTROL_PRESS_RIGHT;
+    return bool(player_controler & PLAYER_CONTROL_PRESS_LEFT) ^ bool(player_controler & PLAYER_CONTROL_PRESS_RIGHT);
 }
 
 // 角色面朝方向是否背对速度
 bool
-Player::Is_back_to_velocity() const
+Player::is_back_to_velocity() const
 {
     switch(facing_dir)
     {
@@ -172,7 +169,7 @@ Player::Is_back_to_velocity() const
 
 // 获取角色尝试移动的方向
 const Vector2&
-Player::Get_try_move_dir() const
+Player::get_try_move_dir() const
 {
     static Vector2 move_dir;
 
@@ -185,20 +182,20 @@ Player::Get_try_move_dir() const
 }
 
 bool
-Player::Is_try_walk() const
+Player::is_try_walk() const
 {
-    return Is_try_move_x_on_one_dir() && CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_L_ALT);
+    return is_try_move_x_on_one_dir() && CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_L_ALT);
 }
 
 bool
-Player::Is_try_run() const
+Player::is_try_run() const
 {
-    return Is_try_move_x_on_one_dir() && !CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_L_ALT);
+    return is_try_move_x_on_one_dir() && !CONTROLER_GET(player_controler, PLAYER_CONTROL_PRESS_L_ALT);
 }
 
 // 获取角色面朝方向
 const Vector2&
-Player::Get_facing_vector() const
+Player::get_facing_vector() const
 {
     static Vector2 facing_vector;
     switch(facing_dir)
@@ -208,11 +205,4 @@ Player::Get_facing_vector() const
     default: facing_vector = VECTOR2_UNIT_RIGHT; break;
     }
     return facing_vector;
-}
-
-// 角色停止移动
-void
-Player::On_stop_move()
-{
-    movement_acceleration.to_zero(), movement_velocity.to_zero();
 }

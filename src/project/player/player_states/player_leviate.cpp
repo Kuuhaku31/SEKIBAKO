@@ -53,7 +53,7 @@ PlayerStatesLeviate::On_update(float delta_time)
 
         if(player.movement_velocity.vx) // 如果速度不为0
         {
-            if(player.Is_try_walk())
+            if(player.is_try_walk())
             {
                 // 如果尝试行走，切换到 walk 状态
                 player.Switch_to_state(PLAYER_STATE_WALK);

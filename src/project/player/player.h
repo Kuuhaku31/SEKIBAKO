@@ -81,19 +81,17 @@ public:
     void On_update(float delta_time) override;
 
 public:
-    bool Is_try_move_x() const;            // 角色是否至少按下一个水平移动键
-    bool Is_try_move_x_on_one_dir() const; // 角色是否只按下一个水平移动键
-    bool Is_back_to_velocity() const;      // 角色面朝方向是否背对速度
-    bool Is_try_walk() const;              // 角色是否尝试行走
-    bool Is_try_run() const;               // 角色是否尝试奔跑
-
-    const Vector2& Get_try_move_dir() const;  // 获取角色尝试移动的方向
-    const Vector2& Get_facing_vector() const; // 获取角色面朝方向
-
-public:
     PlayerControler player_controler = 0; // 角色控制器
 
-    void On_stop_move(); // 停止移动
+private:
+    bool is_try_move_x() const;            // 角色是否至少按下一个水平移动键
+    bool is_try_move_x_on_one_dir() const; // 角色是否只按下一个水平移动键
+    bool is_back_to_velocity() const;      // 角色面朝方向是否背对速度
+    bool is_try_walk() const;              // 角色是否尝试行走
+    bool is_try_run() const;               // 角色是否尝试奔跑
+
+    const Vector2& get_try_move_dir() const;  // 获取角色尝试移动的方向
+    const Vector2& get_facing_vector() const; // 获取角色面朝方向
 
 private:
     // 朝向
