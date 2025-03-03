@@ -10,14 +10,14 @@ set(PATH
 )
 
 foreach(p ${PATH})
-    aux_source_directory(${p} DIR_LIB_SRCS)
+    aux_source_directory(${p} DIR_LIB_SRC)
 endforeach()
 
 include_directories(${PATH})
 
 # 添加依赖
-set(IMGUI_DIR D:/Project/GitHub/imgui)
-set(IMGUI_BACKENDS_DIR D:/Project/GitHub/imgui/backends)
+set(IMGUI_DIR D:/Projects/GitHub/imgui)
+set(IMGUI_BACKENDS_DIR D:/Projects/GitHub/imgui/backends)
 aux_source_directory(${IMGUI_DIR} IMGUI_SOURCEFILES)
 set(IMGUI_SOURCEFILES
     ${IMGUI_SOURCEFILES}
@@ -26,7 +26,7 @@ set(IMGUI_SOURCEFILES
 )
 
 add_library(${PROJECT_NAME}
-    ${DIR_LIB_SRCS}
+    ${DIR_LIB_SRC}
     ${IMGUI_SOURCEFILES}
 )
 
@@ -85,8 +85,8 @@ else()
 endif()
 
 # 添加cJSON库
-set(cJSON_INCLUDE_DIRS "E:/software/msys64/mingw64/include/cjson")
-set(cJSON_LIBRARIES "E:/software/msys64/mingw64/lib/libcjson.a")
+set(cJSON_INCLUDE_DIRS "C:/msys64/mingw64/include/cjson")
+set(cJSON_LIBRARIES "C:/msys64/mingw64/lib/libcjson.a")
 set(cJSON_FOUND TRUE)
 
 if(cJSON_FOUND)
