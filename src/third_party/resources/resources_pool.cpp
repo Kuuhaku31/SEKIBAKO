@@ -6,7 +6,7 @@
 #include "animation.h"
 #include "imgui_setup.h"
 
-#include "cJSON.h"
+#include "cjson/cJSON.h"
 
 ResourcesPool* ResourcesPool::instance = nullptr;
 ResourcesPool&
