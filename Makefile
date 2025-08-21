@@ -108,8 +108,8 @@ $(build_dir)/project/%.cpp.o: $(project_dir)/%.cpp
 
 # app 目标
 app: $(imgui_objs) $(third_party_objs) $(project_objs)
-	@mkdir -p $(build_dir)
-	$(CXX) $(CXXFLAGS) -o $(build_dir)/$@ $^ $(addprefix -I, $(project_include_path) $(third_party_include_path) $(imgui_include_path)) $(SDL_LDLIBS) $(SDL_CFLAGS) -lcjson -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL_gfx
+	@mkdir -p bin
+	$(CXX) $(CXXFLAGS) -o bin/$@ $^ $(addprefix -I, $(project_include_path) $(third_party_include_path) $(imgui_include_path)) $(SDL_LDLIBS) $(SDL_CFLAGS) -lcjson -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL_gfx
 
 clear:
 	@rm -rf $(build_dir)
