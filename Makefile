@@ -7,116 +7,109 @@
 # ---------------------------
 # 路径设置
 # ---------------------------
-PROJECT_PATH   = ./src/project        # 你的项目源码目录
-THIRD_PARTY_DIR = ./src/third_party   # (可选) 第三方目录
 
-PATH_OUTPUT    = ./bin                # 输出目录 (存放 exe)
-BUILD_DIR      = ./build              # 对象文件目录 (o 文件)
+# └─src
+#     ├─project
+#     │  ├─debug
+#     │  ├─game
+#     │  │  ├─animation_master
+#     │  │  ├─collision_manager
+#     │  │  └─effect_master
+#     │  ├─imgui_windows
+#     │  └─player
+#     │      ├─player_effects
+#     │      └─player_states
+#     ├─test
+#     │  └─test_base
+#     └─third_party
+#         ├─animation
+#         ├─base
+#         ├─imgui_setup
+#         ├─resources
+#         └─state_machine
 
-# ImGui 路径 (请修改为你的实际路径)
-IMGUI_DIR = D:/repositories/github/imgui
+build_dir = ./build
 
-# 最终输出的可执行文件名
-EXE     = main
-OUTPUT  = $(PATH_OUTPUT)/$(EXE)
 
-# ---------------------------
-# 源文件收集
-# ---------------------------
-# 项目内所有 cpp
-CPP_FILES := $(shell find $(PROJECT_PATH) -name "*.cpp")
+imgui_dir = D:/repositories/github/imgui
+imgui_src := \
+	$(imgui_dir)/imgui.cpp \
+	$(imgui_dir)/imgui_demo.cpp \
+	$(imgui_dir)/imgui_draw.cpp \
+	$(imgui_dir)/imgui_tables.cpp \
+	$(imgui_dir)/imgui_widgets.cpp \
+	$(imgui_dir)/backends/imgui_impl_sdl2.cpp \
+	$(imgui_dir)/backends/imgui_impl_sdlrenderer2.cpp
+# 	$(imgui_dir)/backends/imgui_impl_opengl3.cpp
+imgui_include_path := \
+	$(imgui_dir) \
+	$(imgui_dir)/backends \
 
-# ImGui 源文件
-IMGUI_SRC := \
-	$(IMGUI_DIR)/imgui.cpp \
-	$(IMGUI_DIR)/imgui_demo.cpp \
-	$(IMGUI_DIR)/imgui_draw.cpp \
-	$(IMGUI_DIR)/imgui_tables.cpp \
-	$(IMGUI_DIR)/imgui_widgets.cpp \
-	$(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp \
-	$(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 
-# 总源文件
-SOURCES := $(CPP_FILES) $(IMGUI_SRC)
+third_party_dir = ./src/third_party
+third_party_src := $(shell find $(third_party_dir) -name "*.c" -o -name "*.cpp") # 获取子文件夹下所有c cpp文件
+third_party_include_path := $(shell find $(third_party_dir) -type d)
 
-# ---------------------------
-# 编译器与参数
-# ---------------------------
-CXX      = x86_64-w64-mingw32-g++          # mingw64 g++
-CXXFLAGS_BASE = -std=c++23 -Wall -Wformat
+project_dir = ./src/project
+project_src := $(shell find $(project_dir) -name "*.c" -o -name "*.cpp")
+project_include_path := $(shell find $(project_dir) -type d)
 
-# include 路径
-INCLUDES := \
-	$(IMGUI_DIR) \
-	$(IMGUI_DIR)/backends
 
-CXXFLAGS_BASE += $(addprefix -I, $(INCLUDES))
+imgui_objs := $(imgui_src)
+imgui_objs := $(subst $(imgui_dir), , $(imgui_objs))
+imgui_objs := $(addprefix $(build_dir)/imgui, $(imgui_objs))
+imgui_objs := $(addsuffix .o, $(imgui_objs))
 
-# SDL2 flags (从 pkg-config 获取)
+
+third_party_objs := $(third_party_src)
+third_party_objs := $(subst $(third_party_dir), , $(third_party_objs))
+third_party_objs := $(addprefix $(build_dir)/third_party, $(third_party_objs))
+third_party_objs := $(addsuffix .o,$(third_party_objs))
+
+
+project_objs := $(project_src)
+project_objs := $(subst $(project_dir), , $(project_objs))
+project_objs := $(addprefix $(build_dir)/project, $(project_objs))
+project_objs := $(addsuffix .o, $(project_objs))
+
+
 SDL_CFLAGS := $(shell pkg-config --cflags sdl2)
-SDL_LDLIBS := \
-	$(shell pkg-config --libs sdl2) \
-	$(shell pkg-config --libs sdl2_image) \
-	$(shell pkg-config --libs sdl2_gfx) \
-	$(shell pkg-config --libs sdl2_ttf) \
-	$(shell pkg-config --libs sdl2_mixer)
+SDL_LDLIBS := $(shell pkg-config --libs sdl2)
+SDL_LDLIBS := $(subst -mwindows, , $(SDL_LDLIBS))
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -g
 
-LIBS := $(SDL_LDLIBS) -lopengl32
-
-# ---------------------------
-# 编译模式 (debug / release)
-# ---------------------------
-MODE ?= debug
-
-ifeq ($(MODE),debug)
-	CXXFLAGS := $(CXXFLAGS_BASE) $(SDL_CFLAGS) -g -O0
-	LDFLAGS  :=
-else ifeq ($(MODE),release)
-	CXXFLAGS := $(CXXFLAGS_BASE) $(SDL_CFLAGS) -O2 -DNDEBUG
-	LDFLAGS  := -mwindows
-endif
-
-# ---------------------------
-
-# 对象文件路径生成
-# 项目源码对象文件（相对路径）
-PROJECT_OBJS = $(patsubst ./%, $(BUILD_DIR)/%, $(CPP_FILES:.cpp=.o))
-# ImGui 对象文件（绝对路径）
-IMGUI_OBJS = $(IMGUI_SRC:.cpp=.o)
-
-OBJS = $(PROJECT_OBJS) $(IMGUI_OBJS)
-
-# ---------------------------
-# 规则定义
-# ---------------------------
-
-# 默认目标：编译出最终 exe
-all: $(OUTPUT)
-	@echo "[INFO] Build complete: $(OUTPUT) (MODE=$(MODE))"
-
-# 链接阶段
-$(OUTPUT): $(OBJS)
-	@mkdir -p $(PATH_OUTPUT)
-	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
+msg:
+	@echo "$(imgui_src)"
+	@echo "$(imgui_include_path)"
+	@echo =====================
+	@echo "$(third_party_src)"
+	@echo "$(third_party_include_path)"
+	@echo =====================
+	@echo "$(SDL_CFLAGS)"
+	@echo "$(SDL_LDLIBS)"
+	@echo =====================
+	@echo [imgui_objs] "$(imgui_objs)"
+	@echo [third_party_objs] "$(third_party_objs)"
+	@echo [project_objs] "$(project_objs)"
 
 
-# 项目源码编译规则
-$(BUILD_DIR)/%.o: %.cpp
+# 编译规则
+$(build_dir)/imgui/%.cpp.o: $(imgui_dir)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(addprefix -I, $(imgui_include_path)) -c -o $@ $< $(SDL_CFLAGS)
 
-# ImGui 源码编译规则（绝对路径）
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+$(build_dir)/third_party/%.cpp.o: $(third_party_dir)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(addprefix -I, $(third_party_include_path) $(imgui_include_path)) -c -o $@ $<
 
-# 清理
-clean:
-	$(RM) -f $(OUTPUT) $(OBJS)
-	$(RM) -rf $(BUILD_DIR)
+$(build_dir)/project/%.cpp.o: $(project_dir)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(addprefix -I, $(project_include_path) $(third_party_include_path) $(imgui_include_path)) -c -o $@ $<
 
-# 运行（从 bin/ 下启动 exe）
-run: $(OUTPUT)
-	cd $(PATH_OUTPUT) && ./$(EXE)
+# app 目标
+app: $(imgui_objs) $(third_party_objs) $(project_objs)
+	@mkdir -p $(build_dir)
+	$(CXX) $(CXXFLAGS) -o $(build_dir)/$@ $^ $(addprefix -I, $(project_include_path) $(third_party_include_path) $(imgui_include_path)) $(SDL_LDLIBS) $(SDL_CFLAGS) -lcjson -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL_gfx
 
-# 重新编译后直接运行
-crun: clean run
+clear:
+	@rm -rf $(build_dir)

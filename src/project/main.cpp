@@ -6,5 +6,6 @@
 int
 main()
 {
+    printf("test\n");
     return Game::Instance().PlayGame();
 }
