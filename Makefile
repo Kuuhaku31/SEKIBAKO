@@ -113,3 +113,9 @@ app: $(imgui_objs) $(third_party_objs) $(project_objs)
 
 clear:
 	@rm -rf $(build_dir)
+
+
+update-assets:
+	@rm -rf bin/assets
+	@mkdir -p bin/assets
+	@cp -r D:/OneDrive/resources/SEKIBAKO/* bin/assets/

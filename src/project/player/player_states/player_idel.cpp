@@ -49,7 +49,7 @@ PlayerStatesIdle::On_render() const
 }
 
 void
-PlayerStatesIdle::On_update(float delta_time)
+PlayerStatesIdle::On_update(float)
 {
     if(player.is_try_walk() && player.movement_velocity.vx)
     {

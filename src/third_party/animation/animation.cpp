@@ -13,10 +13,11 @@ AnimationTemplate::AnimationTemplate(const AnimationInformation& info)
     texs_size = info.texs_size;
 
     int tex_w = 0, tex_h = 0;
-    SDL_QueryTexture(texture, nullptr, nullptr, &tex_w, &tex_h);
-
-    frame_w     = tex_w / info.num_x;
-    frame_h     = tex_h / info.num_y;
+    if(!SDL_QueryTexture(texture, nullptr, nullptr, &tex_w, &tex_h))
+    {
+        frame_w = tex_w / info.num_x;
+        frame_h = tex_h / info.num_y;
+    }
     frame_count = info.frame_count;
 
     frame_src_list = new Point[frame_count];
