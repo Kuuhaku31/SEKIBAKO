@@ -32,15 +32,14 @@ build_dir = ./build
 
 
 imgui_dir = D:/repositories/github/imgui
-imgui_src := \
-	$(imgui_dir)/imgui.cpp \
-	$(imgui_dir)/imgui_demo.cpp \
-	$(imgui_dir)/imgui_draw.cpp \
-	$(imgui_dir)/imgui_tables.cpp \
-	$(imgui_dir)/imgui_widgets.cpp \
-	$(imgui_dir)/backends/imgui_impl_sdl2.cpp \
-	$(imgui_dir)/backends/imgui_impl_sdlrenderer2.cpp
-# 	$(imgui_dir)/backends/imgui_impl_opengl3.cpp
+imgui_src += $(imgui_dir)/imgui.cpp
+imgui_src += $(imgui_dir)/imgui_demo.cpp
+imgui_src += $(imgui_dir)/imgui_draw.cpp
+imgui_src += $(imgui_dir)/imgui_tables.cpp
+imgui_src += $(imgui_dir)/imgui_widgets.cpp
+imgui_src += $(imgui_dir)/backends/imgui_impl_sdl2.cpp
+imgui_src += $(imgui_dir)/backends/imgui_impl_sdlrenderer2.cpp
+# imgui_src += $(imgui_dir)/backends/imgui_impl_opengl3.cpp
 imgui_include_path := \
 	$(imgui_dir) \
 	$(imgui_dir)/backends \
@@ -79,14 +78,14 @@ SDL_LDLIBS := $(subst -mwindows, , $(SDL_LDLIBS))
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -g
 
 msg:
-	@echo "$(imgui_src)"
-	@echo "$(imgui_include_path)"
+	@echo [imgui_src] "$(imgui_src)"
+	@echo [imgui_include_path] "$(imgui_include_path)"
 	@echo =====================
-	@echo "$(third_party_src)"
-	@echo "$(third_party_include_path)"
+	@echo [third_party_src] "$(third_party_src)"
+	@echo [third_party_include_path] "$(third_party_include_path)"
 	@echo =====================
-	@echo "$(SDL_CFLAGS)"
-	@echo "$(SDL_LDLIBS)"
+	@echo [SDL_CFLAGS] "$(SDL_CFLAGS)"
+	@echo [SDL_LDLIBS] "$(SDL_LDLIBS)"
 	@echo =====================
 	@echo [imgui_objs] "$(imgui_objs)"
 	@echo [third_party_objs] "$(third_party_objs)"
