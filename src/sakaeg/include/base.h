@@ -7,8 +7,36 @@
 #include <stdint.h>
 
 
+#define ORIGIN_POINT Point{ 0, 0 }
+
+#define COLOR_BLACK Color{ 0x00, 0x00, 0x00, 0xFF }       // 黑色
+#define COLOR_WHITE Color{ 0xFF, 0xFF, 0xFF, 0xFF }       // 白色
+#define COLOR_RED Color{ 0xFF, 0x00, 0x00, 0xFF }         // 红色
+#define COLOR_GREEN Color{ 0x00, 0xFF, 0x00, 0xFF }       // 绿色
+#define COLOR_BLUE Color{ 0x00, 0x00, 0xFF, 0xFF }        // 蓝色
+#define COLOR_YELLOW Color{ 0xFF, 0xFF, 0x00, 0xFF }      // 黄色
+#define COLOR_CYAN Color{ 0x00, 0xFF, 0xFF, 0xFF }        // 青色
+#define COLOR_PURPLE Color{ 0xFF, 0x00, 0xFF, 0xFF }      // 紫色
+#define COLOR_ORANGE Color{ 0xFF, 0xA5, 0x00, 0xFF }      // 橙色
+#define COLOR_GRAY Color{ 0x80, 0x80, 0x80, 0xFF }        // 灰色
+#define COLOR_DARK_GRAY Color{ 0x40, 0x40, 0x40, 0xFF }   // 深灰色
+#define COLOR_LIGHT_GRAY Color{ 0xC0, 0xC0, 0xC0, 0xFF }  // 浅灰色
+#define COLOR_TRANSPARENT Color{ 0x00, 0x00, 0x00, 0x00 } // 透明色
+
+#define VECTOR2_ZERO Vector2{ 0.0f, 0.0f }
+#define VECTOR2_UNIT_UP Vector2{ 0.0f, -1.0f }
+#define VECTOR2_UNIT_DOWN Vector2{ 0.0f, 1.0f }
+#define VECTOR2_UNIT_LEFT Vector2{ -1.0f, 0.0f }
+#define VECTOR2_UNIT_RIGHT Vector2{ 1.0f, 0.0f }
+
+
 typedef std::function<void()> Callback;
 
+struct Point
+{
+    int32_t x = 0;
+    int32_t y = 0;
+};
 
 struct IRect
 {
@@ -26,22 +54,6 @@ struct FRect
     float h = 0;
 };
 
-struct Point
-{
-    int32_t px = 0;
-    int32_t py = 0;
-
-    Point&
-    operator=(const Point& p)
-    {
-        px = p.px;
-        py = p.py;
-
-        return *this;
-    }
-};
-#define ORIGIN_POINT Point{ 0, 0 }
-
 struct Color
 {
     uint8_t r;
@@ -50,31 +62,12 @@ struct Color
     uint8_t a;
 };
 
-void
-color_to_float4(const Color& color, float* f4);
-void
-float4_to_color(const float* f4, Color& color);
-
-#define COLOR_BLACK Color{ 0x00, 0x00, 0x00, 0xFF }       // 黑色
-#define COLOR_WHITE Color{ 0xFF, 0xFF, 0xFF, 0xFF }       // 白色
-#define COLOR_RED Color{ 0xFF, 0x00, 0x00, 0xFF }         // 红色
-#define COLOR_GREEN Color{ 0x00, 0xFF, 0x00, 0xFF }       // 绿色
-#define COLOR_BLUE Color{ 0x00, 0x00, 0xFF, 0xFF }        // 蓝色
-#define COLOR_YELLOW Color{ 0xFF, 0xFF, 0x00, 0xFF }      // 黄色
-#define COLOR_CYAN Color{ 0x00, 0xFF, 0xFF, 0xFF }        // 青色
-#define COLOR_PURPLE Color{ 0xFF, 0x00, 0xFF, 0xFF }      // 紫色
-#define COLOR_ORANGE Color{ 0xFF, 0xA5, 0x00, 0xFF }      // 橙色
-#define COLOR_GRAY Color{ 0x80, 0x80, 0x80, 0xFF }        // 灰色
-#define COLOR_DARK_GRAY Color{ 0x40, 0x40, 0x40, 0xFF }   // 深灰色
-#define COLOR_LIGHT_GRAY Color{ 0xC0, 0xC0, 0xC0, 0xFF }  // 浅灰色
-#define COLOR_TRANSPARENT Color{ 0x00, 0x00, 0x00, 0x00 } // 透明色
-
 
 class Vector2
 {
 public:
-    float vx = 0;
-    float vy = 0;
+    float x = 0;
+    float y = 0;
 
 public:
     Vector2() = default;
@@ -108,11 +101,6 @@ public:
 
     bool approx_zero() const;
 };
-#define VECTOR2_ZERO Vector2{ 0.0f, 0.0f }
-#define VECTOR2_UNIT_UP Vector2{ 0.0f, -1.0f }
-#define VECTOR2_UNIT_DOWN Vector2{ 0.0f, 1.0f }
-#define VECTOR2_UNIT_LEFT Vector2{ -1.0f, 0.0f }
-#define VECTOR2_UNIT_RIGHT Vector2{ 1.0f, 0.0f }
 
 
 class Timer
@@ -286,26 +274,16 @@ swap(Tem& a, Tem& b)
     b = c;
 }
 
-bool
-operator==(const Point& a, const Point& b);
+void color_to_float4(const Color& color, float* f4);
+void float4_to_color(const float* f4, Color& color);
 
-bool
-operator!=(const Point& a, const Point& b);
+bool operator==(const Point& a, const Point& b);
+bool operator!=(const Point& a, const Point& b);
+bool operator<(const Point& a, const Point& b);
+bool operator>(const Point& a, const Point& b);
+bool operator<=(const Point& a, const Point& b);
+bool operator>=(const Point& a, const Point& b);
+bool operator>=(const Point& a, const Point& b);
 
-bool
-operator<(const Point& a, const Point& b);
-
-bool
-operator>(const Point& a, const Point& b);
-
-bool
-operator<=(const Point& a, const Point& b);
-
-bool
-operator>=(const Point& a, const Point& b);
-
-Point
-operator+(const Point& a, const Point& b);
-
-Point
-operator-(const Point& a, const Point& b);
+Point operator+(const Point& a, const Point& b);
+Point operator-(const Point& a, const Point& b);

@@ -6,79 +6,79 @@
 #include <cmath>
 
 Vector2::Vector2(float x, float y)
-    : vx(x)
-    , vy(y)
+    : x(x)
+    , y(y)
 {
 }
 
 Vector2
 Vector2::operator+(const Vector2& v) const
 {
-    return Vector2(vx + v.vx, vy + v.vy);
+    return Vector2(x + v.x, y + v.y);
 }
 
 void
 Vector2::operator+=(const Vector2& v)
 {
-    vx += v.vx;
-    vy += v.vy;
+    x += v.x;
+    y += v.y;
 }
 
 Vector2
 Vector2::operator-(const Vector2& v) const
 {
-    return Vector2(vx - v.vx, vy - v.vy);
+    return Vector2(x - v.x, y - v.y);
 }
 
 void
 Vector2::operator-=(const Vector2& v)
 {
-    vx -= v.vx;
-    vy -= v.vy;
+    x -= v.x;
+    y -= v.y;
 }
 
 float
 Vector2::operator*(const Vector2& v) const
 {
-    return vx * v.vx + vy * v.vy;
+    return x * v.x + y * v.y;
 }
 
 Vector2
 Vector2::operator*(float f) const
 {
-    return Vector2(vx * f, vy * f);
+    return Vector2(x * f, y * f);
 }
 
 void
 Vector2::operator*=(float f)
 {
-    vx *= f;
-    vy *= f;
+    x *= f;
+    y *= f;
 }
 
 Vector2
 Vector2::operator/(float f) const
 {
-    return Vector2(vx / f, vy / f);
+    return Vector2(x / f, y / f);
 }
 
 void
 Vector2::operator/=(float f)
 {
-    vx /= f;
-    vy /= f;
+    x /= f;
+    y /= f;
 }
 
 bool
 Vector2::operator==(const Vector2& v) const
 {
-    return vx == v.vx && vy == v.vy;
+    return x == v.x && y == v.y;
 }
 
 bool
 Vector2::operator!=(const Vector2& v) const
 {
-    return vx != v.vx || vy != v.vy;
+    return x != v.x || y != v.y;
 }
 
 bool
@@ -93,21 +93,23 @@ Vector2::operator<(const Vector2& v) const
     return module() < v.module();
 }
 
-Vector2::operator float*()
+Vector2::
+operator float*()
 {
-    return &vx;
+    return &x;
 }
 
-Vector2::operator Point() const
+Vector2::
+operator Point() const
 {
-    return { (int)std::floor(vx), (int)std::floor(vy) };
+    return { (int)std::floor(x), (int)std::floor(y) };
 }
 
 void
 Vector2::rotate(float angle)
 {
-    vx = vx * cos(angle) - vy * sin(angle);
-    vy = vx * sin(angle) + vy * cos(angle);
+    x = x * cos(angle) - y * sin(angle);
+    y = x * sin(angle) + y * cos(angle);
 }
 
 void
@@ -117,22 +119,22 @@ Vector2::to_unit()
 
     if(m != 0)
     {
-        vx /= m;
-        vy /= m;
+        x /= m;
+        y /= m;
     }
 }
 
 void
 Vector2::to_zero()
 {
-    vx = 0;
-    vy = 0;
+    x = 0;
+    y = 0;
 }
 
 float
 Vector2::module() const
 {
-    return sqrt(vx * vx + vy * vy);
+    return sqrt(x * x + y * y);
 }
 
 bool

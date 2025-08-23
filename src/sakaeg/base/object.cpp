@@ -24,7 +24,7 @@ void
 Object::On_update(float delta_time)
 {
     static float v_mod, f_mod = 0.0f;
-    float        vel_x_before = movement_velocity.vx;
+    float        vel_x_before = movement_velocity.x;
 
     if((v_mod = movement_velocity.module())) // 如果有速度，需要计算阻力
     {
@@ -38,7 +38,7 @@ Object::On_update(float delta_time)
     movement_velocity += (movement_acceleration * delta_time);
 
     // 如果速度方向改变，速度置0
-    if(vel_x_before * movement_velocity.vx < 0) movement_velocity.vx = 0;
+    if(vel_x_before * movement_velocity.x < 0) movement_velocity.x = 0;
 
     // 更新位置
     movement_position += (movement_velocity * delta_time);
@@ -85,13 +85,13 @@ Object::Move_to(const Vector2& dst)
 void
 Object::Move_to_x(float dst_x)
 {
-    movement_position.vx = dst_x;
+    movement_position.x = dst_x;
 }
 
 void
 Object::Move_to_y(float dst_y)
 {
-    movement_position.vy = dst_y;
+    movement_position.y = dst_y;
 }
 
 void
@@ -104,15 +104,15 @@ Object::Stop_move()
 void
 Object::Stop_move_x()
 {
-    movement_acceleration.vx = 0;
-    movement_velocity.vx     = 0;
+    movement_acceleration.x = 0;
+    movement_velocity.x     = 0;
 }
 
 void
 Object::Stop_move_y()
 {
-    movement_acceleration.vy = 0;
-    movement_velocity.vy     = 0;
+    movement_acceleration.y = 0;
+    movement_velocity.y     = 0;
 }
 
 const Vector2&
