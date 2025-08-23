@@ -8,49 +8,7 @@
 # 路径设置
 # ---------------------------
 
-# └─src
-#     ├─project
-#     │  ├─debug
-#     │  ├─game
-#     │  │  ├─animation_master
-#     │  │  ├─collision_manager
-#     │  │  └─effect_master
-#     │  ├─imgui_windows
-#     │  └─player
-#     │      ├─player_effects
-#     │      └─player_states
-#     ├─test
-#     │  └─test_base
-#     └─third_party
-#         ├─animation
-#         ├─base
-#         ├─imgui_setup
-#         ├─resources
-#         └─state_machine
-
-
-
-# third_party_dir = ./src/third_party
-# third_party_src := $(shell find $(third_party_dir) -name "*.c" -o -name "*.cpp") # 获取子文件夹下所有c cpp文件
-# third_party_include_path := $(shell find $(third_party_dir) -type d)
-
-# project_dir = ./src/project
-# project_src := $(shell find $(project_dir) -name "*.c" -o -name "*.cpp")
-# project_include_path := $(shell find $(project_dir) -type d)
-
-
-# third_party_objs := $(third_party_src)
-# third_party_objs := $(subst $(third_party_dir), , $(third_party_objs))
-# third_party_objs := $(addprefix $(build_dir)/third_party, $(third_party_objs))
-# third_party_objs := $(addsuffix .o,$(third_party_objs))
-
-
-# project_objs := $(project_src)
-# project_objs := $(subst $(project_dir), , $(project_objs))
-# project_objs := $(addprefix $(build_dir)/project, $(project_objs))
-# project_objs := $(addsuffix .o, $(project_objs))
-
-
+MODE ?= debug
 
 BUILD_PATH = ./build
 
@@ -82,12 +40,30 @@ imgui_target_obj := $(addprefix $(IMGUI_OBJ_PATH)/, $(imgui_target_obj))
 imgui_target_obj := $(addsuffix .o, $(imgui_target_obj))
 
 
+
+T0_PATH := ./src/test/t0
+T0_OBJ_PATH := $(BUILD_PATH)/test/t0
+T0_INCLUDE_PATH := $(T0_PATH)
+
+t0_target_src += main.cpp
+t0_target_src += header.cpp
+
+t0_target_obj := $(t0_target_src)
+t0_target_obj := $(subst $(T0_PATH), , $(t0_target_obj))
+t0_target_obj := $(addprefix $(T0_OBJ_PATH)/, $(t0_target_obj))
+t0_target_obj := $(addsuffix .o, $(t0_target_obj))
+
+
+
 SDL_CFLAGS := $(shell pkg-config --cflags sdl2)
 SDL_LDLIBS := $(shell pkg-config --libs sdl2)
-# SDL_LDLIBS := $(subst -mwindows, , $(SDL_LDLIBS))
+ifeq ($(MODE), debug)
+	SDL_LDLIBS := $(subst -mwindows, , $(SDL_LDLIBS))
+endif
 
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -g
+
 
 msg:
 	@echo =====================
@@ -100,6 +76,9 @@ msg:
 	@echo 
 	@echo [imgui_target_src] $(imgui_target_src)
 	@echo [imgui_target_obj] $(imgui_target_obj)
+	@echo =====================
+	@echo [t0_target_src] $(t0_target_src)
+	@echo [t0_target_obj] $(t0_target_obj)
 	@echo =====================
 	@echo "$(CXX)"
 	@echo [imgui_src] "$(imgui_src)"
@@ -116,27 +95,22 @@ msg:
 	@echo [project_objs] "$(project_objs)"
 
 
+
 # 编译规则
 $(IMGUI_OBJ_PATH)/%.cpp.o: $(IMGUI_PATH)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(addprefix -I, $(IMGUI_INCLUDE_PATH)) -c -o $@ $< $(SDL_CFLAGS)
 
-$(BUILD_PATH)/third_party/%.cpp.o: $(THIRD_PARTY_PATH)/%.cpp
+
+$(T0_OBJ_PATH)/%.cpp.o: $(T0_PATH)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(addprefix -I, $(THIRD_PARTY_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(addprefix -I, $(IMGUI_INCLUDE_PATH)) -c -o $@ $< $(SDL_CFLAGS)
 
-$(BUILD_PATH)/project/%.cpp.o: $(PROJECT_PATH)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(addprefix -I, $(PROJECT_INCLUDE_PATH) $(THIRD_PARTY_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -c -o $@ $<
 
-# app 目标
-app: $(IMGUI_OBJ) $(THIRD_PARTY_OBJ) $(PROJECT_OBJ)
+t0: $(t0_target_obj) $(imgui_target_obj)
 	@mkdir -p bin
-	$(CXX) $(CXXFLAGS) -o bin/$@ $^ $(addprefix -I, $(PROJECT_INCLUDE_PATH) $(THIRD_PARTY_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) $(SDL_LDLIBS) $(SDL_CFLAGS) -lcjson -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL_gfx
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(IMGUI_INCLUDE_PATH), $(T0_INCLUDE_PATH)) -o bin/$@  $(t0_target_obj) $(imgui_target_obj) $(SDL_LDLIBS) -lopengl32
 
-t0: $(imgui_target_obj)
-	@mkdir -p bin
-	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(IMGUI_INCLUDE_PATH)) -o bin/$@ src/test/t0/main.cpp $(imgui_target_obj) $(SDL_LDLIBS) -lopengl32
 
 clear:
 	@rm -rf $(BUILD_PATH)

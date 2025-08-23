@@ -26,9 +26,13 @@
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
 #endif
 
+#include "header.h"
+
 // Main code
 int main(int, char**)
 {
+    PrintMessage("Hello, World!");
+
     // Setup SDL
 #ifdef _WIN32
     ::SetProcessDPIAware();
