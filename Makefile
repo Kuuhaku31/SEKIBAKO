@@ -38,8 +38,8 @@ imgui_src += $(imgui_dir)/imgui_draw.cpp
 imgui_src += $(imgui_dir)/imgui_tables.cpp
 imgui_src += $(imgui_dir)/imgui_widgets.cpp
 imgui_src += $(imgui_dir)/backends/imgui_impl_sdl2.cpp
-imgui_src += $(imgui_dir)/backends/imgui_impl_sdlrenderer2.cpp
-# imgui_src += $(imgui_dir)/backends/imgui_impl_opengl3.cpp
+# imgui_src += $(imgui_dir)/backends/imgui_impl_sdlrenderer2.cpp
+imgui_src += $(imgui_dir)/backends/imgui_impl_opengl3.cpp
 imgui_include_path := \
 	$(imgui_dir) \
 	$(imgui_dir)/backends \
@@ -78,6 +78,7 @@ SDL_LDLIBS := $(subst -mwindows, , $(SDL_LDLIBS))
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -g
 
 msg:
+	@echo "$(CXX)"
 	@echo [imgui_src] "$(imgui_src)"
 	@echo [imgui_include_path] "$(imgui_include_path)"
 	@echo =====================
@@ -109,6 +110,11 @@ $(build_dir)/project/%.cpp.o: $(project_dir)/%.cpp
 app: $(imgui_objs) $(third_party_objs) $(project_objs)
 	@mkdir -p bin
 	$(CXX) $(CXXFLAGS) -o bin/$@ $^ $(addprefix -I, $(project_include_path) $(third_party_include_path) $(imgui_include_path)) $(SDL_LDLIBS) $(SDL_CFLAGS) -lcjson -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL_gfx
+
+t0:
+	@mkdir -p bin
+	g++ -I/mingw64/include/SDL2 $(addprefix -I, $(imgui_include_path)) -Dmain=SDL_main -o bin/$@ src/test/t0/main.cpp $(imgui_src) -lmingw32 -lSDL2main -lSDL2 -lopengl32
+	@cp /mingw64/bin/SDL2.dll bin
 
 clear:
 	@rm -rf $(build_dir)
