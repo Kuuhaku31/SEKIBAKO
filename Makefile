@@ -136,7 +136,7 @@ $(T0_OBJ_PATH)/%.cpp.o: $(T0_PATH)/%.cpp
 
 $(T1_OBJ_PATH)/%.cpp.o: $(T1_PATH)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(addprefix -I, $(T1_INCLUDE_PATH), $(SAKAEG_INCLUDE_PATH)) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -c -o $@ $<
 
 
 t0: $(t0_target_obj) $(imgui_target_obj)
@@ -144,9 +144,12 @@ t0: $(t0_target_obj) $(imgui_target_obj)
 	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(IMGUI_INCLUDE_PATH), $(T0_INCLUDE_PATH)) -o bin/$@ $(t0_target_obj) $(imgui_target_obj) $(SDL_LDLIBS) -lopengl32
 
 
-t1: $(t1_target_obj) $(SAKAEG_OBJ)
+t1: $(t1_target_obj) $(SAKAEG_OBJ) $(imgui_target_obj)
 	@mkdir -p bin
-	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(T1_INCLUDE_PATH), $(SAKAEG_INCLUDE_PATH)) -o bin/$@ $(t1_target_obj) $(SAKAEG_OBJ)
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) \
+	$(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) \
+	-o bin/$@ $(t1_target_obj) $(SAKAEG_OBJ) $(imgui_target_obj) \
+	$(SDL_LDLIBS) -lopengl32
 
 clear:
 	@rm -rf $(BUILD_PATH)
