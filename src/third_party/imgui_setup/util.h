@@ -24,7 +24,7 @@ typedef ImFont       Font;
 typedef Mix_Chunk    Sound;
 typedef Mix_Music    Music;
 
-typedef std::function<void()>             Callback;
+// typedef std::function<void()>             Callback;
 typedef std::function<void(const Event&)> EventCallback; // 事件回调函数
 
 class AnimationTemplate;

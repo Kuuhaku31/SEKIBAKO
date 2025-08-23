@@ -3,7 +3,13 @@
 
 #pragma once
 
-#include "util.h"
+// #include "util.h"
+#include <functional>
+#include <stdint.h>
+
+
+typedef std::function<void()> Callback;
+
 
 struct IRect
 {
@@ -26,7 +32,8 @@ struct Point
     int32_t px = 0;
     int32_t py = 0;
 
-    Point& operator=(const Point& p)
+    Point&
+    operator=(const Point& p)
     {
         px = p.px;
         py = p.py;
@@ -135,13 +142,37 @@ public:
     bool is_paused   = false; // 计时器是否暂停
     bool is_one_shot = false; // 计时器是否为一次性触发
 
-    void Set_wait_time(float t) { t > 0.0f ? wait_time = t : wait_time = 0.0f; }
-    void Set_wait_time_add(float t) { t > 0.0f ? wait_time += t : wait_time = 0.0f; }
-    void Set_wait_time_mul(float t) { t > 0.0f ? wait_time *= t : wait_time = 0.0f; }
-    void Set_on_timeout(Callback f) { on_timeout = f; }
+    void
+    Set_wait_time(float t)
+    {
+        t > 0.0f ? wait_time = t : wait_time = 0.0f;
+    }
+    void
+    Set_wait_time_add(float t)
+    {
+        t > 0.0f ? wait_time += t : wait_time = 0.0f;
+    }
+    void
+    Set_wait_time_mul(float t)
+    {
+        t > 0.0f ? wait_time *= t : wait_time = 0.0f;
+    }
+    void
+    Set_on_timeout(Callback f)
+    {
+        on_timeout = f;
+    }
 
-    const float& Get_pass_time() const { return pass_time; }
-    const bool&  Get_is_shotted() const { return is_shotted; }
+    const float&
+    Get_pass_time() const
+    {
+        return pass_time;
+    }
+    const bool&
+    Get_is_shotted() const
+    {
+        return is_shotted;
+    }
 
 private:
     float pass_time  = 0;     // 计时器已经过去的时间

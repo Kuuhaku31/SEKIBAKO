@@ -4,6 +4,7 @@
 #pragma once
 
 #include "base.h"
+#include "util.h"
 
 // Painter
 class Painter
