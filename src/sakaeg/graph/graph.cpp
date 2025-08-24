@@ -75,9 +75,9 @@ Graph::Init(const char* graph_title, const IRect& graph_layout)
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
+    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;   // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
     // io.ConfigViewportsNoAutoMerge = true;
     // io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -137,14 +137,20 @@ Graph::On_frame_begin(EventCallback f) const
     ImGui::NewFrame();
 }
 
+static float
+cl(uint8_t c)
+{
+    return (float)c / 255.0f;
+}
+
 void
-Graph::On_frame_end(Callback f) const
+Graph::On_frame_end(Callback) const
 {
     // Rendering
     ImGui::Render();
     ImGuiIO& io = ImGui::GetIO();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-    glClearColor(clear_color.r * clear_color_alpha, clear_color.g * clear_color_alpha, clear_color.b * clear_color_alpha, clear_color_alpha);
+    glClearColor(cl(clear_color.r), cl(clear_color.g), cl(clear_color.b), cl(clear_color_alpha));
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

@@ -72,6 +72,31 @@ main(int, char**)
             ImGui::End();
         }
 
+        if(ImGui::Begin("Demo Window"))
+        {
+            ImDrawList* draw_list = ImGui::GetWindowDrawList();
+            ImVec2      p         = ImGui::GetCursorScreenPos();
+
+            draw_list->AddRectFilled(ImVec2(p.x + 10, p.y + 10), ImVec2(p.x + 110, p.y + 60), IM_COL32(200, 100, 100, 255));
+            draw_list->AddCircle(ImVec2(p.x + 60, p.y + 100), 30, IM_COL32(100, 200, 100, 255), 0, 3.0f);
+        }
+        ImGui::End();
+
+
+        // 获取背景绘图列表
+        ImDrawList* bg = ImGui::GetBackgroundDrawList();
+
+        ImVec2 win_pos  = ImGui::GetWindowPos();
+        ImVec2 win_size = io.DisplaySize;
+
+        // 计算屏幕中心
+        ImVec2 center = ImVec2(win_size.x * 0.5f, win_size.y * 0.5f);
+        center.x += win_pos.x, center.y += win_pos.y;
+
+        // 画一个半径 100 的绿色圆
+        bg->AddCircleFilled(center, 10.0f, IM_COL32(0, 255, 0, 255));
+
+
         graph.On_frame_end([]() {
             // Render the frame
         });

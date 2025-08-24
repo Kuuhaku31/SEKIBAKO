@@ -77,6 +77,19 @@ t1_target_obj := $(addprefix $(T1_OBJ_PATH)/, $(t1_target_obj))
 t1_target_obj := $(addsuffix .o, $(t1_target_obj))
 
 
+T2_PATH := ./src/test/t2
+T2_OBJ_PATH := $(BUILD_PATH)/test/t2
+T2_INCLUDE_PATH := $(T2_PATH)
+
+t2_target_src += main.cpp
+# t2_target_src += stb_image.cpp
+
+t2_target_obj := $(t2_target_src)
+t2_target_obj := $(subst $(T2_PATH), , $(t2_target_obj))
+t2_target_obj := $(addprefix $(T2_OBJ_PATH)/, $(t2_target_obj))
+t2_target_obj := $(addsuffix .o, $(t2_target_obj))
+
+
 SDL_CFLAGS := $(shell pkg-config --cflags sdl2)
 SDL_LDLIBS := $(shell pkg-config --libs sdl2)
 ifeq ($(MODE), debug)
@@ -139,6 +152,11 @@ $(T1_OBJ_PATH)/%.cpp.o: $(T1_PATH)/%.cpp
 	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -c -o $@ $<
 
 
+$(T2_OBJ_PATH)/%.cpp.o: $(T2_PATH)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(T2_INCLUDE_PATH)) -c -o $@ $<
+
+
 t0: $(t0_target_obj) $(imgui_target_obj)
 	@mkdir -p bin
 	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(IMGUI_INCLUDE_PATH), $(T0_INCLUDE_PATH)) -o bin/$@ $(t0_target_obj) $(imgui_target_obj) $(SDL_LDLIBS) -lopengl32
@@ -150,6 +168,13 @@ t1: $(t1_target_obj) $(SAKAEG_OBJ) $(imgui_target_obj)
 	$(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) \
 	-o bin/$@ $(t1_target_obj) $(SAKAEG_OBJ) $(imgui_target_obj) \
 	$(SDL_LDLIBS) -lopengl32
+
+t2: $(t2_target_obj)
+	@mkdir -p bin
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) \
+	$(addprefix -I, $(T2_INCLUDE_PATH)) \
+	-o bin/$@ $(t2_target_obj) \
+	$(SDL_LDLIBS) -lopengl32 -lglew32
 
 clear:
 	@rm -rf $(BUILD_PATH)
