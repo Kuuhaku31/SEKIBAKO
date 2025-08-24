@@ -70,6 +70,7 @@ T1_OBJ_PATH := $(BUILD_PATH)/test/t1
 T1_INCLUDE_PATH := $(T1_PATH)
 
 t1_target_src += main.cpp
+t1_target_src += debug.cpp
 
 t1_target_obj := $(t1_target_src)
 t1_target_obj := $(subst $(T1_PATH), , $(t1_target_obj))

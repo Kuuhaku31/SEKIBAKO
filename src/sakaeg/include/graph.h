@@ -31,7 +31,8 @@ public:
     void On_frame_begin(EventCallback f = nullptr) const;
     void On_frame_end(Callback f = nullptr) const;
 
-    uint32_t GetWindowID() const;
+    uint32_t GetGraphID() const;
+    void     GetGraphLayout(IRect& layout) const;
 
 private: // 单例模式
     Graph()                        = default;

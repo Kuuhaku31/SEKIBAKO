@@ -3,6 +3,8 @@
 
 #include "graph.h"
 
+#include "header.h"
+
 #include <stdio.h>
 
 int
@@ -29,7 +31,7 @@ main(int, char**)
             // Handle events
             if(event.type == SDL_QUIT)
                 done = true;
-            if(event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == graph.GetWindowID())
+            if(event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == graph.GetGraphID())
                 done = true;
         });
 
@@ -72,6 +74,7 @@ main(int, char**)
             ImGui::End();
         }
 
+        static ImVec2 rect_pos;
         if(ImGui::Begin("Demo Window"))
         {
             ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -79,6 +82,8 @@ main(int, char**)
 
             draw_list->AddRectFilled(ImVec2(p.x + 10, p.y + 10), ImVec2(p.x + 110, p.y + 60), IM_COL32(200, 100, 100, 255));
             draw_list->AddCircle(ImVec2(p.x + 60, p.y + 100), 30, IM_COL32(100, 200, 100, 255), 0, 3.0f);
+
+            ImGui::DragFloat2("Rect Position", (float*)&rect_pos);
         }
         ImGui::End();
 
@@ -86,16 +91,21 @@ main(int, char**)
         // 获取背景绘图列表
         ImDrawList* bg = ImGui::GetBackgroundDrawList();
 
-        ImVec2 win_pos  = ImGui::GetWindowPos();
-        ImVec2 win_size = io.DisplaySize;
+        // ImVec2 win_pos  = ImGui::GetWindowPos();
+        // ImVec2 win_size = ImGui::GetWindowSize();
+        IRect graph_layout;
+        graph.GetGraphLayout(graph_layout);
 
         // 计算屏幕中心
-        ImVec2 center = ImVec2(win_size.x * 0.5f, win_size.y * 0.5f);
-        center.x += win_pos.x, center.y += win_pos.y;
+        ImVec2 center = ImVec2(graph_layout.w * 0.5f, graph_layout.h * 0.5f);
+        // center.x += graph_layout.x, center.y += graph_layout.y;
 
-        // 画一个半径 100 的绿色圆
+        // 画一个半径 10 的绿色圆
+        bg->AddRectFilled(rect_pos, ImVec2(rect_pos.x + 50, rect_pos.y + 50), IM_COL32(255, 0, 0, 255));
         bg->AddCircleFilled(center, 10.0f, IM_COL32(0, 255, 0, 255));
 
+        debug_info info;
+        DebugWindow(info);
 
         graph.On_frame_end([]() {
             // Render the frame

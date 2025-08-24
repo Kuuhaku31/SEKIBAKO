@@ -76,8 +76,8 @@ Graph::Init(const char* graph_title, const IRect& graph_layout)
     (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;   // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
+    // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
     // io.ConfigViewportsNoAutoMerge = true;
     // io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -154,23 +154,18 @@ Graph::On_frame_end(Callback) const
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    // Update and Render additional Platform Windows
-    // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-    //  For this specific demo app we could also call SDL_GL_MakeCurrent(window, gl_context) directly)
-    if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        SDL_Window*   backup_current_window  = SDL_GL_GetCurrentWindow();
-        SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-    }
-
     SDL_GL_SwapWindow(window);
 }
 
 uint32_t
-Graph::GetWindowID() const
+Graph::GetGraphID() const
 {
     return SDL_GetWindowID(window);
+}
+
+void
+Graph::GetGraphLayout(IRect& layout) const
+{
+    SDL_GetWindowPosition(window, &layout.x, &layout.y);
+    SDL_GetWindowSize(window, &layout.w, &layout.h);
 }
