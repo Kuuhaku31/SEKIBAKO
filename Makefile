@@ -126,7 +126,7 @@ $(IMGUI_OBJ_PATH)/%.cpp.o: $(IMGUI_PATH)/%.cpp
 
 $(SAKAEG_OBJ_PATH)/%.cpp.o: $(SAKAEG_PATH)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(addprefix -I, $(SAKAEG_INCLUDE_PATH)) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -c -o $@ $<
 
 
 $(T0_OBJ_PATH)/%.cpp.o: $(T0_PATH)/%.cpp
