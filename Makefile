@@ -150,7 +150,9 @@ $(T0_OBJ_PATH)/%.cpp.o: $(T0_PATH)/%.cpp
 
 $(T1_OBJ_PATH)/%.cpp.o: $(T1_PATH)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) \
+	$(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -ID:/repositories/github/stb \
+	-c -o $@ $<
 
 
 $(T2_OBJ_PATH)/%.cpp.o: $(T2_PATH)/%.cpp

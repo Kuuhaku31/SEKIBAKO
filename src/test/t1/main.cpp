@@ -6,7 +6,43 @@
 
 #include "header.h"
 
+#include <SDL_render.h>
 #include <stdio.h>
+#include <string>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#include <GL/gl.h>
+
+// #define STB_IMAGE_IMPLEMENTATION
+// #include "stb_image.h"
+
+
+// Simple implementation of LoadTextureFromFile using stb_image and OpenGL
+GLuint
+LoadTextureFromFile(const char* filename, int* out_width, int* out_height)
+{
+    int            channels = 0;
+    unsigned char* data     = stbi_load(filename, out_width, out_height, &channels, 4);
+    if(!data)
+    {
+        printf("Failed to load texture: %s\n", stbi_failure_reason());
+        return 0;
+    }
+
+    GLuint texture_id = 0;
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *out_width, *out_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    stbi_image_free(data);
+
+    return texture_id;
+}
 
 int
 main(int, char**)
@@ -28,6 +64,11 @@ main(int, char**)
     bool   show_demo_window    = true;
     bool   show_another_window = false;
     ImVec4 clear_color         = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
+    int    my_image_w = 0;
+    int    my_image_h = 0;
+    GLuint my_texture = LoadTextureFromFile("./assets/test.jpg", &my_image_w, &my_image_h);
 
     // Main loop
     bool done = false;
@@ -90,6 +131,13 @@ main(int, char**)
             draw_list->AddCircle(ImVec2(p.x + 60, p.y + 100), 30, IM_COL32(100, 200, 100, 255), 0, 3.0f);
 
             ImGui::DragFloat2("Rect Position", (float*)&rect_pos);
+
+            // 渲染图片
+
+            if(my_texture)
+                ImGui::Image((ImTextureID)(intptr_t)my_texture, ImVec2((float)my_image_w, (float)my_image_h));
+            else
+                ImGui::Text("Failed to load texture!");
         }
         ImGui::End();
 
@@ -117,6 +165,10 @@ main(int, char**)
             // Render the frame
         });
     }
+
+    // stbi_image_free(data);
+
+    graph.Quit();
 
 
     return 0;
