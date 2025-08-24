@@ -13,11 +13,25 @@
 #include <SDL_ttf.h>
 
 
-typedef SDL_Texture  Texture;
-typedef SDL_Renderer Renderer;
-typedef ImFont       Font;
-typedef Mix_Chunk    Sound;
-typedef Mix_Music    Music;
+// typedef SDL_Texture  Texture;
+// typedef SDL_Renderer Renderer;
+typedef ImFont    Font;
+typedef Mix_Chunk Sound;
+typedef Mix_Music Music;
+
+class Texture
+{
+public:
+    Texture(const char* filename);
+    ~Texture();
+
+    uint32_t     get_id() const;
+    const IRect& get_size() const;
+
+private:
+    uint32_t id;
+    IRect    size;
+};
 
 // 位置修正回调函数
 typedef std::function<void(float& dst_x, float& dst_y, const float& src_w, const float& src_h)> CorrectivePos;
@@ -51,7 +65,7 @@ public:
     ~AnimationTemplate();
 
 private:
-    Texture* texture;        // 纹理
+    Texture& texture;        // 纹理
     Point*   frame_src_list; // 帧源列表
     uint16_t frame_w;        // 帧宽
     uint16_t frame_h;        // 帧高
@@ -184,7 +198,3 @@ private: // 单例模式
 
     static ResourcesPool* instance;
 };
-
-// 加载纹理数据
-unsigned int LoadTextureFromFile(const char* filename, int* out_width, int* out_height);
-void         FreeTexture(unsigned int* texture_id);

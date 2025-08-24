@@ -33,10 +33,10 @@ main(int, char**)
     ImVec4 clear_color         = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
-    int my_image_w = 0;
-    int my_image_h = 0;
+    // int my_image_w = 0;
+    // int my_image_h = 0;
 
-    unsigned int my_texture = LoadTextureFromFile("./assets/test.jpg", &my_image_w, &my_image_h);
+    // unsigned int my_texture = LoadTexture("./assets/test.jpg", &my_image_w, &my_image_h);
 
     // Main loop
     bool done = false;
@@ -101,11 +101,16 @@ main(int, char**)
             ImGui::DragFloat2("Rect Position", (float*)&rect_pos);
 
             // 渲染图片
-
+            Texture* my_texture = resources_pool.Get_texture("test_jpg");
             if(my_texture)
             {
-                ImGui::Text("Succeed to load texture: %d", my_texture);
-                ImGui::Image((ImTextureID)(intptr_t)my_texture, ImVec2((float)my_image_w, (float)my_image_h));
+                // 获取纹理宽高
+                IRect    size   = my_texture->get_size();
+                uint32_t id     = my_texture->get_id();
+                ImVec2   size_v = ImVec2(size.w, size.h);
+
+                ImGui::Text("Succeed to load texture: %d", id);
+                ImGui::Image((ImTextureID)(intptr_t)(id), size_v);
             }
             else
                 ImGui::Text("Failed to load texture!");
@@ -140,7 +145,8 @@ main(int, char**)
     // stbi_image_free(data);
 
     graph.Quit();
-    FreeTexture(&my_texture);
+
+    resources_pool.FreeResources();
 
     return 0;
 }

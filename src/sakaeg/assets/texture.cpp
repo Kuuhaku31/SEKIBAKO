@@ -1,21 +1,21 @@
 
 
-// load_tex.cpp
+// texture.cpp
+
+#include "resources_pool.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "resources_pool.h"
 #include "stb_image.h"
 #include <GL/gl.h>
 
 
-// Simple implementation of LoadTextureFromFile using stb_image and OpenGL
 // 用 stb_image 加载图片并用 OpenGL 创建纹理，返回纹理ID
-unsigned int
-LoadTextureFromFile(const char* filename, int* out_width, int* out_height)
+uint32_t
+load_texture(const char* filename, int* out_width, int* out_height)
 {
     // 1. 用 stb_image 加载图片数据，channels=4 强制输出 RGBA 格式
-    int            channels = 0;
-    unsigned char* data     = stbi_load(filename, out_width, out_height, &channels, 4);
+    int      channels = 0;
+    uint8_t* data     = stbi_load(filename, out_width, out_height, &channels, 4);
     if(!data)
     {
         // 加载失败，输出错误信息
@@ -44,8 +44,31 @@ LoadTextureFromFile(const char* filename, int* out_width, int* out_height)
 
 
 void
-FreeTexture(unsigned int* texture_id)
+free_texture(uint32_t* texture_id)
 {
     glDeleteTextures(1, texture_id);
     *texture_id = 0;
+}
+
+
+Texture::Texture(const char* filename)
+{
+    id = load_texture(filename, &size.w, &size.h);
+}
+
+Texture::~Texture()
+{
+    free_texture(&id);
+}
+
+uint32_t
+Texture::get_id() const
+{
+    return id;
+}
+
+const IRect&
+Texture::get_size() const
+{
+    return size;
 }

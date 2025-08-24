@@ -76,7 +76,8 @@ ResourcesPool::LoadResources()
                 const char* label = cJSON_GetObjectItem(item, "label")->valuestring;
                 const char* path  = cJSON_GetObjectItem(item, "path")->valuestring;
 
-                texture_pool[label] = IMG_LoadTexture(renderer, path);
+                // texture_pool[label] = IMG_LoadTexture(renderer, path);
+                texture_pool[label] = new Texture(path);
             }
         }
     }
@@ -248,7 +249,8 @@ ResourcesPool::FreeResources()
     {
         if(pair.second)
         {
-            SDL_DestroyTexture(pair.second);
+            // SDL_DestroyTexture(pair.second);
+            delete pair.second;
             pair.second = nullptr;
         }
     }
