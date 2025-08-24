@@ -11,6 +11,30 @@
 #include <string>
 
 
+void
+渲染图片(const char* label)
+{
+    ResourcesPool& resources_pool = ResourcesPool::Instance();
+
+    Texture* my_texture = resources_pool.Get_texture(label);
+    if(my_texture)
+    {
+        // 获取纹理宽高
+        IRect    size   = my_texture->get_size();
+        uint32_t id     = my_texture->get_id();
+        float    scale  = 0.3f;
+        ImVec2   size_v = ImVec2(size.w * scale, size.h * scale);
+
+        ImGui::Text("Succeed to load texture: %d", id);
+        ImGui::Image((ImTextureID)(intptr_t)(id), size_v);
+    }
+    else
+    {
+        ImGui::Text("Failed to load texture!");
+    }
+}
+
+
 int
 main(int, char**)
 {
@@ -101,19 +125,9 @@ main(int, char**)
             ImGui::DragFloat2("Rect Position", (float*)&rect_pos);
 
             // 渲染图片
-            Texture* my_texture = resources_pool.Get_texture("test_jpg");
-            if(my_texture)
-            {
-                // 获取纹理宽高
-                IRect    size   = my_texture->get_size();
-                uint32_t id     = my_texture->get_id();
-                ImVec2   size_v = ImVec2(size.w, size.h);
-
-                ImGui::Text("Succeed to load texture: %d", id);
-                ImGui::Image((ImTextureID)(intptr_t)(id), size_v);
-            }
-            else
-                ImGui::Text("Failed to load texture!");
+            渲染图片("test_jpg");
+            渲染图片("pink");
+            渲染图片("老婆！");
         }
         ImGui::End();
 
