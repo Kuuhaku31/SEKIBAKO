@@ -140,7 +140,7 @@ $(IMGUI_OBJ_PATH)/%.cpp.o: $(IMGUI_PATH)/%.cpp
 
 $(SAKAEG_OBJ_PATH)/%.cpp.o: $(SAKAEG_PATH)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -IC:/msys64/mingw64/include/cjson -c -o $@ $<
 
 
 $(T0_OBJ_PATH)/%.cpp.o: $(T0_PATH)/%.cpp
@@ -168,7 +168,7 @@ t1: $(t1_target_obj) $(SAKAEG_OBJ) $(imgui_target_obj)
 	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) \
 	$(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) \
 	-o bin/$@ $(t1_target_obj) $(SAKAEG_OBJ) $(imgui_target_obj) \
-	$(SDL_LDLIBS) -lopengl32
+	$(SDL_LDLIBS) -lopengl32 -lcjson -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 
 t2: $(t2_target_obj)
 	@mkdir -p bin

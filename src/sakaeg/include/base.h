@@ -5,6 +5,8 @@
 
 #include <functional>
 #include <stdint.h>
+#include <string>
+#include <unordered_map>
 
 
 #define ORIGIN_POINT Point{ 0, 0 }
@@ -260,6 +262,47 @@ private:
     Vector2 view_right_bottom_position; // 视野右下角位置
 
     float unit_size = 1.0f; // 一个单位长度的大小（像素）
+};
+
+
+#define STATE_NULL "state_null"
+
+class StateNode
+{
+public:
+    StateNode(const std::string& id);
+    ~StateNode() = default;
+
+    virtual void On_enter();
+    virtual void On_render() const;
+    virtual void On_update(float delta_time);
+    virtual void On_update_after(float delta_time);
+    virtual void On_exit();
+
+    const std::string state_id;
+};
+
+
+class StateMachine
+{
+public:
+    StateMachine();
+    ~StateMachine();
+
+    void On_render() const;
+    void On_update(float delta_time);
+    void On_update_after(float delta_time);
+
+    void Switch_to_state(const char* id);       // 切换状态
+    void Register_state(StateNode* state_node); // 注册状态
+    void Clear_states();                        // 清空状态机
+
+    std::string Current_state() const;
+
+private:
+    StateNode* current_state = nullptr; // 当前状态
+
+    std::unordered_map<std::string, StateNode*> state_pool; // 状态池
 };
 
 

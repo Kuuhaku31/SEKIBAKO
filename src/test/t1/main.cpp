@@ -2,6 +2,7 @@
 // main.cpp
 
 #include "graph.h"
+#include "resources_pool.h"
 
 #include "header.h"
 
@@ -17,6 +18,11 @@ main(int, char**)
 
     Graph& graph = Graph::Instance();
     graph.Init("Test", IRect{ 100, 100, 1280, 720 });
+
+
+    // Load resources
+    ResourcesPool& resources_pool = ResourcesPool::Instance();
+    resources_pool.LoadResources();
 
     // Our state
     bool   show_demo_window    = true;
