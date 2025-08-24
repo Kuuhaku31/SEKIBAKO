@@ -184,3 +184,7 @@ private: // 单例模式
 
     static ResourcesPool* instance;
 };
+
+// 加载纹理数据
+unsigned int LoadTextureFromFile(const char* filename, int* out_width, int* out_height);
+void         FreeTexture(unsigned int* texture_id);

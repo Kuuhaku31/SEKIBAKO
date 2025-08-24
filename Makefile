@@ -140,7 +140,10 @@ $(IMGUI_OBJ_PATH)/%.cpp.o: $(IMGUI_PATH)/%.cpp
 
 $(SAKAEG_OBJ_PATH)/%.cpp.o: $(SAKAEG_PATH)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(addprefix -I, $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -IC:/msys64/mingw64/include/cjson -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) \
+	$(addprefix -I, $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) \
+	-IC:/msys64/mingw64/include/cjson  -ID:/repositories/github/stb \
+	-c -o $@ $<
 
 
 $(T0_OBJ_PATH)/%.cpp.o: $(T0_PATH)/%.cpp
@@ -151,7 +154,7 @@ $(T0_OBJ_PATH)/%.cpp.o: $(T0_PATH)/%.cpp
 $(T1_OBJ_PATH)/%.cpp.o: $(T1_PATH)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) \
-	$(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) -ID:/repositories/github/stb \
+	$(addprefix -I, $(T1_INCLUDE_PATH) $(SAKAEG_INCLUDE_PATH) $(IMGUI_INCLUDE_PATH)) \
 	-c -o $@ $<
 
 
