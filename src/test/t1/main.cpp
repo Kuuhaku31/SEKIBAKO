@@ -35,6 +35,79 @@ void
 }
 
 
+Mix_Music* gMusic    = nullptr;
+bool       isPlaying = false;
+int        volume    = MIX_MAX_VOLUME / 2;
+
+void
+ShowMusicPlayerUI()
+{
+    ImGui::Begin("Music Player");
+
+    if(ImGui::Button("Load Music"))
+    {
+        // 初始化 SDL_mixer
+        int flags   = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_FLAC;
+        int initted = Mix_Init(flags);
+        if((initted & flags) != flags)
+        {
+            // std::cerr << "Missing codec support: " << Mix_GetError() << std::endl;
+            printf("Error: Mix_Init(): %s\n", Mix_GetError());
+        }
+        else
+        {
+            // SDL_mixer 初始化成功
+            printf("SDL_mixer initialized successfully\n");
+        }
+
+        if(gMusic) Mix_FreeMusic(gMusic);
+        gMusic = Mix_LoadMUS("./assets/Hello.wav");
+        if(!gMusic)
+        {
+            printf("Load error: %s\n", Mix_GetError());
+        }
+    }
+
+    if(ImGui::Button("Play"))
+    {
+        if(gMusic)
+        {
+            Mix_PlayMusic(gMusic, -1);
+            isPlaying = true;
+        }
+    }
+
+    ImGui::SameLine();
+    if(ImGui::Button("Pause"))
+    {
+        Mix_PauseMusic();
+        isPlaying = false;
+    }
+
+    ImGui::SameLine();
+    if(ImGui::Button("Resume"))
+    {
+        Mix_ResumeMusic();
+        isPlaying = true;
+    }
+
+    ImGui::SameLine();
+    if(ImGui::Button("Stop"))
+    {
+        Mix_HaltMusic();
+        isPlaying = false;
+    }
+
+    // 音量滑条
+    ImGui::SliderInt("Volume", &volume, 0, MIX_MAX_VOLUME);
+    Mix_VolumeMusic(volume);
+
+    ImGui::Text("Status: %s", isPlaying ? "Playing" : "Stopped");
+
+    ImGui::End();
+}
+
+
 int
 main(int, char**)
 {
@@ -130,6 +203,8 @@ main(int, char**)
             渲染图片("老婆！");
         }
         ImGui::End();
+
+        ShowMusicPlayerUI();
 
 
         // 获取背景绘图列表

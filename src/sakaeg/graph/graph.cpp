@@ -8,6 +8,7 @@
 #include "imgui_impl_sdl2.h"
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <SDL_opengl.h>
 
 
@@ -31,7 +32,9 @@ int32_t
 Graph::Init(const char* graph_title, const IRect& graph_layout)
 {
     // Setup SDL
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
+    uint32_t flags = SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER;
+    flags |= SDL_INIT_AUDIO;
+    if(SDL_Init(flags) != 0)
     {
         printf("Error: %s\n", SDL_GetError());
         return -1;
@@ -103,6 +106,17 @@ Graph::Init(const char* graph_title, const IRect& graph_layout)
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+
+    // 初始化 SDL_mixer
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    flags       = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_FLAC;
+    int initted = Mix_Init(flags);
+    if((initted & flags) != flags)
+    {
+        // std::cerr << "Missing codec support: " << Mix_GetError() << std::endl;
+        printf("Error: Mix_Init(): %s\n", Mix_GetError());
+    }
+
     return 0;
 }
 
@@ -110,6 +124,9 @@ int32_t
 Graph::Quit()
 {
     // Cleanup
+    Mix_CloseAudio();
+    Mix_Quit();
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();

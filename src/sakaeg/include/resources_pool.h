@@ -65,7 +65,7 @@ public:
     ~AnimationTemplate();
 
 private:
-    Texture& texture;        // 纹理
+    Texture* texture;        // 纹理
     Point*   frame_src_list; // 帧源列表
     uint16_t frame_w;        // 帧宽
     uint16_t frame_h;        // 帧高

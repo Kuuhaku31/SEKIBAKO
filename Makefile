@@ -186,7 +186,7 @@ clear:
 	@rm -rf $(BUILD_PATH)
 
 
-update-assets:
-	@rm -rf bin/assets
-	@mkdir -p bin/assets
-	@cp -r D:/OneDrive/resources/SEKIBAKO/* bin/assets/
+sa:
+	mkdir -p D:/OneDrive/resources/SEKIBAKO/assets
+	cp -r ./bin/assets/* D:/OneDrive/resources/SEKIBAKO/assets 
+	cp -r ./bin/resources.json D:/OneDrive/resources/SEKIBAKO

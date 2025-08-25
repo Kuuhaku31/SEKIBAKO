@@ -20,8 +20,8 @@ ResourcesPool::Instance()
 bool
 ResourcesPool::LoadResources()
 {
-    static SDL_Renderer* renderer = SDL_GetRenderer(SDL_GL_GetCurrentWindow()); // 获取渲染器
-    static ImGuiIO&      io       = ImGui::GetIO();                             // 获取 ImGui IO
+    // static SDL_Renderer* renderer = SDL_GetRenderer(SDL_GL_GetCurrentWindow()); // 获取渲染器
+    static ImGuiIO& io = ImGui::GetIO(); // 获取 ImGui IO
 
     static const char resources_path[] = "resources.json";
 
@@ -168,6 +168,8 @@ ResourcesPool::LoadResources()
     }
 
     bool flag = true;
+
+    printf("Resource Loading Status:\n");
 
     // 检查加载纹理
     for(const auto& pair : texture_pool)
