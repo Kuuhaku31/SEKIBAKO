@@ -32,12 +32,6 @@ main(int, char**)
     bool   show_another_window = false;
     ImVec4 clear_color         = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-
-    // int my_image_w = 0;
-    // int my_image_h = 0;
-
-    // unsigned int my_texture = LoadTexture("./assets/test.jpg", &my_image_w, &my_image_h);
-
     // Main loop
     bool done = false;
     while(!done)

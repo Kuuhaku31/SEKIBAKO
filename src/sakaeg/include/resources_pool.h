@@ -15,10 +15,14 @@
 
 // typedef SDL_Texture  Texture;
 // typedef SDL_Renderer Renderer;
+// Mix_Chunk：用于存储短小的音效（如按钮点击、爆炸声等），通常是一次性加载到内存中，适合播放短促、频繁的声音。底层一般是 WAV、OGG 等格式，支持多次同时播放（多通道）。
+// Mix_Music：用于存储较长的音乐（如背景音乐 BGM），通常是流式读取，不会一次性全部加载到内存，适合播放长时间的音频。支持的格式有 MP3、OGG、MIDI 等，通常一次只能播放一首。
 typedef ImFont    Font;
 typedef Mix_Chunk Sound;
 typedef Mix_Music Music;
 
+
+// 纹理类
 class Texture
 {
 public:

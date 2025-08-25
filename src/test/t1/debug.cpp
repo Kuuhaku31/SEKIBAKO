@@ -11,9 +11,15 @@
 void
 DebugWindow(const debug_info& info)
 {
-    static Graph&   graph = Graph::Instance();
-    static ImGuiIO& io    = ImGui::GetIO();
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+    static Graph&         graph          = Graph::Instance();
+    static ImGuiIO&       io             = ImGui::GetIO();
 
+    Font* my_font = resources_pool.Get_font("Sarasa-SuperTTC-x16");
+    if(my_font)
+    {
+        ImGui::PushFont(my_font);
+    }
 
     ImGui::Begin("Debug");
     ImGui::Text("Debug information");
@@ -41,6 +47,8 @@ DebugWindow(const debug_info& info)
     ImGui::Text("Graph Center: (%.1f, %.1f)", center.x, center.y);
 
     ImGui::End();
+
+    if(my_font) ImGui::PopFont();
 }
 
 
