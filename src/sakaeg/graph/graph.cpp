@@ -117,6 +117,10 @@ Graph::Init(const char* graph_title, const IRect& graph_layout)
         printf("Error: Mix_Init(): %s\n", Mix_GetError());
     }
 
+    // 设置控制台 IO 编码为 UTF-8
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
     return 0;
 }
 
@@ -124,6 +128,8 @@ int32_t
 Graph::Quit()
 {
     // Cleanup
+
+    // 关闭音频
     Mix_CloseAudio();
     Mix_Quit();
 

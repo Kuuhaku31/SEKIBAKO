@@ -13,3 +13,6 @@ struct debug_info
 
 
 void DebugWindow(const debug_info& info);
+void ShowMusicPlayerUI();
+
+void 渲染图片(const char* label);
