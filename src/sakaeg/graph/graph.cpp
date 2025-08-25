@@ -31,6 +31,10 @@ Graph::Instance()
 int32_t
 Graph::Init(const char* graph_title, const IRect& graph_layout)
 {
+    // 设置控制台 IO 编码为 UTF-8
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
     // Setup SDL
     uint32_t flags = SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER;
     flags |= SDL_INIT_AUDIO;
@@ -117,10 +121,6 @@ Graph::Init(const char* graph_title, const IRect& graph_layout)
         printf("Error: Mix_Init(): %s\n", Mix_GetError());
     }
 
-    // 设置控制台 IO 编码为 UTF-8
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
-
     return 0;
 }
 
@@ -129,7 +129,7 @@ Graph::Quit()
 {
     // Cleanup
 
-    // 关闭音频
+    // SDL_mixer
     Mix_CloseAudio();
     Mix_Quit();
 

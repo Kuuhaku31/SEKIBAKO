@@ -84,12 +84,12 @@ main(int, char**)
         {
             ImGui::Begin("Another Window", &show_another_window); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
             ImGui::Text("Hello from another window!");
-            if(ImGui::Button("Close Me"))
-                show_another_window = false;
+            if(ImGui::Button("Close Me")) show_another_window = false;
             ImGui::End();
         }
 
-        static ImVec2 rect_pos;
+        static debug_info info;
+
         if(ImGui::Begin("Demo Window"))
         {
             ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -98,36 +98,22 @@ main(int, char**)
             draw_list->AddRectFilled(ImVec2(p.x + 10, p.y + 10), ImVec2(p.x + 110, p.y + 60), IM_COL32(200, 100, 100, 255));
             draw_list->AddCircle(ImVec2(p.x + 60, p.y + 100), 30, IM_COL32(100, 200, 100, 255), 0, 3.0f);
 
-            ImGui::DragFloat2("Rect Position", (float*)&rect_pos);
+            ImGui::DragFloat2("Rect Position", (float*)&info.rect_pos);
+
+            播放音乐("Hello");
 
             // 渲染图片
             渲染图片("test_jpg");
+            // ImGui::SameLine();
             渲染图片("pink");
+            ImGui::SameLine();
             渲染图片("老婆！");
         }
         ImGui::End();
 
-        ShowMusicPlayerUI();
-
-
-        // 获取背景绘图列表
-        ImDrawList* bg = ImGui::GetBackgroundDrawList();
-
-        // ImVec2 win_pos  = ImGui::GetWindowPos();
-        // ImVec2 win_size = ImGui::GetWindowSize();
-        IRect graph_layout;
-        graph.GetGraphLayout(graph_layout);
-
-        // 计算屏幕中心
-        ImVec2 center = ImVec2(graph_layout.w * 0.5f, graph_layout.h * 0.5f);
-        // center.x += graph_layout.x, center.y += graph_layout.y;
-
-        // 画一个半径 10 的绿色圆
-        bg->AddRectFilled(rect_pos, ImVec2(rect_pos.x + 50, rect_pos.y + 50), IM_COL32(255, 0, 0, 255));
-        bg->AddCircleFilled(center, 10.0f, IM_COL32(0, 255, 0, 255));
-
-        debug_info info;
         DebugWindow(info);
+        画背景(info);
+        画前景(info);
 
         graph.On_frame_end([]() {
             // Render the frame

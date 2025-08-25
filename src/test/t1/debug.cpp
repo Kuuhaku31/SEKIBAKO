@@ -58,7 +58,7 @@ void
         float    scale  = 0.3f;
         ImVec2   size_v = ImVec2(size.w * scale, size.h * scale);
 
-        ImGui::Text("Succeed to load texture: %d", id);
+        // ImGui::Text("Succeed to load texture: %d", id);
         ImGui::Image((ImTextureID)(intptr_t)(id), size_v);
     }
     else
@@ -68,33 +68,19 @@ void
 }
 
 
-Mix_Music* gMusic    = nullptr;
-bool       isPlaying = false;
-int        volume    = MIX_MAX_VOLUME / 2;
-
 void
-ShowMusicPlayerUI()
+播放音乐(const char* label)
 {
-    ImGui::Begin("Music Player");
+    static ResourcesPool& resources_pool = ResourcesPool::Instance();
+
+    static Music* gMusic    = nullptr;
+    static bool   isPlaying = false;
+    static int    volume    = MIX_MAX_VOLUME * 0.1f;
+
 
     if(ImGui::Button("Load Music"))
     {
-        // 初始化 SDL_mixer
-        int flags   = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_FLAC;
-        int initted = Mix_Init(flags);
-        if((initted & flags) != flags)
-        {
-            // std::cerr << "Missing codec support: " << Mix_GetError() << std::endl;
-            printf("Error: Mix_Init(): %s\n", Mix_GetError());
-        }
-        else
-        {
-            // SDL_mixer 初始化成功
-            printf("SDL_mixer initialized successfully\n");
-        }
-
-        if(gMusic) Mix_FreeMusic(gMusic);
-        gMusic = Mix_LoadMUS("./assets/Hello.wav");
+        gMusic = resources_pool.Get_music(label);
         if(!gMusic)
         {
             printf("Load error: %s\n", Mix_GetError());
@@ -107,6 +93,10 @@ ShowMusicPlayerUI()
         {
             Mix_PlayMusic(gMusic, -1);
             isPlaying = true;
+        }
+        else
+        {
+            printf("Music not loaded\n");
         }
     }
 
@@ -136,6 +126,39 @@ ShowMusicPlayerUI()
     Mix_VolumeMusic(volume);
 
     ImGui::Text("Status: %s", isPlaying ? "Playing" : "Stopped");
+}
 
-    ImGui::End();
+
+void
+画背景(const debug_info& info)
+{
+    static Graph& graph = Graph::Instance();
+
+    // 获取背景绘图列表
+    ImDrawList* bg = ImGui::GetBackgroundDrawList();
+
+    // ImVec2 win_pos  = ImGui::GetWindowPos();
+    // ImVec2 win_size = ImGui::GetWindowSize();
+    IRect graph_layout;
+    graph.GetGraphLayout(graph_layout);
+
+    // 计算屏幕中心
+    ImVec2 center = ImVec2(graph_layout.w * 0.5f, graph_layout.h * 0.5f);
+    // center.x += graph_layout.x, center.y += graph_layout.y;
+
+    // 画一个半径 10 的绿色圆
+    bg->AddRectFilled(info.rect_pos, ImVec2(info.rect_pos.x + 50, info.rect_pos.y + 50), IM_COL32(255, 0, 0, 255));
+    bg->AddCircleFilled(center, 10.0f, IM_COL32(0, 255, 0, 255));
+}
+
+void
+画前景(const debug_info& info)
+{
+    // static Graph& graph = Graph::Instance();
+
+    // 获取前景绘图列表
+    ImDrawList* fg = ImGui::GetForegroundDrawList();
+
+    // 画一个半径 10 的蓝色圆
+    fg->AddCircleFilled(info.rect_pos, 10.0f, IM_COL32(0, 0, 255, 255 * 0.8f));
 }
