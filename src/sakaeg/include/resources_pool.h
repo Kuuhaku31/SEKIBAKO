@@ -23,7 +23,7 @@ typedef Mix_Music Music;
 
 
 // 纹理类
-class Texture
+typedef class Texture
 {
 public:
     Texture(const char* filename);
@@ -35,7 +35,7 @@ public:
 private:
     uint32_t id;
     IRect    size;
-};
+}* Texture_ptr;
 
 // 位置修正回调函数
 typedef std::function<void(float& dst_x, float& dst_y, const float& src_w, const float& src_h)> CorrectivePos;
@@ -96,6 +96,8 @@ public:
 public:
     void On_render() const;           // 渲染
     void On_update(float delta_time); // 更新
+
+    void GetCurrentFrame(Texture_ptr* tex, IRect* src_rect, FRect* dst_rect) const;
 
 public:
     void Restart();              // 重置

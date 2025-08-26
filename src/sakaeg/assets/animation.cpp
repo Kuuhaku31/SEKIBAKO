@@ -13,12 +13,16 @@ AnimationTemplate::AnimationTemplate(const AnimationInformation& info)
     texture   = info.texture;
     texs_size = info.texs_size;
 
-    int tex_w = 0, tex_h = 0;
+    int tex_w = info.texture->get_size().w;
+    int tex_h = info.texture->get_size().h;
     // if(!SDL_QueryTexture(texture, nullptr, nullptr, &tex_w, &tex_h))
     // {
     //     frame_w = tex_w / info.num_x;
     //     frame_h = tex_h / info.num_y;
     // }
+    frame_w = tex_w / info.num_x;
+    frame_h = tex_h / info.num_y;
+
     frame_count = info.frame_count;
 
     frame_src_list = new Point[frame_count];
@@ -109,6 +113,23 @@ AnimationInstance::On_update(float delta_time)
 {
     frame_timer.On_update(delta_time);
 } // 更新
+
+void
+AnimationInstance::GetCurrentFrame(Texture_ptr* tex, IRect* src_rect, FRect* dst_rect) const
+{
+    src_rect->x = animation.frame_src_list[frame_current].x;
+    src_rect->y = animation.frame_src_list[frame_current].y;
+    src_rect->w = animation.frame_w;
+    src_rect->h = animation.frame_h;
+
+    dst_rect->x = x;
+    dst_rect->y = y;
+    dst_rect->w = ph_w;
+    dst_rect->h = ph_h;
+    if(on_corrective) on_corrective(dst_rect->x, dst_rect->y, ph_w, ph_h);
+
+    *tex = animation.texture;
+}
 
 void
 AnimationInstance::Restart()
