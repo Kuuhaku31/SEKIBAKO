@@ -49,7 +49,7 @@ Graph::Init(const char* graph_title, const IRect& graph_layout)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);                                  //
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); //
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);                          //
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);                          //
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);                          //
 
     SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 

@@ -71,6 +71,7 @@ T1_INCLUDE_PATH := $(T1_PATH)
 
 t1_target_src += main.cpp
 t1_target_src += debug.cpp
+t1_target_src += draw.cpp
 
 t1_target_obj := $(t1_target_src)
 t1_target_obj := $(subst $(T1_PATH), , $(t1_target_obj))
@@ -186,7 +187,8 @@ clear:
 	@rm -rf $(BUILD_PATH)
 
 
+path = D:/assets/SEKIBAKO
 sa:
-	mkdir -p D:/OneDrive/resources/SEKIBAKO/assets
-	cp -r ./bin/assets/* D:/OneDrive/resources/SEKIBAKO/assets 
-	cp -r ./bin/resources.json D:/OneDrive/resources/SEKIBAKO
+	mkdir -p $(path)/assets
+	cp -r ./bin/assets/* $(path)/assets
+	cp -r ./bin/resources.json $(path)

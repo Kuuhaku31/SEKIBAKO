@@ -109,6 +109,8 @@ main(int, char**)
         画背景(info);
         画前景(info);
 
+        纹理测试(info);
+
         graph.On_frame_end([]() {
             // Render the frame
         });

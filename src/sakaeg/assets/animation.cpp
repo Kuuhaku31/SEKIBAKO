@@ -105,6 +105,12 @@ AnimationInstance::On_render() const
 }
 
 void
+AnimationInstance::On_update(float delta_time)
+{
+    frame_timer.On_update(delta_time);
+} // 更新
+
+void
 AnimationInstance::Restart()
 {
     is_finished   = false;
@@ -166,4 +172,42 @@ AnimationInstance::Set_size_mul(float size)
         texs_size *= size;
         update_ph_vy();
     }
+}
+
+
+void
+AnimationInstance::Set_on_corrective(CorrectivePos f)
+{
+    on_corrective = f;
+}
+void
+AnimationInstance::Set_on_finished(Callback f)
+{
+    on_finished = f;
+}
+
+const float&
+AnimationInstance::Get_ph_w() const
+{
+    return ph_w;
+} // 物理宽
+
+const float&
+AnimationInstance::Get_ph_h() const
+{
+    return ph_h;
+} // 物理高
+
+const bool&
+AnimationInstance::Is_finished() const
+{
+    return is_finished;
+} // 动画是否结束
+
+
+inline void
+AnimationInstance::update_ph_vy()
+{
+    ph_w = animation.frame_w / texs_size;
+    ph_h = animation.frame_h / texs_size;
 }

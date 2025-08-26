@@ -40,6 +40,9 @@ private:
 // 位置修正回调函数
 typedef std::function<void(float& dst_x, float& dst_y, const float& src_w, const float& src_h)> CorrectivePos;
 
+// 渲染回调函数
+typedef std::function<void(const Texture* tex, const IRect& src, const IRect& dst)> RenderCallback;
+
 // 动画信息
 struct AnimationInformation
 {
@@ -91,12 +94,8 @@ public:
     ~AnimationInstance() = default;
 
 public:
-    void On_render() const; // 渲染
-    void
-    On_update(float delta_time)
-    {
-        frame_timer.On_update(delta_time);
-    } // 更新
+    void On_render() const;           // 渲染
+    void On_update(float delta_time); // 更新
 
 public:
     void Restart();              // 重置
@@ -109,33 +108,13 @@ public:
     void Set_size_add(float size);
     void Set_size_mul(float size);
 
-    void
-    Set_on_corrective(CorrectivePos f)
-    {
-        on_corrective = f;
-    }
-    void
-    Set_on_finished(Callback f)
-    {
-        on_finished = f;
-    }
+    void Set_on_corrective(CorrectivePos f);
+    void Set_on_finished(Callback f);
 
 public:
-    const float&
-    Get_ph_w() const
-    {
-        return ph_w;
-    } // 物理宽
-    const float&
-    Get_ph_h() const
-    {
-        return ph_h;
-    } // 物理高
-    const bool&
-    Is_finished() const
-    {
-        return is_finished;
-    } // 动画是否结束
+    const float& Get_ph_w() const;    // 物理宽
+    const float& Get_ph_h() const;    // 物理高
+    const bool&  Is_finished() const; // 动画是否结束
 
 public:
     float angle; // 渲染角度
@@ -155,13 +134,9 @@ private:
 
     Callback on_finished; // 动画结束回调
 
+
 private:
-    inline void
-    update_ph_vy()
-    {
-        ph_w = animation.frame_w / texs_size;
-        ph_h = animation.frame_h / texs_size;
-    }
+    inline void update_ph_vy();
 };
 
 

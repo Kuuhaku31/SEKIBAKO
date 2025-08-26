@@ -7,7 +7,6 @@
 #include "graph.h"
 #include "resources_pool.h"
 
-
 void
 DebugWindow(const debug_info& info)
 {
@@ -169,4 +168,5 @@ void
 
     // 画一个半径 10 的蓝色圆
     fg->AddCircleFilled(info.rect_pos, 10.0f, IM_COL32(0, 0, 255, 255 * 0.8f));
+    // fg->AddImage((ImTextureID)(intptr_t)1, ImVec2(50, 50), ImVec2(70, 70));
 }

@@ -22,3 +22,5 @@ void 渲染图片(const char* label);
 
 void 画背景(const debug_info& info);
 void 画前景(const debug_info& info);
+
+void 纹理测试(const debug_info& info);
