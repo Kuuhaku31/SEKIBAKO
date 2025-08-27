@@ -14,7 +14,7 @@ void
     static ImGuiIO& io = ImGui::GetIO();
 
     static const ResourcesPool&     resources_pool = ResourcesPool::Instance();
-    static const AnimationTemplate& test_template  = *resources_pool.Get_animation("Ani-Test");
+    static const AnimationTemplate& test_template  = *resources_pool.Get_animation("Ani-Tile");
 
     static AnimationInstance ani_instance(test_template);
 

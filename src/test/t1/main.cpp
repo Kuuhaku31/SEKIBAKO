@@ -16,12 +16,10 @@ main(int, char**)
 {
     printf("Hello, TEST!\n");
 
-    Vector2 vec(1.0f, 2.0f);
-    printf("Vector2: (%f, %f)\n", vec.x, vec.y);
+    static debug_info info;
 
     Graph& graph = Graph::Instance();
     graph.Init("Test", IRect{ 100, 100, 1280, 720 });
-
 
     // Load resources
     ResourcesPool& resources_pool = ResourcesPool::Instance();
@@ -82,7 +80,6 @@ main(int, char**)
             ImGui::End();
         }
 
-        static debug_info info;
 
         if(ImGui::Begin("Demo Window"))
         {
